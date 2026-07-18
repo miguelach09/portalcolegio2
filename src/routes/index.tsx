@@ -10,10 +10,10 @@ import { AdmissionsBanner } from "@/components/site/AdmissionsBanner";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Colegio Cafam — Formación integral en Bogotá" },
+      { title: "Colegio Cafam" },
       { name: "description", content: "Colegio Cafam: educación de calidad desde 1971. Admisiones 2027 abiertas, vida escolar, deporte, arte y tecnología." },
-      { property: "og:title", content: "Colegio Cafam — Formación integral en Bogotá" },
-      { property: "og:description", content: "Educación de calidad desde 1971. Admisiones 2027 abiertas." },
+      { property: "og:title", content: "Colegio Cafam" },
+      { property: "og:description", content: "Colegio Cafam: educación de calidad desde 1971. Admisiones 2027 abiertas, vida escolar, deporte, arte y tecnología." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
     ],
