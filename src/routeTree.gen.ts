@@ -9,8 +9,56 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MiColegioRouteImport } from './routes/mi-colegio'
+import { Route as HerramientasRouteImport } from './routes/herramientas'
+import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CircularesRouteImport } from './routes/circulares'
+import { Route as BienestarRouteImport } from './routes/bienestar'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as AdmisionesRouteImport } from './routes/admisiones'
 import { Route as IndexRouteImport } from './routes/index'
 
+const MiColegioRoute = MiColegioRouteImport.update({
+  id: '/mi-colegio',
+  path: '/mi-colegio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HerramientasRoute = HerramientasRouteImport.update({
+  id: '/herramientas',
+  path: '/herramientas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaleriaRoute = GaleriaRouteImport.update({
+  id: '/galeria',
+  path: '/galeria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CircularesRoute = CircularesRouteImport.update({
+  id: '/circulares',
+  path: '/circulares',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BienestarRoute = BienestarRouteImport.update({
+  id: '/bienestar',
+  path: '/bienestar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmisionesRoute = AdmisionesRouteImport.update({
+  id: '/admisiones',
+  path: '/admisiones',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +67,144 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admisiones': typeof AdmisionesRoute
+  '/biblioteca': typeof BibliotecaRoute
+  '/bienestar': typeof BienestarRoute
+  '/circulares': typeof CircularesRoute
+  '/contacto': typeof ContactoRoute
+  '/galeria': typeof GaleriaRoute
+  '/herramientas': typeof HerramientasRoute
+  '/mi-colegio': typeof MiColegioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admisiones': typeof AdmisionesRoute
+  '/biblioteca': typeof BibliotecaRoute
+  '/bienestar': typeof BienestarRoute
+  '/circulares': typeof CircularesRoute
+  '/contacto': typeof ContactoRoute
+  '/galeria': typeof GaleriaRoute
+  '/herramientas': typeof HerramientasRoute
+  '/mi-colegio': typeof MiColegioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admisiones': typeof AdmisionesRoute
+  '/biblioteca': typeof BibliotecaRoute
+  '/bienestar': typeof BienestarRoute
+  '/circulares': typeof CircularesRoute
+  '/contacto': typeof ContactoRoute
+  '/galeria': typeof GaleriaRoute
+  '/herramientas': typeof HerramientasRoute
+  '/mi-colegio': typeof MiColegioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admisiones'
+    | '/biblioteca'
+    | '/bienestar'
+    | '/circulares'
+    | '/contacto'
+    | '/galeria'
+    | '/herramientas'
+    | '/mi-colegio'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admisiones'
+    | '/biblioteca'
+    | '/bienestar'
+    | '/circulares'
+    | '/contacto'
+    | '/galeria'
+    | '/herramientas'
+    | '/mi-colegio'
+  id:
+    | '__root__'
+    | '/'
+    | '/admisiones'
+    | '/biblioteca'
+    | '/bienestar'
+    | '/circulares'
+    | '/contacto'
+    | '/galeria'
+    | '/herramientas'
+    | '/mi-colegio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdmisionesRoute: typeof AdmisionesRoute
+  BibliotecaRoute: typeof BibliotecaRoute
+  BienestarRoute: typeof BienestarRoute
+  CircularesRoute: typeof CircularesRoute
+  ContactoRoute: typeof ContactoRoute
+  GaleriaRoute: typeof GaleriaRoute
+  HerramientasRoute: typeof HerramientasRoute
+  MiColegioRoute: typeof MiColegioRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/mi-colegio': {
+      id: '/mi-colegio'
+      path: '/mi-colegio'
+      fullPath: '/mi-colegio'
+      preLoaderRoute: typeof MiColegioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/herramientas': {
+      id: '/herramientas'
+      path: '/herramientas'
+      fullPath: '/herramientas'
+      preLoaderRoute: typeof HerramientasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galeria': {
+      id: '/galeria'
+      path: '/galeria'
+      fullPath: '/galeria'
+      preLoaderRoute: typeof GaleriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/circulares': {
+      id: '/circulares'
+      path: '/circulares'
+      fullPath: '/circulares'
+      preLoaderRoute: typeof CircularesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bienestar': {
+      id: '/bienestar'
+      path: '/bienestar'
+      fullPath: '/bienestar'
+      preLoaderRoute: typeof BienestarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admisiones': {
+      id: '/admisiones'
+      path: '/admisiones'
+      fullPath: '/admisiones'
+      preLoaderRoute: typeof AdmisionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +217,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdmisionesRoute: AdmisionesRoute,
+  BibliotecaRoute: BibliotecaRoute,
+  BienestarRoute: BienestarRoute,
+  CircularesRoute: CircularesRoute,
+  ContactoRoute: ContactoRoute,
+  GaleriaRoute: GaleriaRoute,
+  HerramientasRoute: HerramientasRoute,
+  MiColegioRoute: MiColegioRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
