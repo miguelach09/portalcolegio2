@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, GraduationCap } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, GraduationCap, LogIn, LayoutDashboard, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const nav = [
   { to: "/", label: "Inicio" },
