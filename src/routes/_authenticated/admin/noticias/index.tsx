@@ -88,14 +88,6 @@ function NewsAdminPage() {
                   <p className="mt-1 text-xs text-muted-foreground">{item.published_at}</p>
                 </div>
                 <div className="mt-4 flex items-center justify-end gap-2">
-                  <Link
-                    to="/admin/noticias/$id"
-                    params={{ id: item.id }}
-                    className="rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
-                    title="Editar"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Link>
                   <button
                     onClick={() => handleDelete(item)}
                     className="rounded-md p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"

@@ -91,14 +91,6 @@ function GalleryAdminPage() {
                   <h3 className="mt-1 font-semibold text-foreground line-clamp-1">{img.title}</h3>
                 </div>
                 <div className="mt-3 flex items-center justify-end gap-2">
-                  <Link
-                    to="/admin/galeria/$id"
-                    params={{ id: img.id }}
-                    className="rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
-                    title="Editar"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Link>
                   <button
                     onClick={() => handleDelete(img)}
                     className="rounded-md p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
