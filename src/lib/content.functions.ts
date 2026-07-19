@@ -116,7 +116,18 @@ export const getNews = createServerFn({ method: "GET" })
 
     const { data: rows, error } = await query;
     if (error) throw error;
-    return (rows || []) as NewsItem[];
+
+    const items = await Promise.all(
+      (rows || []).map(async (row) => {
+        const signedUrl = (row as any).image_path ? await getSignedUrl((row as any).image_path) : null;
+        return {
+          ...(row as unknown as NewsItem),
+          image_url: signedUrl || (row as any).image_url || null,
+        } as NewsItem;
+      })
+    );
+
+    return items;
   });
 
 export const getGalleryImages = createServerFn({ method: "GET" })
