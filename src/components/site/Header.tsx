@@ -77,6 +77,7 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <AuthHeader mobile onClick={() => setOpen(false)} />
             <Link
               to="/admisiones"
               onClick={() => setOpen(false)}
@@ -88,5 +89,62 @@ export function Header() {
         </div>
       )}
     </header>
+  );
+}
+
+function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => void }) {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  if (!user) {
+    return (
+      <Link
+        to="/auth"
+        onClick={onClick}
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-primary-soft hover:text-primary ${
+          mobile ? "justify-center border border-input" : ""
+        }`}
+      >
+        <LogIn className="h-4 w-4" />
+        Admin
+      </Link>
+    );
+  }
+
+  async function handleSignOut(e: React.MouseEvent) {
+    e.preventDefault();
+    await supabase.auth.signOut();
+    onClick?.();
+  }
+
+  return (
+    <div className={`flex items-center gap-2 ${mobile ? "flex-col" : ""}`}>
+      <Link
+        to="/admin"
+        onClick={onClick}
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-primary-soft hover:text-primary ${
+          mobile ? "justify-center border border-input" : ""
+        }`}
+      >
+        <LayoutDashboard className="h-4 w-4" />
+        Panel
+      </Link>
+      <button
+        onClick={handleSignOut}
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-destructive/10 hover:text-destructive ${
+          mobile ? "justify-center border border-input" : ""
+        }`}
+      >
+        <LogOut className="h-4 w-4" />
+        Salir
+      </button>
+    </div>
   );
 }
