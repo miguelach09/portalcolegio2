@@ -1,18 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import { FileText, Download } from "lucide-react";
+import { getDocuments } from "@/lib/content.functions";
 
-const circs = [
-  { date: "10 Jul 2026", title: "Circular 042 — Salida pedagógica grado 10°", tag: "Académico" },
-  { date: "01 Jul 2026", title: "Circular 041 — Reunión general de padres julio", tag: "Padres" },
-  { date: "22 Jun 2026", title: "Circular 040 — Convocatoria docente tecnología", tag: "RRHH" },
-  { date: "15 Jun 2026", title: "Circular 039 — Cronograma segundo semestre", tag: "Académico" },
-  { date: "05 Jun 2026", title: "Circular 038 — Actualización manual convivencia", tag: "Institucional" },
-  { date: "20 May 2026", title: "Circular 037 — Jornada deportiva intercursos", tag: "Deporte" },
-];
+const circularesQueryOptions = queryOptions({
+  queryKey: ["documents", "circulares"],
+  queryFn: () => getDocuments({ data: { category: "circulares", limit: 100 } }),
+});
 
 export const Route = createFileRoute("/circulares")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(circularesQueryOptions),
   head: () => ({
     meta: [
       { title: "Circulares — Colegio Cafam" },
@@ -24,32 +23,63 @@ export const Route = createFileRoute("/circulares")({
     links: [{ rel: "canonical", href: "/circulares" }],
   }),
   component: Circulares,
+  errorComponent: ({ error }) => (
+    <PageShell>
+      <PageHero title="Circulares" subtitle="No se pudieron cargar las circulares." />
+      <section className="container-page py-16">
+        <p className="text-destructive">{error.message}</p>
+      </section>
+    </PageShell>
+  ),
 });
 
+const categoryLabels: Record<string, string> = {
+  circulares: "Circular",
+  revisas: "Revisa",
+  admisiones: "Admisiones",
+  herramientas: "Herramientas",
+  general: "General",
+};
+
 function Circulares() {
+  const { data: documents = [] } = useSuspenseQuery(circularesQueryOptions);
+
   return (
     <PageShell>
       <PageHero eyebrow="Circulares" title="Comunicaciones oficiales." subtitle="Mantente al día con la información institucional." />
       <section className="container-page py-16 md:py-24">
-        <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-          {circs.map((c) => (
-            <a key={c.title} href="#" className="flex items-center justify-between gap-4 p-5 hover:bg-primary-soft">
-              <div className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
-                  <FileText className="h-5 w-5" />
-                </span>
-                <div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                    <span>{c.date}</span>
-                    <span className="rounded-full bg-secondary px-2 py-0.5 font-semibold">{c.tag}</span>
+        {documents.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+            <FileText className="mx-auto h-10 w-10 text-muted-foreground" />
+            <p className="mt-4 text-muted-foreground">No hay circulares publicadas aún.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-border rounded-2xl border border-border bg-card">
+            {documents.map((doc) => (
+              <a
+                key={doc.id}
+                href={doc.file_url || "#"}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-between gap-4 p-5 hover:bg-primary-soft"
+              >
+                <div className="flex items-start gap-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                    <FileText className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                      <span>{new Date(doc.published_at).toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}</span>
+                      <span className="rounded-full bg-secondary px-2 py-0.5 font-semibold">{categoryLabels[doc.category] || doc.category}</span>
+                    </div>
+                    <h3 className="mt-1 font-display font-semibold text-foreground">{doc.title}</h3>
                   </div>
-                  <h3 className="mt-1 font-display font-semibold text-foreground">{c.title}</h3>
                 </div>
-              </div>
-              <Download className="h-5 w-5 shrink-0 text-primary" />
-            </a>
-          ))}
-        </div>
+                <Download className="h-5 w-5 shrink-0 text-primary" />
+              </a>
+            ))}
+          </div>
+        )}
       </section>
     </PageShell>
   );
