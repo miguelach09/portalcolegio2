@@ -20,6 +20,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdmisionesRouteImport } from './routes/admisiones'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSetupAdminRouteImport } from './routes/api/setup-admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminNoticiasIndexRouteImport } from './routes/_authenticated/admin/noticias/index'
 import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_authenticated/admin/galeria/index'
@@ -82,6 +83,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSetupAdminRoute = ApiSetupAdminRouteImport.update({
+  id: '/api/setup-admin',
+  path: '/api/setup-admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/galeria': typeof GaleriaRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/api/setup-admin': typeof ApiSetupAdminRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/galeria': typeof GaleriaRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/api/setup-admin': typeof ApiSetupAdminRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/galeria': typeof GaleriaRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/api/setup-admin': typeof ApiSetupAdminRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/_authenticated/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/herramientas'
     | '/mi-colegio'
+    | '/api/setup-admin'
     | '/admin/'
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/herramientas'
     | '/mi-colegio'
+    | '/api/setup-admin'
     | '/admin'
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/herramientas'
     | '/mi-colegio'
+    | '/api/setup-admin'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/documentos/nuevo'
     | '/_authenticated/admin/galeria/nueva'
@@ -256,6 +268,7 @@ export interface RootRouteChildren {
   GaleriaRoute: typeof GaleriaRoute
   HerramientasRoute: typeof HerramientasRoute
   MiColegioRoute: typeof MiColegioRoute
+  ApiSetupAdminRoute: typeof ApiSetupAdminRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -335,6 +348,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/setup-admin': {
+      id: '/api/setup-admin'
+      path: '/api/setup-admin'
+      fullPath: '/api/setup-admin'
+      preLoaderRoute: typeof ApiSetupAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
@@ -427,17 +447,8 @@ const rootRouteChildren: RootRouteChildren = {
   GaleriaRoute: GaleriaRoute,
   HerramientasRoute: HerramientasRoute,
   MiColegioRoute: MiColegioRoute,
+  ApiSetupAdminRoute: ApiSetupAdminRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
