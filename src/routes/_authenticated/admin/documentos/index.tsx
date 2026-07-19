@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, FileText, Trash2, ExternalLink, Pencil } from "lucide-react";
+import { Plus, FileText, Trash2, ExternalLink } from "lucide-react";
 import { getDocuments, deleteDocument } from "@/lib/content.functions";
 import type { Document } from "@/lib/content.types";
 
