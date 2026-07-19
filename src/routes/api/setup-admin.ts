@@ -4,7 +4,6 @@ import { z } from "zod";
 const setupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-  token: z.string(),
 });
 
 export const Route = createFileRoute("/api/setup-admin")({
@@ -17,10 +16,7 @@ export const Route = createFileRoute("/api/setup-admin")({
           return Response.json({ error: "Invalid input" }, { status: 400 });
         }
 
-        const { email, password, token } = parsed.data;
-        if (token !== process.env.SETUP_TOKEN) {
-          return Response.json({ error: "Invalid setup token" }, { status: 401 });
-        }
+        const { email, password } = parsed.data;
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
