@@ -287,19 +287,21 @@ export const createNews = createServerFn({ method: "POST" })
     const parsed = newsFormSchema.parse(data.values);
 
     const supabase = createPublicClient();
+    const insertData: any = {
+      title: parsed.title,
+      summary: parsed.summary || null,
+      content: parsed.content || null,
+      category: parsed.category,
+      published_at: parsed.published_at,
+      is_active: parsed.is_active,
+      sort_order: parsed.sort_order,
+      image_url: data.imageUrl || null,
+    };
+    if (data.imagePath) insertData.image_path = data.imagePath;
+
     const { data: row, error } = await supabase
       .from("news")
-      .insert({
-        title: parsed.title,
-        summary: parsed.summary || null,
-        content: parsed.content || null,
-        category: parsed.category,
-        published_at: parsed.published_at,
-        is_active: parsed.is_active,
-        sort_order: parsed.sort_order,
-        image_url: data.imageUrl || null,
-        image_path: data.imagePath || null,
-      })
+      .insert(insertData)
       .select()
       .single();
 
