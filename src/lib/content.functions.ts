@@ -9,8 +9,11 @@ import type {
   NewsItem,
 } from "./content.types";
 import {
+  documentFormSchema,
   documentUpdateSchema,
+  galleryImageFormSchema,
   galleryImageUpdateSchema,
+  newsFormSchema,
   newsUpdateSchema,
 } from "./content.schemas";
 
@@ -83,10 +86,15 @@ export const getDocuments = createServerFn({ method: "GET" })
     const { data: rows, error } = await query;
     if (error) throw error;
 
-    const docs: Document[] = (rows || []).map((row) => ({
-      ...(row as unknown as Document),
-      file_url: row.file_path ? await getSignedUrl(row.file_path) : null,
-    }));
+    const docs: Document[] = await Promise.all(
+      (rows || []).map(async (row) => {
+        const signedUrl = row.file_path ? await getSignedUrl(row.file_path) : null;
+        return {
+          ...(row as unknown as Document),
+          file_url: signedUrl,
+        };
+      })
+    );
 
     return docs;
   });
@@ -129,10 +137,15 @@ export const getGalleryImages = createServerFn({ method: "GET" })
     const { data: rows, error } = await query;
     if (error) throw error;
 
-    const images: GalleryImage[] = (rows || []).map((row) => ({
-      ...(row as unknown as GalleryImage),
-      image_url: row.image_path ? await getSignedUrl(row.image_path) : row.image_url,
-    }));
+    const images = await Promise.all(
+      (rows || []).map(async (row) => {
+        const signedUrl = row.image_path ? await getSignedUrl(row.image_path) : null;
+        return {
+          ...(row as unknown as GalleryImage),
+          image_url: signedUrl || row.image_url || "",
+        };
+      })
+    );
 
     return images;
   });
@@ -188,7 +201,7 @@ export const getGalleryImageById = createServerFn({ method: "GET" })
 
     return {
       ...(row as unknown as GalleryImage),
-      image_url: row.image_path ? await getSignedUrl(row.image_path) : row.image_url,
+      image_url: row.image_path ? await getSignedUrl(row.image_path) : row.image_url || "",
     };
   });
 
@@ -198,7 +211,7 @@ export const createDocument = createServerFn({ method: "POST" })
   .inputValidator((input: { values: Record<string, unknown>; filePath: string }) => input)
   .handler(async ({ data, context }) => {
     await checkAdmin(context);
-    const parsed = documentUpdateSchema.omit({ id: true }).parse(data.values);
+    const parsed = documentFormSchema.parse(data.values);
 
     const supabase = createPublicClient();
     const { data: row, error } = await supabase
@@ -252,7 +265,6 @@ export const deleteDocument = createServerFn({ method: "POST" })
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Delete storage object first, then row
     const { error: storageError } = await supabaseAdmin.storage
       .from(BUCKET_NAME)
       .remove([data.filePath]);
@@ -412,18 +424,3 @@ export const deleteGalleryImage = createServerFn({ method: "POST" })
     if (error) throw error;
     return { ok: true };
   });
-
-// Auth helpers
-export const signInWithEmail = createServerFn({ method: "POST" })
-  .inputValidator((input: { email: string; password: string }) => input)
-  .handler(async ({ data }) => {
-    // This is a server-side helper; actual sign-in happens client-side with supabase.auth.signInWithPassword.
-    // We keep this stub to avoid importing auth flows into public loaders.
-    return { ok: true };
-  });
-
-import {
-  documentFormSchema,
-  galleryImageFormSchema,
-  newsFormSchema,
-} from "./content.schemas";
