@@ -1,22 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import lib from "@/assets/gallery-library.jpg";
-import lab from "@/assets/gallery-lab.jpg";
-import music from "@/assets/gallery-music.jpg";
-import art from "@/assets/gallery-art.jpg";
-import grad from "@/assets/gallery-graduation.jpg";
-import sports from "@/assets/gallery-sports.jpg";
+import type { GalleryImage } from "@/lib/content.types";
 
-const images = [
-  { src: lib, alt: "Biblioteca", tall: true },
-  { src: lab, alt: "Laboratorio" },
-  { src: music, alt: "Música" },
-  { src: sports, alt: "Deporte" },
-  { src: art, alt: "Arte" },
-  { src: grad, alt: "Graduación", tall: true },
-];
+interface GalleryPreviewProps {
+  images: GalleryImage[];
+}
 
-export function GalleryPreview() {
+export function GalleryPreview({ images }: GalleryPreviewProps) {
+  const displayImages = images.slice(0, 6);
+
+  // Map categories to tall flags for visual variety
+  const layoutFlags = [true, false, false, false, false, true];
+
   return (
     <section className="container-page py-16 md:py-24">
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
@@ -35,29 +30,35 @@ export function GalleryPreview() {
         </Link>
       </div>
 
-      <div className="mt-10 grid auto-rows-[180px] grid-cols-2 gap-3 md:grid-cols-3 md:auto-rows-[220px]">
-        {images.map((img, i) => (
-          <div
-            key={i}
-            className={`group relative overflow-hidden rounded-2xl ${
-              img.tall ? "row-span-2" : ""
-            }`}
-          >
-            <img
-              src={img.src}
-              alt={img.alt}
-              loading="lazy"
-              width={800}
-              height={800}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-            <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
-              {img.alt}
-            </span>
-          </div>
-        ))}
-      </div>
+      {displayImages.length === 0 ? (
+        <div className="mt-10 rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+          <p className="text-muted-foreground">No hay imágenes en la galería aún.</p>
+        </div>
+      ) : (
+        <div className="mt-10 grid auto-rows-[180px] grid-cols-2 gap-3 md:grid-cols-3 md:auto-rows-[220px]">
+          {displayImages.map((img, i) => (
+            <div
+              key={img.id}
+              className={`group relative overflow-hidden rounded-2xl ${
+                layoutFlags[i] ? "row-span-2" : ""
+              }`}
+            >
+              <img
+                src={img.image_url}
+                alt={img.title}
+                loading="lazy"
+                width={800}
+                height={800}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                {img.title}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
