@@ -22,6 +22,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/_authenticated/admin/documentos/index'
+import { Route as AuthenticatedAdminDocumentosNuevoRouteImport } from './routes/_authenticated/admin/documentos/nuevo'
 
 const MiColegioRoute = MiColegioRouteImport.update({
   id: '/mi-colegio',
@@ -88,6 +89,12 @@ const AuthenticatedAdminDocumentosIndexRoute =
     path: '/admin/documentos/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminDocumentosNuevoRoute =
+  AuthenticatedAdminDocumentosNuevoRouteImport.update({
+    id: '/admin/documentos/nuevo',
+    path: '/admin/documentos/nuevo',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
 }
 export interface FileRoutesByTo {
@@ -115,6 +123,7 @@ export interface FileRoutesByTo {
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/documentos': typeof AuthenticatedAdminDocumentosIndexRoute
 }
 export interface FileRoutesById {
@@ -131,6 +140,7 @@ export interface FileRoutesById {
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/_authenticated/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
 }
 export interface FileRouteTypes {
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/herramientas'
     | '/mi-colegio'
     | '/admin/'
+    | '/admin/documentos/nuevo'
     | '/admin/documentos/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/herramientas'
     | '/mi-colegio'
     | '/admin'
+    | '/admin/documentos/nuevo'
     | '/admin/documentos'
   id:
     | '__root__'
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
     | '/herramientas'
     | '/mi-colegio'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/documentos/nuevo'
     | '/_authenticated/admin/documentos/'
   fileRoutesById: FileRoutesById
 }
@@ -286,16 +299,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDocumentosIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/documentos/nuevo': {
+      id: '/_authenticated/admin/documentos/nuevo'
+      path: '/admin/documentos/nuevo'
+      fullPath: '/admin/documentos/nuevo'
+      preLoaderRoute: typeof AuthenticatedAdminDocumentosNuevoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminDocumentosNuevoRoute: typeof AuthenticatedAdminDocumentosNuevoRoute
   AuthenticatedAdminDocumentosIndexRoute: typeof AuthenticatedAdminDocumentosIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminDocumentosNuevoRoute:
+    AuthenticatedAdminDocumentosNuevoRoute,
   AuthenticatedAdminDocumentosIndexRoute:
     AuthenticatedAdminDocumentosIndexRoute,
 }
