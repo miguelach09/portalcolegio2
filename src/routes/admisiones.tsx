@@ -1,9 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
-import { CheckCircle2, FileText, Calendar, Users } from "lucide-react";
+import { CheckCircle2, FileText, Calendar, Users, Download } from "lucide-react";
+import { getDocuments } from "@/lib/content.functions";
+
+const docsQueryOptions = queryOptions({
+  queryKey: ["admisiones-docs"],
+  queryFn: () => getDocuments({ data: { category: "admisiones", limit: 20 } }),
+});
 
 export const Route = createFileRoute("/admisiones")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(docsQueryOptions),
   head: () => ({
     meta: [
       { title: "Admisiones 2027 — Colegio Cafam" },
@@ -34,6 +42,8 @@ const requirements = [
 ];
 
 function Admisiones() {
+  const { data: docs = [] } = useSuspenseQuery(docsQueryOptions);
+
   return (
     <PageShell>
       <PageHero
@@ -68,6 +78,30 @@ function Admisiones() {
                 </li>
               ))}
             </ul>
+
+            {docs.length > 0 && (
+              <>
+                <h4 className="mt-8 font-display text-lg font-bold">Descargas del proceso</h4>
+                <ul className="mt-4 space-y-2">
+                  {docs.map((doc) => (
+                    <li key={doc.id}>
+                      <a
+                        href={doc.file_url || "#"}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium hover:border-primary hover:text-primary"
+                      >
+                        <span className="flex items-center gap-2">
+                          <FileText className="h-4 w-4 text-primary" />
+                          {doc.title}
+                        </span>
+                        <Download className="h-4 w-4 shrink-0" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
 
           <div className="rounded-2xl bg-[var(--gradient-hero)] p-8 text-white shadow-[var(--shadow-lift)]">

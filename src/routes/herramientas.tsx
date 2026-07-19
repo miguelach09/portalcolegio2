@@ -1,7 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
-import { Mail, CreditCard, HeartHandshake, Library, ClipboardCheck, BookOpen, Video, Cloud } from "lucide-react";
+import { Mail, CreditCard, HeartHandshake, Library, ClipboardCheck, BookOpen, Video, Cloud, FileText, Download } from "lucide-react";
+import { getDocuments } from "@/lib/content.functions";
+
+const docsQueryOptions = queryOptions({
+  queryKey: ["herramientas-docs"],
+  queryFn: () => getDocuments({ data: { category: "herramientas", limit: 20 } }),
+});
 
 const tools = [
   { name: "Office 365", desc: "Correo institucional y suite de productividad", href: "https://login.microsoftonline.com/", icon: Mail, color: "bg-sky text-white" },
@@ -15,6 +22,7 @@ const tools = [
 ];
 
 export const Route = createFileRoute("/herramientas")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(docsQueryOptions),
   head: () => ({
     meta: [
       { title: "Herramientas digitales — Colegio Cafam" },
@@ -29,6 +37,8 @@ export const Route = createFileRoute("/herramientas")({
 });
 
 function Herramientas() {
+  const { data: docs = [] } = useSuspenseQuery(docsQueryOptions);
+
   return (
     <PageShell>
       <PageHero eyebrow="Herramientas digitales" title="Todas las plataformas, un solo acceso." />
@@ -46,6 +56,30 @@ function Herramientas() {
             </a>
           ))}
         </div>
+
+        {docs.length > 0 && (
+          <div className="mt-16 rounded-2xl border border-border bg-card p-8">
+            <h3 className="font-display text-2xl font-bold">Documentos y guías</h3>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {docs.map((doc) => (
+                <li key={doc.id}>
+                  <a
+                    href={doc.file_url || "#"}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium hover:border-primary hover:text-primary"
+                  >
+                    <span className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-primary" />
+                      {doc.title}
+                    </span>
+                    <Download className="h-4 w-4 shrink-0" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
     </PageShell>
   );

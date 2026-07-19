@@ -16,8 +16,17 @@ import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CircularesRouteImport } from './routes/circulares'
 import { Route as BienestarRouteImport } from './routes/bienestar'
 import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdmisionesRouteImport } from './routes/admisiones'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminNoticiasIndexRouteImport } from './routes/_authenticated/admin/noticias/index'
+import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_authenticated/admin/galeria/index'
+import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/_authenticated/admin/documentos/index'
+import { Route as AuthenticatedAdminNoticiasNuevaRouteImport } from './routes/_authenticated/admin/noticias/nueva'
+import { Route as AuthenticatedAdminGaleriaNuevaRouteImport } from './routes/_authenticated/admin/galeria/nueva'
+import { Route as AuthenticatedAdminDocumentosNuevoRouteImport } from './routes/_authenticated/admin/documentos/nuevo'
 
 const MiColegioRoute = MiColegioRouteImport.update({
   id: '/mi-colegio',
@@ -54,9 +63,18 @@ const BibliotecaRoute = BibliotecaRouteImport.update({
   path: '/biblioteca',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdmisionesRoute = AdmisionesRouteImport.update({
   id: '/admisiones',
   path: '/admisiones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -64,10 +82,52 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAdminNoticiasIndexRoute =
+  AuthenticatedAdminNoticiasIndexRouteImport.update({
+    id: '/admin/noticias/',
+    path: '/admin/noticias/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminGaleriaIndexRoute =
+  AuthenticatedAdminGaleriaIndexRouteImport.update({
+    id: '/admin/galeria/',
+    path: '/admin/galeria/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminDocumentosIndexRoute =
+  AuthenticatedAdminDocumentosIndexRouteImport.update({
+    id: '/admin/documentos/',
+    path: '/admin/documentos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminNoticiasNuevaRoute =
+  AuthenticatedAdminNoticiasNuevaRouteImport.update({
+    id: '/admin/noticias/nueva',
+    path: '/admin/noticias/nueva',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminGaleriaNuevaRoute =
+  AuthenticatedAdminGaleriaNuevaRouteImport.update({
+    id: '/admin/galeria/nueva',
+    path: '/admin/galeria/nueva',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminDocumentosNuevoRoute =
+  AuthenticatedAdminDocumentosNuevoRouteImport.update({
+    id: '/admin/documentos/nuevo',
+    path: '/admin/documentos/nuevo',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admisiones': typeof AdmisionesRoute
+  '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
   '/circulares': typeof CircularesRoute
@@ -75,10 +135,18 @@ export interface FileRoutesByFullPath {
   '/galeria': typeof GaleriaRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
+  '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
+  '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
+  '/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admisiones': typeof AdmisionesRoute
+  '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
   '/circulares': typeof CircularesRoute
@@ -86,11 +154,20 @@ export interface FileRoutesByTo {
   '/galeria': typeof GaleriaRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
+  '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
+  '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/admin/documentos': typeof AuthenticatedAdminDocumentosIndexRoute
+  '/admin/galeria': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/admin/noticias': typeof AuthenticatedAdminNoticiasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/admisiones': typeof AdmisionesRoute
+  '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
   '/circulares': typeof CircularesRoute
@@ -98,12 +175,20 @@ export interface FileRoutesById {
   '/galeria': typeof GaleriaRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
+  '/_authenticated/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
+  '/_authenticated/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/_authenticated/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
+  '/_authenticated/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/_authenticated/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admisiones'
+    | '/auth'
     | '/biblioteca'
     | '/bienestar'
     | '/circulares'
@@ -111,10 +196,18 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/herramientas'
     | '/mi-colegio'
+    | '/admin/'
+    | '/admin/documentos/nuevo'
+    | '/admin/galeria/nueva'
+    | '/admin/noticias/nueva'
+    | '/admin/documentos/'
+    | '/admin/galeria/'
+    | '/admin/noticias/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admisiones'
+    | '/auth'
     | '/biblioteca'
     | '/bienestar'
     | '/circulares'
@@ -122,10 +215,19 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/herramientas'
     | '/mi-colegio'
+    | '/admin'
+    | '/admin/documentos/nuevo'
+    | '/admin/galeria/nueva'
+    | '/admin/noticias/nueva'
+    | '/admin/documentos'
+    | '/admin/galeria'
+    | '/admin/noticias'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/admisiones'
+    | '/auth'
     | '/biblioteca'
     | '/bienestar'
     | '/circulares'
@@ -133,11 +235,20 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/herramientas'
     | '/mi-colegio'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/documentos/nuevo'
+    | '/_authenticated/admin/galeria/nueva'
+    | '/_authenticated/admin/noticias/nueva'
+    | '/_authenticated/admin/documentos/'
+    | '/_authenticated/admin/galeria/'
+    | '/_authenticated/admin/noticias/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AdmisionesRoute: typeof AdmisionesRoute
+  AuthRoute: typeof AuthRoute
   BibliotecaRoute: typeof BibliotecaRoute
   BienestarRoute: typeof BienestarRoute
   CircularesRoute: typeof CircularesRoute
@@ -198,11 +309,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BibliotecaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admisiones': {
       id: '/admisiones'
       path: '/admisiones'
       fullPath: '/admisiones'
       preLoaderRoute: typeof AdmisionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -212,12 +337,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/noticias/': {
+      id: '/_authenticated/admin/noticias/'
+      path: '/admin/noticias'
+      fullPath: '/admin/noticias/'
+      preLoaderRoute: typeof AuthenticatedAdminNoticiasIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/galeria/': {
+      id: '/_authenticated/admin/galeria/'
+      path: '/admin/galeria'
+      fullPath: '/admin/galeria/'
+      preLoaderRoute: typeof AuthenticatedAdminGaleriaIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/documentos/': {
+      id: '/_authenticated/admin/documentos/'
+      path: '/admin/documentos'
+      fullPath: '/admin/documentos/'
+      preLoaderRoute: typeof AuthenticatedAdminDocumentosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/noticias/nueva': {
+      id: '/_authenticated/admin/noticias/nueva'
+      path: '/admin/noticias/nueva'
+      fullPath: '/admin/noticias/nueva'
+      preLoaderRoute: typeof AuthenticatedAdminNoticiasNuevaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/galeria/nueva': {
+      id: '/_authenticated/admin/galeria/nueva'
+      path: '/admin/galeria/nueva'
+      fullPath: '/admin/galeria/nueva'
+      preLoaderRoute: typeof AuthenticatedAdminGaleriaNuevaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/documentos/nuevo': {
+      id: '/_authenticated/admin/documentos/nuevo'
+      path: '/admin/documentos/nuevo'
+      fullPath: '/admin/documentos/nuevo'
+      preLoaderRoute: typeof AuthenticatedAdminDocumentosNuevoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminDocumentosNuevoRoute: typeof AuthenticatedAdminDocumentosNuevoRoute
+  AuthenticatedAdminGaleriaNuevaRoute: typeof AuthenticatedAdminGaleriaNuevaRoute
+  AuthenticatedAdminNoticiasNuevaRoute: typeof AuthenticatedAdminNoticiasNuevaRoute
+  AuthenticatedAdminDocumentosIndexRoute: typeof AuthenticatedAdminDocumentosIndexRoute
+  AuthenticatedAdminGaleriaIndexRoute: typeof AuthenticatedAdminGaleriaIndexRoute
+  AuthenticatedAdminNoticiasIndexRoute: typeof AuthenticatedAdminNoticiasIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminDocumentosNuevoRoute:
+    AuthenticatedAdminDocumentosNuevoRoute,
+  AuthenticatedAdminGaleriaNuevaRoute: AuthenticatedAdminGaleriaNuevaRoute,
+  AuthenticatedAdminNoticiasNuevaRoute: AuthenticatedAdminNoticiasNuevaRoute,
+  AuthenticatedAdminDocumentosIndexRoute:
+    AuthenticatedAdminDocumentosIndexRoute,
+  AuthenticatedAdminGaleriaIndexRoute: AuthenticatedAdminGaleriaIndexRoute,
+  AuthenticatedAdminNoticiasIndexRoute: AuthenticatedAdminNoticiasIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdmisionesRoute: AdmisionesRoute,
+  AuthRoute: AuthRoute,
   BibliotecaRoute: BibliotecaRoute,
   BienestarRoute: BienestarRoute,
   CircularesRoute: CircularesRoute,
@@ -229,13 +431,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
