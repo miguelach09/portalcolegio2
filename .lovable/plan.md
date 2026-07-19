@@ -1,70 +1,69 @@
+# Plan: Base de datos y gestor de archivos para portalcolegio.com
+
 ## Objetivo
+Darle al sitio un backend real con Lovable Cloud para que el administrador pueda subir, organizar y publicar PDFs (circulares, revisas, documentos de admisiones) e imágenes (galería, noticias) desde un panel privado, y que el sitio público las muestre dinámicamente en todas las secciones, incluyendo los accesos rápidos del home.
 
-Rediseñar el sitio del Colegio Cafam manteniendo su identidad visual (azul Cafam + acentos amarillo/naranja/verde) pero con una ejecución moderna: tipografía Outfit/Figtree, layouts más aireados, tarjetas suaves, mejor jerarquía y experiencia mobile-first. Se replican todas las secciones actuales.
+## Alcance
+- Habilitar Lovable Cloud en el proyecto (base de datos PostgreSQL + Storage + auth).
+- Autenticación: un solo usuario administrador con email/password (sin perfiles adicionales, solo `auth.users`).
+- Tablas de contenido: `documents` (PDFs/circulares/revisas), `news` (noticias), `gallery_images` (galería/vida escolar).
+- Bucket de Storage privado para archivos, con acceso público controlado mediante signed URLs o políticas seguras.
+- Panel administrativo protegido bajo `/_authenticated/admin` para crear, editar, eliminar y ordenar contenido.
+- Actualizar las rutas públicas (`/`, `/circulares`, `/galeria`, `/mi-colegio`, `/admisiones`, `/herramientas`) para leer contenido desde la base de datos en lugar de placeholders.
 
-## Sistema de diseño
+## Estructura propuesta
 
-- **Paleta** (tokens en `src/styles.css`): azul Cafam `#0057a8` (primary), celeste `#009fe3` (accent), amarillo `#ffd200`, verde `#5bbf5b`, naranja `#ff8a2b`, blanco/gris neutros. Definidos en `oklch` con variantes claras y `--gradient-hero`, `--shadow-card`.
-- **Tipografía**: Outfit (headings) + Figtree (body), cargadas vía `<link>` en `__root.tsx`.
-- **Componentes base**: header sticky con logo Cafam + nav, hero con carrusel, cards con iconos redondeados (accesos), grid de noticias, footer con redes sociales y datos de contacto.
+### 1. Backend / Lovable Cloud
+- Habilitar Lovable Cloud en el proyecto.
+- Crear bucket `site-assets` en Storage para PDFs e imágenes.
+- Crear migraciones SQL:
+  - `documents`: `id`, `title`, `category` (circulares | revisas | admisiones | herramientas | general), `file_path` (Storage path), `file_url`, `published_at`, `is_active`, `created_at`, `updated_at`.
+  - `news`: `id`, `title`, `summary`, `content`, `image_url`, `published_at`, `is_active`, `created_at`.
+  - `gallery_images`: `id`, `title`, `category`, `image_url`, `sort_order`, `is_active`, `created_at`.
+- Políticas RLS:
+  - Lectura pública (`anon`) para filas activas.
+  - Escritura solo para usuarios autenticados (`authenticated`) con rol admin.
+  - Tabla `user_roles` con rol `admin` y función `has_role()` para evitar escalada de privilegios.
 
-## Estructura de rutas (TanStack Router)
+### 2. Autenticación
+- Ruta pública `/auth` con formulario de login.
+- Layout protegido `src/routes/_authenticated/route.tsx` (gestionado por la integración) para el panel admin.
+- Middleware `attachSupabaseAuth` en `src/start.ts` para que las server functions autenticadas reciban el bearer token.
+- Server functions protegidas con `requireSupabaseAuth` para escritura/eliminación.
 
-```
-src/routes/
-  __root.tsx            (header + footer sitewide, tipografías, tokens)
-  index.tsx             Home
-  mi-colegio.tsx        Historia, misión, visión, PEI
-  admisiones.tsx        Proceso Admisiones 2027
-  galeria.tsx           Fotos instalaciones y eventos
-  circulares.tsx        Listado de comunicados
-  herramientas.tsx      Herramientas digitales
-  bienestar.tsx
-  biblioteca.tsx
-  contacto.tsx
-```
+### 3. Panel administrativo (`/_authenticated/admin`)
+- Dashboard con resumen de documentos, noticias e imágenes.
+- Sección "Documentos": formulario para subir PDFs (drag & drop o input file), elegir categoría, título, fecha de publicación y activar/desactivar. Listado con opciones de editar/eliminar.
+- Sección "Noticias": formulario con título, resumen, contenido, imagen destacada, fecha y activar/desactivar.
+- Sección "Galería": formulario para subir imágenes, título, categoría y orden.
+- Validación de formularios con Zod + React Hook Form.
+- Subida de archivos directamente al Storage de Lovable Cloud desde el cliente, luego guardar metadatos en la BD mediante server function.
 
-Cada ruta con su propio `head()` (title, description, og:title/description, canonical relativo).
+### 4. Vistas públicas actualizadas
+- **Home (`/`)**: accesos rápidos dinámicos desde `documents` filtrados por categoría; últimas noticias desde `news`; preview de galería desde `gallery_images`.
+- **Circulares (`/circulares`)**: listado de documentos filtrados por `category = 'circulares'`.
+- **Herramientas (`/herramientas`)**: listado de documentos filtrados por `category = 'herramientas'`.
+- **Admisiones (`/admisiones`)**: documentos de admisiones + CTA de inscripción.
+- **Galería (`/galeria`)**: masonry grid con imágenes de `gallery_images`.
+- **Mi Colegio (`/mi-colegio`)**: noticias destacadas + galería de vida escolar.
 
-## Home (`/`)
+### 5. UX y diseño
+- Mantener la identidad Cafam (azul institucional, tipografía Outfit/Figtree).
+- Panel admin con UI clara, tablas o cards, estados de carga y mensajes de éxito/error con `sonner`.
+- Los documentos se abren en nueva pestaña usando URL pública del Storage.
 
-1. **Header**: logo Cafam Colegio + nav (Inicio, Mi Colegio, Admisiones, Galería, Circulares, Herramientas, Contáctenos) + botón CTA "Admisiones 2027".
-2. **Hero carrusel**: 4 slides (Admisiones 2027, Piscinas, Canchas, Instagram) con badges de índice, título grande, subtítulo, CTA principal.
-3. **Accesos rápidos**: grid de 6 tarjetas con icono coloreado — Admisiones, PAC, Bienestar, Q10 (recibo matrícula), Correo institucional, Biblioteca. Cada una con hover suave.
-4. **Noticias**: 3 tarjetas destacadas (Boletín escolar, Convocatoria docentes, etc.) con fecha, título, resumen y "leer más".
-5. **De interés**: lista con Horario rotativo, Minuta escolar, Directorio funcionarios, Líneas telefónicas, Fechas institucionales.
-6. **Galería preview**: mosaico de 6-8 imágenes de vida escolar con CTA "Ver galería completa".
-7. **Franja Admisiones 2027**: banda a ancho completo con fechas de preinscripción y CTA.
-8. **Footer**: datos del colegio, redes (YouTube, SoundCloud, Instagram), enlaces rápidos, créditos.
+## Notas técnicas
+- Se usará `createServerFn` para toda la lógica de backend; no edge functions.
+- Los archivos se almacenan en Storage, no en la base de datos (la BD solo guarda metadatos y referencias).
+- El bucket será privado por defecto; las URLs públicas se generarán con signed URLs o políticas `TO anon` según lo que permita la configuración del workspace.
+- Se respetarán las reglas de importación de Supabase en TanStack Start: `*.functions.ts` en rutas client-safe, `*.server.ts` para helpers de servidor.
 
-## Páginas internas
+## Entregables
+- Lovable Cloud habilitado y configurado.
+- Auth funcional (login/logout) para el administrador.
+- Tablas y Storage creados.
+- Panel administrativo funcional para subir y gestionar documentos, noticias e imágenes.
+- Sitio público mostrando contenido dinámico en todas las secciones priorizadas.
 
-- **Mi Colegio**: hero con foto + tabs/secciones (Historia, PEI, Misión/Visión, Valores).
-- **Admisiones**: timeline del proceso, requisitos, fechas, FAQ, CTA preinscripción.
-- **Galería**: grid tipo masonry con filtros por categoría.
-- **Circulares**: lista con búsqueda/filtro por fecha, cards con PDF/enlace.
-- **Herramientas digitales**: grid de accesos externos (Office 365, Q10, PAC, etc.).
-- **Bienestar / Biblioteca**: página informativa con hero + secciones.
-- **Contáctenos**: mapa embebido, formulario, teléfonos, direcciones, horarios.
-
-## Contenido
-
-- Se mantiene el contenido/enlaces externos actuales (Q10, Office 365, YouTube, SoundCloud, PAC, Bienestar).
-- Imágenes iniciales: placeholders (`data-lov-image-placeholder`) para renders de instalaciones/estudiantes y fotos genéricas; los enlaces a assets externos actuales (`portalcolegio.com/images/...`) no se referenciarán directamente para evitar dependencia; se usan renders/uploads.
-- Textos: se conserva la voz institucional y datos visibles hoy; noticias como ejemplos placeholder que el colegio podrá reemplazar.
-
-## Detalles técnicos
-
-- Tokens de color y sombras en `src/styles.css` (`@theme` + `:root`).
-- `<link>` a Google Fonts (Outfit + Figtree) en `head()` del root.
-- Componentes reutilizables en `src/components/site/` (Header, Footer, HeroCarousel, QuickAccessCard, NewsCard, SectionHeading).
-- Carrusel del hero con `embla-carousel-react` (auto-play).
-- Animaciones sutiles con `framer-motion` (fade-in on scroll).
-- SEO: cada ruta con `head()` propio; `<link rel="canonical">` en leafs; JSON-LD `EducationalOrganization` en `__root.tsx`.
-- Mobile-first, breakpoints Tailwind, menú hamburguesa en <768px.
-
-## Fuera de alcance
-
-- Backend / login real / integración con Q10 (solo enlaces externos).
-- Migración de contenido real (se usa contenido placeholder representativo).
-- Multi-idioma.
+## Próximo paso
+Aprobar este plan para comenzar la implementación. La primera acción será habilitar Lovable Cloud en el proyecto.
