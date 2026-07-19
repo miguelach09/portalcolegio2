@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Newspaper, Trash2, Pencil } from "lucide-react";
+import { Plus, Newspaper, Trash2 } from "lucide-react";
 import { getNews, deleteNews } from "@/lib/content.functions";
 import type { NewsItem } from "@/lib/content.types";
 

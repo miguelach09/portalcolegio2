@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, ImageIcon, Trash2, Pencil } from "lucide-react";
+import { Plus, ImageIcon, Trash2 } from "lucide-react";
 import { getGalleryImages, deleteGalleryImage } from "@/lib/content.functions";
 import type { GalleryImage } from "@/lib/content.types";
 
