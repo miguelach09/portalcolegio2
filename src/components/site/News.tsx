@@ -28,23 +28,35 @@ export function News({ news, interestDocs }: NewsProps) {
               <p className="text-muted-foreground">No hay noticias publicadas aún.</p>
             ) : (
               displayNews.map((n) => (
-                <article key={n.id} className="group rounded-2xl border border-border bg-card p-6 transition-shadow hover:shadow-[var(--shadow-lift)]">
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5" />
-                      {new Date(n.published_at).toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}
-                    </span>
-                    <span className="rounded-full bg-primary-soft px-2.5 py-0.5 font-semibold uppercase tracking-wider text-primary">
-                      {categoryLabels[n.category] || n.category}
-                    </span>
+                <article key={n.id} className="group overflow-hidden rounded-2xl border border-border bg-card transition-shadow hover:shadow-[var(--shadow-lift)]">
+                  {n.image_url && (
+                    <div className="aspect-[2/1] w-full overflow-hidden">
+                      <img
+                        src={n.image_url}
+                        alt={n.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {new Date(n.published_at).toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}
+                      </span>
+                      <span className="rounded-full bg-primary-soft px-2.5 py-0.5 font-semibold uppercase tracking-wider text-primary">
+                        {categoryLabels[n.category] || n.category}
+                      </span>
+                    </div>
+                    <h3 className="mt-3 font-display text-xl font-semibold text-foreground group-hover:text-primary">
+                      {n.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{n.summary || n.content || ""}</p>
+                    <a href="#" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                      Leer más <ArrowUpRight className="h-4 w-4" />
+                    </a>
                   </div>
-                  <h3 className="mt-3 font-display text-xl font-semibold text-foreground group-hover:text-primary">
-                    {n.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{n.summary || n.content || ""}</p>
-                  <a href="#" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                    Leer más <ArrowUpRight className="h-4 w-4" />
-                  </a>
                 </article>
               ))
             )}
