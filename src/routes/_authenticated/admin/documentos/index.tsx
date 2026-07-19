@@ -105,14 +105,6 @@ function DocumentsAdminPage() {
                             <ExternalLink className="h-4 w-4" />
                           </a>
                         )}
-                        <Link
-                          to="/admin/documentos/$id"
-                          params={{ id: doc.id }}
-                          className="rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
-                          title="Editar"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Link>
                         <button
                           onClick={() => handleDelete(doc)}
                           className="rounded-md p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
