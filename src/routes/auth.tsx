@@ -49,7 +49,6 @@ function AuthPage() {
       <PageHero
         title="Acceso administrativo"
         subtitle="Inicia sesión para gestionar el contenido del sitio."
-        variant="small"
       />
       <section className="container-app py-16">
         <div className="mx-auto max-w-md rounded-2xl border bg-card p-8 shadow-sm">

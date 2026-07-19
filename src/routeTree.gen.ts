@@ -16,6 +16,7 @@ import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CircularesRouteImport } from './routes/circulares'
 import { Route as BienestarRouteImport } from './routes/bienestar'
 import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdmisionesRouteImport } from './routes/admisiones'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -56,6 +57,11 @@ const BibliotecaRoute = BibliotecaRouteImport.update({
   path: '/biblioteca',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdmisionesRoute = AdmisionesRouteImport.update({
   id: '/admisiones',
   path: '/admisiones',
@@ -79,6 +85,7 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admisiones': typeof AdmisionesRoute
+  '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
   '/circulares': typeof CircularesRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admisiones': typeof AdmisionesRoute
+  '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
   '/circulares': typeof CircularesRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/admisiones': typeof AdmisionesRoute
+  '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
   '/circulares': typeof CircularesRoute
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admisiones'
+    | '/auth'
     | '/biblioteca'
     | '/bienestar'
     | '/circulares'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admisiones'
+    | '/auth'
     | '/biblioteca'
     | '/bienestar'
     | '/circulares'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/admisiones'
+    | '/auth'
     | '/biblioteca'
     | '/bienestar'
     | '/circulares'
@@ -158,6 +170,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AdmisionesRoute: typeof AdmisionesRoute
+  AuthRoute: typeof AuthRoute
   BibliotecaRoute: typeof BibliotecaRoute
   BienestarRoute: typeof BienestarRoute
   CircularesRoute: typeof CircularesRoute
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BibliotecaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admisiones': {
       id: '/admisiones'
       path: '/admisiones'
@@ -265,6 +285,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdmisionesRoute: AdmisionesRoute,
+  AuthRoute: AuthRoute,
   BibliotecaRoute: BibliotecaRoute,
   BienestarRoute: BienestarRoute,
   CircularesRoute: CircularesRoute,
