@@ -43,6 +43,7 @@ export interface NewsItem {
   summary: string | null;
   content: string | null;
   image_url: string | null;
+  image_path: string | null;
   category: NewsCategory;
   published_at: string;
   is_active: boolean;
