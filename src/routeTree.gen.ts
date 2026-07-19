@@ -9,55 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as AdmisionesRouteImport } from './routes/admisiones'
-import { Route as BibliotecaRouteImport } from './routes/biblioteca'
-import { Route as BienestarRouteImport } from './routes/bienestar'
-import { Route as CircularesRouteImport } from './routes/circulares'
-import { Route as ContactoRouteImport } from './routes/contacto'
-import { Route as GaleriaRouteImport } from './routes/galeria'
-import { Route as HerramientasRouteImport } from './routes/herramientas'
 import { Route as MiColegioRouteImport } from './routes/mi-colegio'
+import { Route as HerramientasRouteImport } from './routes/herramientas'
+import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CircularesRouteImport } from './routes/circulares'
+import { Route as BienestarRouteImport } from './routes/bienestar'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as AdmisionesRouteImport } from './routes/admisiones'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdmisionesRoute = AdmisionesRouteImport.update({
-  id: '/admisiones',
-  path: '/admisiones',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BibliotecaRoute = BibliotecaRouteImport.update({
-  id: '/biblioteca',
-  path: '/biblioteca',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BienestarRoute = BienestarRouteImport.update({
-  id: '/bienestar',
-  path: '/bienestar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CircularesRoute = CircularesRouteImport.update({
-  id: '/circulares',
-  path: '/circulares',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactoRoute = ContactoRouteImport.update({
-  id: '/contacto',
-  path: '/contacto',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GaleriaRoute = GaleriaRouteImport.update({
-  id: '/galeria',
-  path: '/galeria',
+const MiColegioRoute = MiColegioRouteImport.update({
+  id: '/mi-colegio',
+  path: '/mi-colegio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HerramientasRoute = HerramientasRouteImport.update({
@@ -65,9 +31,43 @@ const HerramientasRoute = HerramientasRouteImport.update({
   path: '/herramientas',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MiColegioRoute = MiColegioRouteImport.update({
-  id: '/mi-colegio',
-  path: '/mi-colegio',
+const GaleriaRoute = GaleriaRouteImport.update({
+  id: '/galeria',
+  path: '/galeria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CircularesRoute = CircularesRouteImport.update({
+  id: '/circulares',
+  path: '/circulares',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BienestarRoute = BienestarRouteImport.update({
+  id: '/bienestar',
+  path: '/bienestar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmisionesRoute = AdmisionesRouteImport.update({
+  id: '/admisiones',
+  path: '/admisiones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
@@ -169,60 +169,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admisiones': {
-      id: '/admisiones'
-      path: '/admisiones'
-      fullPath: '/admisiones'
-      preLoaderRoute: typeof AdmisionesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/biblioteca': {
-      id: '/biblioteca'
-      path: '/biblioteca'
-      fullPath: '/biblioteca'
-      preLoaderRoute: typeof BibliotecaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bienestar': {
-      id: '/bienestar'
-      path: '/bienestar'
-      fullPath: '/bienestar'
-      preLoaderRoute: typeof BienestarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/circulares': {
-      id: '/circulares'
-      path: '/circulares'
-      fullPath: '/circulares'
-      preLoaderRoute: typeof CircularesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contacto': {
-      id: '/contacto'
-      path: '/contacto'
-      fullPath: '/contacto'
-      preLoaderRoute: typeof ContactoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/galeria': {
-      id: '/galeria'
-      path: '/galeria'
-      fullPath: '/galeria'
-      preLoaderRoute: typeof GaleriaRouteImport
+    '/mi-colegio': {
+      id: '/mi-colegio'
+      path: '/mi-colegio'
+      fullPath: '/mi-colegio'
+      preLoaderRoute: typeof MiColegioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/herramientas': {
@@ -232,11 +183,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HerramientasRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mi-colegio': {
-      id: '/mi-colegio'
-      path: '/mi-colegio'
-      fullPath: '/mi-colegio'
-      preLoaderRoute: typeof MiColegioRouteImport
+    '/galeria': {
+      id: '/galeria'
+      path: '/galeria'
+      fullPath: '/galeria'
+      preLoaderRoute: typeof GaleriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/circulares': {
+      id: '/circulares'
+      path: '/circulares'
+      fullPath: '/circulares'
+      preLoaderRoute: typeof CircularesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bienestar': {
+      id: '/bienestar'
+      path: '/bienestar'
+      fullPath: '/bienestar'
+      preLoaderRoute: typeof BienestarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admisiones': {
+      id: '/admisiones'
+      path: '/admisiones'
+      fullPath: '/admisiones'
+      preLoaderRoute: typeof AdmisionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
