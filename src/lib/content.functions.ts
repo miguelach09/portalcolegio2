@@ -49,11 +49,14 @@ async function checkAdmin(context: {
   }
 }
 
-async function getSignedUrl(filePath: string) {
+async function getSignedUrl(filePath: string, options?: { download?: boolean }) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const filename = filePath.split("/").pop();
   const { data, error } = await supabaseAdmin.storage
     .from(BUCKET_NAME)
-    .createSignedUrl(filePath, 60 * 60 * 24 * 365); // 1 year
+    .createSignedUrl(filePath, 60 * 60 * 24 * 365, {
+      download: options?.download ? (filename || true) : false,
+    });
 
   if (error || !data?.signedUrl) {
     console.error("Error creating signed URL:", error);
@@ -61,6 +64,8 @@ async function getSignedUrl(filePath: string) {
   }
   return data.signedUrl;
 }
+
+
 
 // Public reads
 export const getDocuments = createServerFn({ method: "GET" })
@@ -88,7 +93,7 @@ export const getDocuments = createServerFn({ method: "GET" })
 
     const docs: Document[] = await Promise.all(
       (rows || []).map(async (row) => {
-        const signedUrl = row.file_path ? await getSignedUrl(row.file_path) : null;
+        const signedUrl = row.file_path ? await getSignedUrl(row.file_path, { download: true }) : null;
         return {
           ...(row as unknown as Document),
           file_url: signedUrl,
@@ -177,7 +182,7 @@ export const getDocumentById = createServerFn({ method: "GET" })
 
     return {
       ...(row as unknown as Document),
-      file_url: row.file_path ? await getSignedUrl(row.file_path) : null,
+      file_url: row.file_path ? await getSignedUrl(row.file_path, { download: true }) : null,
     };
   });
 
