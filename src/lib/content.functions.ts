@@ -224,7 +224,7 @@ export const createDocument = createServerFn({ method: "POST" })
     await checkAdmin(context);
     const parsed = documentFormSchema.parse(data.values);
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { data: row, error } = await supabase
       .from("documents")
       .insert({
@@ -250,7 +250,7 @@ export const updateDocument = createServerFn({ method: "POST" })
     const parsed = documentUpdateSchema.parse(data.values);
     const { id, ...rest } = parsed;
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { data: row, error } = await supabase
       .from("documents")
       .update({
@@ -284,7 +284,7 @@ export const deleteDocument = createServerFn({ method: "POST" })
       console.error("Error deleting storage object:", storageError);
     }
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { error } = await supabase.from("documents").delete().eq("id", data.id);
     if (error) throw error;
     return { ok: true };
@@ -297,7 +297,7 @@ export const createNews = createServerFn({ method: "POST" })
     await checkAdmin(context);
     const parsed = newsFormSchema.parse(data.values);
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const insertData: any = {
       title: parsed.title,
       summary: parsed.summary || null,
@@ -328,7 +328,7 @@ export const updateNews = createServerFn({ method: "POST" })
     const parsed = newsUpdateSchema.parse(data.values);
     const { id, ...rest } = parsed;
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { data: row, error } = await supabase
       .from("news")
       .update({
@@ -362,7 +362,7 @@ export const deleteNews = createServerFn({ method: "POST" })
       if (storageError) console.error("Error deleting news image:", storageError);
     }
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { error } = await supabase.from("news").delete().eq("id", data.id);
     if (error) throw error;
     return { ok: true };
@@ -377,7 +377,7 @@ export const createGalleryImage = createServerFn({ method: "POST" })
     await checkAdmin(context);
     const parsed = galleryImageFormSchema.parse(data.values);
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { data: row, error } = await supabase
       .from("gallery_images")
       .insert({
@@ -403,7 +403,7 @@ export const updateGalleryImage = createServerFn({ method: "POST" })
     const parsed = galleryImageUpdateSchema.parse(data.values);
     const { id, ...rest } = parsed;
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { data: row, error } = await supabase
       .from("gallery_images")
       .update({
@@ -432,7 +432,7 @@ export const deleteGalleryImage = createServerFn({ method: "POST" })
       .remove([data.imagePath]);
     if (storageError) console.error("Error deleting gallery image:", storageError);
 
-    const supabase = createPublicClient();
+    const supabase = context.supabase;
     const { error } = await supabase.from("gallery_images").delete().eq("id", data.id);
     if (error) throw error;
     return { ok: true };
