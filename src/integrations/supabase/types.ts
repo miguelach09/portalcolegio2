@@ -4,187 +4,184 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
   public: {
     Tables: {
       documents: {
         Row: {
-          id: string;
-          title: string;
-          category: Database["public"]["Enums"]["document_category"];
-          file_path: string;
-          file_url: string | null;
-          file_size: number | null;
-          file_type: string | null;
-          published_at: string;
-          is_active: boolean;
-          sort_order: number;
-          created_at: string;
-          updated_at: string;
-        };
+          category: Database["public"]["Enums"]["document_category"]
+          created_at: string
+          file_path: string
+          file_size: number | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          is_active: boolean
+          published_at: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
         Insert: {
-          id?: string;
-          title: string;
-          category?: Database["public"]["Enums"]["document_category"];
-          file_path: string;
-          file_url?: string | null;
-          file_size?: number | null;
-          file_type?: string | null;
-          published_at?: string;
-          is_active?: boolean;
-          sort_order?: number;
-          created_at?: string;
-          updated_at?: string;
-        };
+          category?: Database["public"]["Enums"]["document_category"]
+          created_at?: string
+          file_path: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          published_at?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
         Update: {
-          id?: string;
-          title?: string;
-          category?: Database["public"]["Enums"]["document_category"];
-          file_path?: string;
-          file_url?: string | null;
-          file_size?: number | null;
-          file_type?: string | null;
-          published_at?: string;
-          is_active?: boolean;
-          sort_order?: number;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
+          category?: Database["public"]["Enums"]["document_category"]
+          created_at?: string
+          file_path?: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          published_at?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gallery_images: {
         Row: {
-          id: string;
-          title: string;
-          category: Database["public"]["Enums"]["gallery_category"];
-          image_url: string;
-          image_path: string | null;
-          sort_order: number;
-          is_active: boolean;
-          created_at: string;
-          updated_at: string;
-        };
+          category: Database["public"]["Enums"]["gallery_category"]
+          created_at: string
+          id: string
+          image_path: string | null
+          image_url: string
+          is_active: boolean
+          sort_order: number
+          title: string
+          updated_at: string
+        }
         Insert: {
-          id?: string;
-          title: string;
-          category?: Database["public"]["Enums"]["gallery_category"];
-          image_url: string;
-          image_path?: string | null;
-          sort_order?: number;
-          is_active?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
+          category?: Database["public"]["Enums"]["gallery_category"]
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          image_url: string
+          is_active?: boolean
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
         Update: {
-          id?: string;
-          title?: string;
-          category?: Database["public"]["Enums"]["gallery_category"];
-          image_url?: string;
-          image_path?: string | null;
-          sort_order?: number;
-          is_active?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
+          category?: Database["public"]["Enums"]["gallery_category"]
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       news: {
         Row: {
-          id: string;
-          title: string;
-          summary: string | null;
-          content: string | null;
-          image_url: string | null;
-          image_path: string | null;
-          category: Database["public"]["Enums"]["news_category"];
-          published_at: string;
-          is_active: boolean;
-          sort_order: number;
-          created_at: string;
-          updated_at: string;
-        };
+          category: Database["public"]["Enums"]["news_category"]
+          content: string | null
+          created_at: string
+          id: string
+          image_path: string | null
+          image_url: string | null
+          is_active: boolean
+          published_at: string
+          sort_order: number
+          summary: string | null
+          title: string
+          updated_at: string
+        }
         Insert: {
-          id?: string;
-          title: string;
-          summary?: string | null;
-          content?: string | null;
-          image_url?: string | null;
-          image_path?: string | null;
-          category?: Database["public"]["Enums"]["news_category"];
-          published_at?: string;
-          is_active?: boolean;
-          sort_order?: number;
-          created_at?: string;
-          updated_at?: string;
-        };
+          category?: Database["public"]["Enums"]["news_category"]
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          is_active?: boolean
+          published_at?: string
+          sort_order?: number
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
         Update: {
-          id?: string;
-          title?: string;
-          summary?: string | null;
-          content?: string | null;
-          image_url?: string | null;
-          image_path?: string | null;
-          category?: Database["public"]["Enums"]["news_category"];
-          published_at?: string;
-          is_active?: boolean;
-          sort_order?: number;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
+          category?: Database["public"]["Enums"]["news_category"]
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          is_active?: boolean
+          published_at?: string
+          sort_order?: number
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
-          id: string;
-          user_id: string;
-          role: Database["public"]["Enums"]["app_role"];
-          created_at: string;
-        };
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
         Insert: {
-          id?: string;
-          user_id: string;
-          role: Database["public"]["Enums"]["app_role"];
-          created_at?: string;
-        };
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
         Update: {
-          id?: string;
-          user_id?: string;
-          role?: Database["public"]["Enums"]["app_role"];
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "user_roles_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-    };
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
       has_role: {
         Args: {
-          _user_id: string;
-          _role: Database["public"]["Enums"]["app_role"];
-        };
-        Returns: boolean;
-      };
-    };
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+    }
     Enums: {
-      app_role: "admin" | "moderator" | "user";
+      app_role: "admin"
       document_category:
         | "circulares"
         | "revisas"
         | "admisiones"
         | "herramientas"
-        | "general";
+        | "general"
       gallery_category:
         | "aulas"
         | "deporte"
@@ -193,97 +190,165 @@ export type Database = {
         | "biblioteca"
         | "instalaciones"
         | "eventos"
-        | "graduacion";
+        | "graduacion"
       news_category:
         | "institucional"
         | "academico"
         | "deporte"
         | "arte"
-        | "bienestar";
-    };
+        | "bienestar"
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
-};
+      [_ in never]: never
+    }
+  }
+}
 
-type PublicSchema = Database[Extract<keyof Database, "public">];
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R;
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] & PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R;
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
       }
       ? R
       : never
-    : never;
+    : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I;
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I;
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
       }
       ? I
       : never
-    : never;
+    : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U;
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U;
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
       }
       ? U
       : never
-    : never;
+    : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
-    | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never;
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      app_role: ["admin"],
+      document_category: [
+        "circulares",
+        "revisas",
+        "admisiones",
+        "herramientas",
+        "general",
+      ],
+      gallery_category: [
+        "aulas",
+        "deporte",
+        "arte",
+        "ciencia",
+        "biblioteca",
+        "instalaciones",
+        "eventos",
+        "graduacion",
+      ],
+      news_category: [
+        "institucional",
+        "academico",
+        "deporte",
+        "arte",
+        "bienestar",
+      ],
+    },
+  },
+} as const
