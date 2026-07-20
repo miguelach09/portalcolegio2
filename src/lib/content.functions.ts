@@ -53,7 +53,9 @@ async function getSignedUrl(filePath: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin.storage
     .from(BUCKET_NAME)
-    .createSignedUrl(filePath, 60 * 60 * 24 * 365); // 1 year
+    .createSignedUrl(filePath, 60 * 60 * 24 * 365, {
+      download: filePath.split("/").pop() || true,
+    });
 
   if (error || !data?.signedUrl) {
     console.error("Error creating signed URL:", error);
@@ -61,6 +63,7 @@ async function getSignedUrl(filePath: string) {
   }
   return data.signedUrl;
 }
+
 
 // Public reads
 export const getDocuments = createServerFn({ method: "GET" })
