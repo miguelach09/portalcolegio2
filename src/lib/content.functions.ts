@@ -93,7 +93,7 @@ export const getDocuments = createServerFn({ method: "GET" })
 
     const docs: Document[] = await Promise.all(
       (rows || []).map(async (row) => {
-        const signedUrl = row.file_path ? await getSignedUrl(row.file_path) : null;
+        const signedUrl = row.file_path ? await getSignedUrl(row.file_path, { download: true }) : null;
         return {
           ...(row as unknown as Document),
           file_url: signedUrl,
@@ -182,7 +182,7 @@ export const getDocumentById = createServerFn({ method: "GET" })
 
     return {
       ...(row as unknown as Document),
-      file_url: row.file_path ? await getSignedUrl(row.file_path) : null,
+      file_url: row.file_path ? await getSignedUrl(row.file_path, { download: true }) : null,
     };
   });
 
