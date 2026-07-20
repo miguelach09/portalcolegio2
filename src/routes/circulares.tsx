@@ -23,14 +23,17 @@ export const Route = createFileRoute("/circulares")({
     links: [{ rel: "canonical", href: "/circulares" }],
   }),
   component: Circulares,
-  errorComponent: ({ error }) => (
-    <PageShell>
-      <PageHero title="Circulares" subtitle="No se pudieron cargar las circulares." />
-      <section className="container-page py-16">
-        <p className="text-destructive">{error.message}</p>
-      </section>
-    </PageShell>
-  ),
+  errorComponent: ({ error }) => {
+    console.error("[circulares] load error:", error);
+    return (
+      <PageShell>
+        <PageHero title="Circulares" subtitle="No se pudieron cargar las circulares en este momento." />
+        <section className="container-page py-16">
+          <p className="text-muted-foreground">Inténtalo de nuevo en unos minutos.</p>
+        </section>
+      </PageShell>
+    );
+  },
 });
 
 const categoryLabels: Record<string, string> = {
