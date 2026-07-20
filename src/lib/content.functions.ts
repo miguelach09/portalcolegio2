@@ -49,12 +49,13 @@ async function checkAdmin(context: {
   }
 }
 
-async function getSignedUrl(filePath: string) {
+async function getSignedUrl(filePath: string, options?: { download?: boolean }) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const filename = filePath.split("/").pop();
   const { data, error } = await supabaseAdmin.storage
     .from(BUCKET_NAME)
     .createSignedUrl(filePath, 60 * 60 * 24 * 365, {
-      download: filePath.split("/").pop() || true,
+      download: options?.download ? (filename || true) : false,
     });
 
   if (error || !data?.signedUrl) {
@@ -63,6 +64,7 @@ async function getSignedUrl(filePath: string) {
   }
   return data.signedUrl;
 }
+
 
 
 // Public reads
