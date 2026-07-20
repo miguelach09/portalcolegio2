@@ -23,14 +23,17 @@ export const Route = createFileRoute("/galeria")({
     links: [{ rel: "canonical", href: "/galeria" }],
   }),
   component: Galeria,
-  errorComponent: ({ error }) => (
-    <PageShell>
-      <PageHero title="Galería" subtitle="No se pudieron cargar las imágenes." />
-      <section className="container-page py-16">
-        <p className="text-destructive">{error.message}</p>
-      </section>
-    </PageShell>
-  ),
+  errorComponent: ({ error }) => {
+    console.error("[galeria] load error:", error);
+    return (
+      <PageShell>
+        <PageHero title="Galería" subtitle="No se pudieron cargar las imágenes en este momento." />
+        <section className="container-page py-16">
+          <p className="text-muted-foreground">Inténtalo de nuevo en unos minutos.</p>
+        </section>
+      </PageShell>
+    );
+  },
 });
 
 function Galeria() {
