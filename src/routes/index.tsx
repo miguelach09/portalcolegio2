@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions } from "@tanstack/react-query";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { AIAssistant } from "@/components/site/AIAssistant";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
 import { QuickAccess } from "@/components/site/QuickAccess";
 import { News } from "@/components/site/News";
@@ -52,6 +53,7 @@ function Index() {
         <AdmissionsBanner />
       </main>
       <Footer />
+      <AIAssistant />
     </div>
   );
 }
