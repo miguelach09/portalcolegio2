@@ -3,10 +3,10 @@ import { useCallback, useEffect, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
-import heroStudents from "@/assets/hero-students.jpg";
-import heroPool from "@/assets/hero-pool.jpg";
-import heroSports from "@/assets/hero-sports.jpg";
-import heroClass from "@/assets/hero-classroom.jpg";
+import heroStudents from "@/assets/real/admisiones.jpg";
+import heroPool from "@/assets/real/pool.jpg";
+import heroSports from "@/assets/real/canchas.jpg";
+import heroClass from "@/assets/real/admisiones.jpg";
 
 type Slide = {
   image: string;

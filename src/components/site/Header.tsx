@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, GraduationCap, LogIn, LayoutDashboard, LogOut } from "lucide-react";
+import { Menu, X, LogIn, LayoutDashboard, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { ThemeToggle } from "./ThemeToggle";
+import logoCafam from "@/assets/real/logo-cafam.png";
 
 const nav = [
   { to: "/", label: "Inicio" },
@@ -20,13 +22,13 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-lg">
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-card)]">
-            <GraduationCap className="h-5 w-5" />
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-lg font-bold tracking-tight text-primary">CAFAM</span>
-            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">Colegio</span>
-          </span>
+          <img
+            src={logoCafam}
+            alt="Colegio Cafam"
+            className="h-9 w-auto"
+            width={120}
+            height={38}
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -43,7 +45,8 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-2 lg:flex">
+          <ThemeToggle />
           <AuthHeader />
           <Link
             to="/admisiones"
@@ -53,13 +56,16 @@ export function Header() {
           </Link>
         </div>
 
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border lg:hidden"
-          aria-label="Menú"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border"
+            aria-label="Menú"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (

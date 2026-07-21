@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Youtube, Instagram, Music2, MapPin, Phone, Mail, GraduationCap } from "lucide-react";
+import { Youtube, Instagram, Music2, MapPin, Phone, Mail } from "lucide-react";
+import logoCafam from "@/assets/real/logo-cafam.png";
 
 export function Footer() {
   return (
@@ -7,13 +8,9 @@ export function Footer() {
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-primary">
-              <GraduationCap className="h-5 w-5" />
+            <span className="flex items-center justify-center rounded-xl bg-white px-3 py-2">
+              <img src={logoCafam} alt="Colegio Cafam" className="h-9 w-auto" />
             </span>
-            <div className="leading-none">
-              <div className="font-display text-xl font-bold text-white">CAFAM</div>
-              <div className="text-[11px] uppercase tracking-[0.25em] text-white/60">Colegio</div>
-            </div>
           </div>
           <p className="mt-4 max-w-md text-sm text-white/70">
             Formamos personas íntegras, autónomas y competentes, comprometidas con la construcción
@@ -22,7 +19,7 @@ export function Footer() {
           <div className="mt-6 flex gap-3">
             <a href="https://www.youtube.com/channel/UC8JLRjaP48Nwy6foi5Dwkig" target="_blank" rel="noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/20" aria-label="YouTube"><Youtube className="h-5 w-5" /></a>
             <a href="https://soundcloud.com/colegiocafam" target="_blank" rel="noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/20" aria-label="SoundCloud"><Music2 className="h-5 w-5" /></a>
-            <a href="#" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/20" aria-label="Instagram"><Instagram className="h-5 w-5" /></a>
+            <a href="https://www.instagram.com/colegiocafam/" target="_blank" rel="noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/20" aria-label="Instagram"><Instagram className="h-5 w-5" /></a>
           </div>
         </div>
 
