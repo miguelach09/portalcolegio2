@@ -1,21 +1,29 @@
-import { BookOpen, ClipboardCheck, CreditCard, HeartHandshake, Mail, Library } from "lucide-react";
+import btnPac from "@/assets/real/btn-pac.png";
+import btnQ10 from "@/assets/real/btn-q10.png";
+import btnCorreo from "@/assets/real/btn-correo.png";
+import btnBiblioteca from "@/assets/real/btn-biblioteca.png";
+import btnBienestar from "@/assets/real/btn-bienestar.png";
+import btnAdmision from "@/assets/real/btn-admision.png";
+import btnManual from "@/assets/real/btn-manual.png";
+import btnDocumentos from "@/assets/real/btn-documentos.png";
 
 type Item = {
   label: string;
   desc: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  color: string;
+  image: string;
   external?: boolean;
 };
 
 const items: Item[] = [
-  { label: "Admisiones 2027", desc: "Preinscribe a tu hijo", href: "/admisiones", icon: ClipboardCheck, color: "bg-primary text-primary-foreground" },
-  { label: "PAC", desc: "Portal de Atención al Cliente", href: "https://portalcolegio.com/ingresoPac.php", icon: HeartHandshake, color: "bg-orange-brand text-white", external: true },
-  { label: "Bienestar", desc: "Programas de bienestar", href: "/bienestar", icon: HeartHandshake, color: "bg-green-brand text-white" },
-  { label: "Q10 – Recibo matrícula", desc: "Descarga tu recibo", href: "https://site.q10.com/login?aplentId=242506df-1822-4f95-b1ac-2842f6896513", icon: CreditCard, color: "bg-sky text-white", external: true },
-  { label: "Correo institucional", desc: "Office 365 estudiantes", href: "https://login.microsoftonline.com/", icon: Mail, color: "bg-yellow-brand text-black", external: true },
-  { label: "Biblioteca", desc: "Recursos digitales", href: "/biblioteca", icon: Library, color: "bg-pink-brand text-white" },
+  { label: "Admisiones 2027", desc: "Preinscribe a tu hijo", href: "/admisiones", image: btnAdmision },
+  { label: "PAC", desc: "Portal de Atención al Cliente", href: "https://portalcolegio.com/ingresoPac.php", image: btnPac, external: true },
+  { label: "Bienestar", desc: "Programas de bienestar", href: "/bienestar", image: btnBienestar },
+  { label: "Q10 – Recibo matrícula", desc: "Descarga tu recibo", href: "https://site.q10.com/login?aplentId=242506df-1822-4f95-b1ac-2842f6896513", image: btnQ10, external: true },
+  { label: "Correo institucional", desc: "Office 365 estudiantes", href: "https://login.microsoftonline.com/", image: btnCorreo, external: true },
+  { label: "Biblioteca", desc: "Recursos digitales", href: "/biblioteca", image: btnBiblioteca },
+  { label: "Manual de Convivencia", desc: "Documento institucional", href: "https://portalcolegio.com/MANUAL_CONVIVENCIA_COLEGIO_CAFAM.pdf", image: btnManual, external: true },
+  { label: "Documentos", desc: "Circulares y comunicados", href: "/circulares", image: btnDocumentos },
 ];
 
 export function QuickAccess() {
@@ -33,19 +41,21 @@ export function QuickAccess() {
         </p>
       </div>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((it) => {
-          const Icon = it.icon;
           const inner = (
-            <div className="group flex h-full items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]">
-              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${it.color}`}>
-                <Icon className="h-6 w-6" />
-              </span>
+            <div className="group flex h-full items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]">
+              <img
+                src={it.image}
+                alt={it.label}
+                loading="lazy"
+                className="h-14 w-14 shrink-0 object-contain"
+              />
               <div className="min-w-0">
-                <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-primary">
+                <h3 className="font-display text-base font-semibold text-foreground group-hover:text-primary">
                   {it.label}
                 </h3>
-                <p className="mt-1 text-sm text-muted-foreground">{it.desc}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{it.desc}</p>
               </div>
             </div>
           );
