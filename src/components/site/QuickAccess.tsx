@@ -17,7 +17,7 @@ type Item = {
 
 const items: Item[] = [
   { label: "Admisiones 2027", desc: "Preinscribe a tu hijo", href: "/admisiones", image: btnAdmision },
-  { label: "PAC", desc: "Portal de Atención al Cliente", href: "https://portalcolegio.com/ingresoPac.php", image: btnPac, external: true },
+  { label: "Guías de Aprendizaje", desc: "Escoge tu grado y descarga", href: "/guias", image: btnPac },
   { label: "Bienestar", desc: "Programas de bienestar", href: "/bienestar", image: btnBienestar },
   { label: "Q10 – Recibo matrícula", desc: "Descarga tu recibo", href: "https://site.q10.com/login?aplentId=242506df-1822-4f95-b1ac-2842f6896513", image: btnQ10, external: true },
   { label: "Correo institucional", desc: "Office 365 estudiantes", href: "https://login.microsoftonline.com/", image: btnCorreo, external: true },
