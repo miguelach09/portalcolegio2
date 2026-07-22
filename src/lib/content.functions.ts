@@ -238,6 +238,7 @@ export const createDocument = createServerFn({ method: "POST" })
       .insert({
         title: parsed.title,
         category: parsed.category,
+        grade: parsed.grade ?? null,
         file_path: data.filePath,
         published_at: parsed.published_at,
         is_active: parsed.is_active,
@@ -247,7 +248,7 @@ export const createDocument = createServerFn({ method: "POST" })
       .single();
 
     if (error) throw error;
-    return row as Document;
+    return row as unknown as Document;
   });
 
 export const updateDocument = createServerFn({ method: "POST" })
@@ -264,6 +265,7 @@ export const updateDocument = createServerFn({ method: "POST" })
       .update({
         title: rest.title,
         category: rest.category,
+        grade: rest.grade ?? null,
         published_at: rest.published_at,
         is_active: rest.is_active,
         sort_order: rest.sort_order,
@@ -273,7 +275,7 @@ export const updateDocument = createServerFn({ method: "POST" })
       .single();
 
     if (error) throw error;
-    return row as Document;
+    return row as unknown as Document;
   });
 
 export const deleteDocument = createServerFn({ method: "POST" })
