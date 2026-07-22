@@ -3,7 +3,52 @@ export type DocumentCategory =
   | "revisas"
   | "admisiones"
   | "herramientas"
+  | "guias"
   | "general";
+
+export type Grade =
+  | "transicion"
+  | "primero"
+  | "segundo"
+  | "tercero"
+  | "cuarto"
+  | "quinto"
+  | "sexto"
+  | "septimo"
+  | "octavo"
+  | "noveno"
+  | "decimo"
+  | "once";
+
+export const GRADE_ORDER: Grade[] = [
+  "transicion",
+  "primero",
+  "segundo",
+  "tercero",
+  "cuarto",
+  "quinto",
+  "sexto",
+  "septimo",
+  "octavo",
+  "noveno",
+  "decimo",
+  "once",
+];
+
+export const GRADE_LABELS: Record<Grade, string> = {
+  transicion: "Transición",
+  primero: "Primero",
+  segundo: "Segundo",
+  tercero: "Tercero",
+  cuarto: "Cuarto",
+  quinto: "Quinto",
+  sexto: "Sexto",
+  septimo: "Séptimo",
+  octavo: "Octavo",
+  noveno: "Noveno",
+  decimo: "Décimo",
+  once: "Once",
+};
 
 export type NewsCategory =
   | "institucional"
@@ -26,6 +71,7 @@ export interface Document {
   id: string;
   title: string;
   category: DocumentCategory;
+  grade: Grade | null;
   file_path: string;
   file_url: string | null;
   file_size: number | null;
