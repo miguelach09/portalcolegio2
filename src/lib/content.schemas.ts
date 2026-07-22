@@ -5,7 +5,23 @@ export const documentCategorySchema = z.enum([
   "revisas",
   "admisiones",
   "herramientas",
+  "guias",
   "general",
+]);
+
+export const gradeSchema = z.enum([
+  "transicion",
+  "primero",
+  "segundo",
+  "tercero",
+  "cuarto",
+  "quinto",
+  "sexto",
+  "septimo",
+  "octavo",
+  "noveno",
+  "decimo",
+  "once",
 ]);
 
 export const newsCategorySchema = z.enum([
@@ -27,16 +43,28 @@ export const galleryCategorySchema = z.enum([
   "graduacion",
 ]);
 
-export const documentFormSchema = z.object({
-  title: z.string().min(1, "El título es obligatorio"),
+export const documentFormSchema = z
+  .object({
+    title: z.string().min(1, "El título es obligatorio"),
+    category: documentCategorySchema,
+    grade: gradeSchema.nullable().optional(),
+    published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
+    is_active: z.boolean().default(true),
+    sort_order: z.number().int().min(0).default(0),
+  })
+  .refine((v) => v.category !== "guias" || !!v.grade, {
+    message: "Selecciona el grado para la guía",
+    path: ["grade"],
+  });
+
+export const documentUpdateSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(1),
   category: documentCategorySchema,
-  published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
+  grade: gradeSchema.nullable().optional(),
+  published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   is_active: z.boolean().default(true),
   sort_order: z.number().int().min(0).default(0),
-});
-
-export const documentUpdateSchema = documentFormSchema.extend({
-  id: z.string().uuid(),
 });
 
 export const newsFormSchema = z.object({

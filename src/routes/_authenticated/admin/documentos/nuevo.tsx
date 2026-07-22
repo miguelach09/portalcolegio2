@@ -4,7 +4,8 @@ import { Upload, FileText, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { createDocument } from "@/lib/content.functions";
 import { documentFormSchema } from "@/lib/content.schemas";
-import type { DocumentCategory } from "@/lib/content.types";
+import type { DocumentCategory, Grade } from "@/lib/content.types";
+import { GRADE_LABELS, GRADE_ORDER } from "@/lib/content.types";
 
 export const Route = createFileRoute("/_authenticated/admin/documentos/nuevo")({
   component: NewDocumentPage,
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/_authenticated/admin/documentos/nuevo")({
 
 const categories: { value: DocumentCategory; label: string }[] = [
   { value: "circulares", label: "Circulares" },
+  { value: "guias", label: "Guías de Aprendizaje" },
   { value: "revisas", label: "Revisas" },
   { value: "admisiones", label: "Admisiones" },
   { value: "herramientas", label: "Herramientas" },
@@ -25,6 +27,7 @@ function NewDocumentPage() {
   const [values, setValues] = useState({
     title: "",
     category: "circulares" as DocumentCategory,
+    grade: null as Grade | null,
     published_at: new Date().toISOString().split("T")[0],
     is_active: true,
     sort_order: 0,
@@ -81,25 +84,27 @@ function NewDocumentPage() {
     }
   }
 
+  const showGrade = values.category === "guias";
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
-        <div className="container-app flex h-16 items-center gap-4">
-          <Link to="/admin/documentos" className="text-sm text-muted-foreground hover:text-foreground">
-            ← Volver
+        <div className="container-page flex h-16 items-center gap-4">
+          <Link to="/admin/documentos" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Volver
           </Link>
           <h1 className="text-xl font-bold text-foreground">Nuevo documento</h1>
         </div>
       </header>
 
-      <main className="container-app py-10">
+      <main className="container-page py-10">
         <form onSubmit={handleSubmit} className="mx-auto max-w-2xl space-y-6 rounded-xl border bg-card p-8 shadow-sm">
           <div>
             <label className="mb-2 block text-sm font-medium">Archivo PDF</label>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-input bg-background p-8 transition hover:border-primary hover:bg-accent"
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-input bg-background p-8 transition hover:border-primary hover:bg-accent/10"
             >
               {file ? (
                 <>
@@ -141,7 +146,10 @@ function NewDocumentPage() {
               <label className="mb-1 block text-sm font-medium">Categoría</label>
               <select
                 value={values.category}
-                onChange={(e) => setValues({ ...values, category: e.target.value as DocumentCategory })}
+                onChange={(e) => {
+                  const cat = e.target.value as DocumentCategory;
+                  setValues((v) => ({ ...v, category: cat, grade: cat === "guias" ? v.grade : null }));
+                }}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
               >
                 {categories.map((c) => (
@@ -162,6 +170,27 @@ function NewDocumentPage() {
               {errors.published_at && <p className="mt-1 text-sm text-destructive">{errors.published_at}</p>}
             </div>
           </div>
+
+          {showGrade && (
+            <div>
+              <label className="mb-1 block text-sm font-medium">Grado</label>
+              <select
+                value={values.grade ?? ""}
+                onChange={(e) =>
+                  setValues({ ...values, grade: (e.target.value || null) as Grade | null })
+                }
+                className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">— Selecciona grado —</option>
+                {GRADE_ORDER.map((g) => (
+                  <option key={g} value={g}>
+                    {GRADE_LABELS[g]}
+                  </option>
+                ))}
+              </select>
+              {errors.grade && <p className="mt-1 text-sm text-destructive">{errors.grade}</p>}
+            </div>
+          )}
 
           <div className="grid gap-4 md:grid-cols-2">
             <div>
@@ -195,7 +224,7 @@ function NewDocumentPage() {
           <div className="flex items-center justify-end gap-3 pt-2">
             <Link
               to="/admin/documentos"
-              className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
+              className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent/10"
             >
               Cancelar
             </Link>

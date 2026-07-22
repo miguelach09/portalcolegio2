@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MiColegioRouteImport } from './routes/mi-colegio'
 import { Route as HerramientasRouteImport } from './routes/herramientas'
+import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CircularesRouteImport } from './routes/circulares'
@@ -36,6 +37,11 @@ const MiColegioRoute = MiColegioRouteImport.update({
 const HerramientasRoute = HerramientasRouteImport.update({
   id: '/herramientas',
   path: '/herramientas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuiasRoute = GuiasRouteImport.update({
+  id: '/guias',
+  path: '/guias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GaleriaRoute = GaleriaRouteImport.update({
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
+  '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
+  '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -173,6 +181,7 @@ export interface FileRoutesById {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
+  '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/galeria'
+    | '/guias'
     | '/herramientas'
     | '/mi-colegio'
     | '/admin/'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/galeria'
+    | '/guias'
     | '/herramientas'
     | '/mi-colegio'
     | '/admin'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/galeria'
+    | '/guias'
     | '/herramientas'
     | '/mi-colegio'
     | '/_authenticated/admin/'
@@ -254,6 +266,7 @@ export interface RootRouteChildren {
   CircularesRoute: typeof CircularesRoute
   ContactoRoute: typeof ContactoRoute
   GaleriaRoute: typeof GaleriaRoute
+  GuiasRoute: typeof GuiasRoute
   HerramientasRoute: typeof HerramientasRoute
   MiColegioRoute: typeof MiColegioRoute
 }
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       path: '/herramientas'
       fullPath: '/herramientas'
       preLoaderRoute: typeof HerramientasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guias': {
+      id: '/guias'
+      path: '/guias'
+      fullPath: '/guias'
+      preLoaderRoute: typeof GuiasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galeria': {
@@ -425,19 +445,10 @@ const rootRouteChildren: RootRouteChildren = {
   CircularesRoute: CircularesRoute,
   ContactoRoute: ContactoRoute,
   GaleriaRoute: GaleriaRoute,
+  GuiasRoute: GuiasRoute,
   HerramientasRoute: HerramientasRoute,
   MiColegioRoute: MiColegioRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

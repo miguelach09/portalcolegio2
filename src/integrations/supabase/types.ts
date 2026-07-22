@@ -22,6 +22,7 @@ export type Database = {
           file_size: number | null
           file_type: string | null
           file_url: string | null
+          grade: string | null
           id: string
           is_active: boolean
           published_at: string
@@ -36,6 +37,7 @@ export type Database = {
           file_size?: number | null
           file_type?: string | null
           file_url?: string | null
+          grade?: string | null
           id?: string
           is_active?: boolean
           published_at?: string
@@ -50,6 +52,7 @@ export type Database = {
           file_size?: number | null
           file_type?: string | null
           file_url?: string | null
+          grade?: string | null
           id?: string
           is_active?: boolean
           published_at?: string
@@ -182,6 +185,7 @@ export type Database = {
         | "admisiones"
         | "herramientas"
         | "general"
+        | "guias"
       gallery_category:
         | "aulas"
         | "deporte"
@@ -331,6 +335,7 @@ export const Constants = {
         "admisiones",
         "herramientas",
         "general",
+        "guias",
       ],
       gallery_category: [
         "aulas",

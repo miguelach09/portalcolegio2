@@ -1,69 +1,72 @@
-# Plan: Base de datos y gestor de archivos para portalcolegio.com
 
-## Objetivo
-Darle al sitio un backend real con Lovable Cloud para que el administrador pueda subir, organizar y publicar PDFs (circulares, revisas, documentos de admisiones) e imágenes (galería, noticias) desde un panel privado, y que el sitio público las muestre dinámicamente en todas las secciones, incluyendo los accesos rápidos del home.
+# Plan de pulido del sitio
 
-## Alcance
-- Habilitar Lovable Cloud en el proyecto (base de datos PostgreSQL + Storage + auth).
-- Autenticación: un solo usuario administrador con email/password (sin perfiles adicionales, solo `auth.users`).
-- Tablas de contenido: `documents` (PDFs/circulares/revisas), `news` (noticias), `gallery_images` (galería/vida escolar).
-- Bucket de Storage privado para archivos, con acceso público controlado mediante signed URLs o políticas seguras.
-- Panel administrativo protegido bajo `/_authenticated/admin` para crear, editar, eliminar y ordenar contenido.
-- Actualizar las rutas públicas (`/`, `/circulares`, `/galeria`, `/mi-colegio`, `/admisiones`, `/herramientas`) para leer contenido desde la base de datos en lugar de placeholders.
+## 1. Fix de tema claro (títulos blancos)
 
-## Estructura propuesta
+Auditar y corregir cualquier título/encabezado que hereda color blanco al cambiar a tema claro. Los sospechosos principales:
 
-### 1. Backend / Lovable Cloud
-- Habilitar Lovable Cloud en el proyecto.
-- Crear bucket `site-assets` en Storage para PDFs e imágenes.
-- Crear migraciones SQL:
-  - `documents`: `id`, `title`, `category` (circulares | revisas | admisiones | herramientas | general), `file_path` (Storage path), `file_url`, `published_at`, `is_active`, `created_at`, `updated_at`.
-  - `news`: `id`, `title`, `summary`, `content`, `image_url`, `published_at`, `is_active`, `created_at`.
-  - `gallery_images`: `id`, `title`, `category`, `image_url`, `sort_order`, `is_active`, `created_at`.
-- Políticas RLS:
-  - Lectura pública (`anon`) para filas activas.
-  - Escritura solo para usuarios autenticados (`authenticated`) con rol admin.
-  - Tabla `user_roles` con rol `admin` y función `has_role()` para evitar escalada de privilegios.
+- `src/components/site/PageHero.tsx`: la sección usa `text-white` global sobre gradiente azul — ese está OK (gradiente es oscuro en ambos temas). Verificar que los `h1` internos no tengan clase forzada.
+- `src/components/site/News.tsx`, `GalleryPreview.tsx`, `AdmissionsBanner.tsx`, `Footer.tsx`, `QuickAccess.tsx`: revisar cualquier `text-white`, `text-black` o color hex hardcoded en encabezados dentro de tarjetas o secciones sobre fondo claro.
+- Reemplazar por tokens semánticos: `text-foreground`, `text-primary-foreground`, `text-muted-foreground` según contexto.
+- Confirmar que la regla base en `src/styles.css` (`h1..h6 { color: inherit }` implícito) no está sobreescrita.
 
-### 2. Autenticación
-- Ruta pública `/auth` con formulario de login.
-- Layout protegido `src/routes/_authenticated/route.tsx` (gestionado por la integración) para el panel admin.
-- Middleware `attachSupabaseAuth` en `src/start.ts` para que las server functions autenticadas reciban el bearer token.
-- Server functions protegidas con `requireSupabaseAuth` para escritura/eliminación.
+Verificación: capturar screenshot con Playwright en cada ruta (`/`, `/mi-colegio`, `/admisiones`, `/galeria`, `/circulares`, `/herramientas`, `/contacto`, `/bienestar`, `/biblioteca`) en ambos temas y confirmar contraste.
 
-### 3. Panel administrativo (`/_authenticated/admin`)
-- Dashboard con resumen de documentos, noticias e imágenes.
-- Sección "Documentos": formulario para subir PDFs (drag & drop o input file), elegir categoría, título, fecha de publicación y activar/desactivar. Listado con opciones de editar/eliminar.
-- Sección "Noticias": formulario con título, resumen, contenido, imagen destacada, fecha y activar/desactivar.
-- Sección "Galería": formulario para subir imágenes, título, categoría y orden.
-- Validación de formularios con Zod + React Hook Form.
-- Subida de archivos directamente al Storage de Lovable Cloud desde el cliente, luego guardar metadatos en la BD mediante server function.
+## 2. Reemplazar "PAC" por "Guías de Aprendizaje"
 
-### 4. Vistas públicas actualizadas
-- **Home (`/`)**: accesos rápidos dinámicos desde `documents` filtrados por categoría; últimas noticias desde `news`; preview de galería desde `gallery_images`.
-- **Circulares (`/circulares`)**: listado de documentos filtrados por `category = 'circulares'`.
-- **Herramientas (`/herramientas`)**: listado de documentos filtrados por `category = 'herramientas'`.
-- **Admisiones (`/admisiones`)**: documentos de admisiones + CTA de inscripción.
-- **Galería (`/galeria`)**: masonry grid con imágenes de `gallery_images`.
-- **Mi Colegio (`/mi-colegio`)**: noticias destacadas + galería de vida escolar.
+### Base de datos (migración)
+- Agregar valor `guias` al enum `document_category`.
+- Agregar columna `grade` (text nullable) a `public.documents` con CHECK constraint para: `transicion`, `primero`, `segundo`, `tercero`, `cuarto`, `quinto`, `sexto`, `septimo`, `octavo`, `noveno`, `decimo`, `once`.
+- Índice en `(category, grade, is_active)` para consultas rápidas.
 
-### 5. UX y diseño
-- Mantener la identidad Cafam (azul institucional, tipografía Outfit/Figtree).
-- Panel admin con UI clara, tablas o cards, estados de carga y mensajes de éxito/error con `sonner`.
-- Los documentos se abren en nueva pestaña usando URL pública del Storage.
+### Backend
+- `src/lib/content.schemas.ts`: agregar `guias` al `documentCategorySchema`, agregar `gradeSchema` y campo opcional `grade` en `documentFormSchema`.
+- `src/lib/content.functions.ts`: `getDocuments` acepta filtro opcional `grade`; nuevo `getGuiasByGrade({ grade })`.
+- Regenerar `types.ts` tras la migración.
 
-## Notas técnicas
-- Se usará `createServerFn` para toda la lógica de backend; no edge functions.
-- Los archivos se almacenan en Storage, no en la base de datos (la BD solo guarda metadatos y referencias).
-- El bucket será privado por defecto; las URLs públicas se generarán con signed URLs o políticas `TO anon` según lo que permita la configuración del workspace.
-- Se respetarán las reglas de importación de Supabase en TanStack Start: `*.functions.ts` en rutas client-safe, `*.server.ts` para helpers de servidor.
+### Rutas y UI
+- Nueva ruta `src/routes/guias.tsx` con selector visual de grado (12 tarjetas: Transición → Once) y listado filtrado de PDFs por grado seleccionado (usa search param `?grado=`).
+- `src/components/site/QuickAccess.tsx`: cambiar el ítem PAC por "Guías de Aprendizaje" → `/guias` con icono/imagen adecuado (reusar `btn-pac.png` o generar uno nuevo con texto "Guías").
+- `src/components/site/Header.tsx`: opcional, incluir "Guías" en nav principal o mantenerlo bajo Herramientas.
+- Admin: `src/routes/_authenticated/admin/documentos/nuevo.tsx` — mostrar selector de grado cuando `category === "guias"`, y en el listado permitir filtrar por grado.
 
-## Entregables
-- Lovable Cloud habilitado y configurado.
-- Auth funcional (login/logout) para el administrador.
-- Tablas y Storage creados.
-- Panel administrativo funcional para subir y gestionar documentos, noticias e imágenes.
-- Sitio público mostrando contenido dinámico en todas las secciones priorizadas.
+## 3. Ajustes adicionales de pulido
 
-## Próximo paso
-Aprobar este plan para comenzar la implementación. La primera acción será habilitar Lovable Cloud en el proyecto.
+Cambios enfocados en UX, accesibilidad y SEO — sin tocar lógica de negocio existente:
+
+- **Página 404 personalizada** con branding Cafam y links a secciones principales (`__root.tsx` `notFoundComponent`).
+- **Skeletons de carga** en Home, Galería, Circulares y Guías (reemplazar el flash de contenido vacío).
+- **Botón "volver arriba"** flotante en páginas largas (opuesto al asistente IA para no chocar).
+- **Buscador simple** en `/circulares` y `/guias` (input que filtra por título en cliente).
+- **Meta tags og:image** en rutas hoja usando una imagen real del portal.
+- **Favicon y apple-touch-icon** con el logo Cafam.
+- **Accesibilidad**: `aria-label` en todos los botones icónicos (tema, menú, cerrar asistente), foco visible con `focus-visible:ring`, contraste AA validado.
+- **Persistencia de tema**: verificar que `ThemeToggle` respeta `prefers-color-scheme` en primera visita y no parpadea (script inline en `<head>` de `__root.tsx` que aplica la clase `dark` antes de la hidratación).
+- **Footer**: agregar enlaces a redes sociales reales del colegio y línea de contacto.
+- **Breadcrumbs** simples en páginas internas para orientación.
+
+## Diagrama de flujo Guías
+
+```text
+QuickAccess [Guías] ──► /guias (grid de 12 grados)
+                             │
+                             ▼
+                        /guias?grado=quinto
+                             │
+                             ▼
+                     Lista de PDFs filtrados
+                     (getGuiasByGrade)
+```
+
+## Detalles técnicos
+
+- La migración de `document_category` requiere `ALTER TYPE ... ADD VALUE 'guias'` en su propia transacción antes de usarse.
+- Grade se guarda como texto con CHECK constraint (no enum) para permitir agregar grados sin migración futura.
+- El selector de grado usa `validateSearch` con zod + `fallback` (siguiendo `tanstack-search-params`).
+- No se cambia el backend de admisiones, galería, noticias ni el asistente IA.
+
+## Fuera de alcance
+
+- No se rediseña la identidad visual ni la estructura de rutas existente.
+- No se toca la lógica del asistente de IA.
+- No se implementa multi-idioma ni PWA (se puede proponer aparte).
