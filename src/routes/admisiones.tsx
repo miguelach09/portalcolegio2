@@ -104,7 +104,7 @@ function Admisiones() {
             )}
           </div>
 
-          <div className="rounded-2xl bg-[var(--gradient-hero)] p-8 text-white shadow-[var(--shadow-lift)]">
+          <div className="rounded-2xl bg-[image:var(--gradient-hero)] p-8 text-white shadow-[var(--shadow-lift)]">
             <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-widest">Fechas clave</span>
             <ul className="mt-6 space-y-4">
               <li className="flex items-start gap-3"><Calendar className="mt-0.5 h-5 w-5" /><div><b>15 jul – 17 ago 2026</b><br/><span className="text-white/80 text-sm">Preinscripciones en línea</span></div></li>
