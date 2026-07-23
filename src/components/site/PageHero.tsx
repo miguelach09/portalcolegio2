@@ -12,7 +12,7 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden bg-[var(--gradient-hero)] text-white">
+    <section className="relative overflow-hidden bg-[image:var(--gradient-hero)] text-white">
       <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-yellow-brand/20 blur-3xl" />
       <div className="container-page relative py-16 md:py-24">
