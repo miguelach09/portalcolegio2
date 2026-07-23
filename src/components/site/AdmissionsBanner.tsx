@@ -4,7 +4,7 @@ import { CalendarCheck, ArrowRight } from "lucide-react";
 export function AdmissionsBanner() {
   return (
     <section className="container-page pb-16 md:pb-24">
-      <div className="relative overflow-hidden rounded-3xl bg-[var(--gradient-sky)] p-8 text-white shadow-[var(--shadow-lift)] md:p-14">
+      <div className="relative overflow-hidden rounded-3xl bg-[image:var(--gradient-sky)] p-8 text-white shadow-[var(--shadow-lift)] md:p-14">
         <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-yellow-brand/30 blur-3xl" />
         <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
         <div className="relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
