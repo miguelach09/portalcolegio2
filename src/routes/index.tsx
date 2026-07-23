@@ -39,7 +39,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { data } = Route.useLoaderData();
+  const data = Route.useLoaderData();
   const { news = [], interestDocs = [], gallery = [] } = data || {};
 
   return (

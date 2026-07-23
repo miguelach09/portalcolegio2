@@ -22,7 +22,7 @@ export function News({ news, interestDocs }: NewsProps) {
       <div className="container-page grid gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <span className="text-xs font-bold uppercase tracking-widest text-primary">Noticias</span>
-          <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">Vida escolar y comunidad</h2>
+          <h2 className="mt-2 font-display text-3xl font-bold text-slate-900 md:text-4xl dark:text-white">Vida escolar y comunidad</h2>
           <div className="mt-8 space-y-4">
             {displayNews.length === 0 ? (
               <p className="text-muted-foreground">No hay noticias publicadas aún.</p>
@@ -65,7 +65,7 @@ export function News({ news, interestDocs }: NewsProps) {
 
         <aside>
           <span className="text-xs font-bold uppercase tracking-widest text-orange-brand">De interés</span>
-          <h2 className="mt-2 font-display text-3xl font-bold">Documentos y enlaces</h2>
+          <h2 className="mt-2 font-display text-3xl font-bold text-slate-900 dark:text-white">Documentos y enlaces</h2>
           <ul className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card">
             {interestDocs.length === 0 ? (
               <li className="px-5 py-4 text-sm text-muted-foreground">No hay documentos destacados.</li>
