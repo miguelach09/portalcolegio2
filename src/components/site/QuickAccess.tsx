@@ -32,7 +32,7 @@ export function QuickAccess() {
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
         <div>
           <span className="text-xs font-bold uppercase tracking-widest text-primary">Accesos rápidos</span>
-          <h2 className="mt-2 font-display text-3xl font-bold text-foreground md:text-4xl">
+          <h2 className="mt-2 font-display text-3xl font-bold text-slate-900 md:text-4xl dark:text-white">
             Todo lo que necesitas, a un clic.
           </h2>
         </div>
