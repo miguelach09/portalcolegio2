@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          status: string
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           category: Database["public"]["Enums"]["document_category"]
@@ -58,6 +91,87 @@ export type Database = {
           published_at?: string
           sort_order?: number
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          is_active: boolean
+          location: string | null
+          scheduled_at: string | null
+          sort_order: number
+          start_date: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          scheduled_at?: string | null
+          sort_order?: number
+          start_date: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          scheduled_at?: string | null
+          sort_order?: number
+          start_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      faqs: {
+        Row: {
+          answer: string
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean
+          question: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question?: string
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []
@@ -108,7 +222,9 @@ export type Database = {
           image_url: string | null
           is_active: boolean
           published_at: string
+          scheduled_at: string | null
           sort_order: number
+          status: string
           summary: string | null
           title: string
           updated_at: string
@@ -122,7 +238,9 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           published_at?: string
+          scheduled_at?: string | null
           sort_order?: number
+          status?: string
           summary?: string | null
           title: string
           updated_at?: string
@@ -136,8 +254,153 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           published_at?: string
+          scheduled_at?: string | null
           sort_order?: number
+          status?: string
           summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+        }
+        Relationships: []
+      }
+      survey_options: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          sort_order: number
+          survey_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          sort_order?: number
+          survey_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          sort_order?: number
+          survey_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_options_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      survey_votes: {
+        Row: {
+          created_at: string
+          id: string
+          option_id: string
+          survey_id: string
+          voter_hash: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          option_id: string
+          survey_id: string
+          voter_hash: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          option_id?: string
+          survey_id?: string
+          voter_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_votes_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "survey_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_votes_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      surveys: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          question: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          question: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          question?: string
+          sort_order?: number
           title?: string
           updated_at?: string
         }
@@ -178,7 +441,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin"
+      app_role: "admin" | "editor"
       document_category:
         | "circulares"
         | "revisas"
@@ -328,7 +591,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin"],
+      app_role: ["admin", "editor"],
       document_category: [
         "circulares",
         "revisas",

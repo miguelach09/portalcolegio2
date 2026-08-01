@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useState } from "react";
 import type { GalleryImage } from "@/lib/content.types";
+import { Lightbox } from "./Lightbox";
 
 interface GalleryPreviewProps {
   images: GalleryImage[];
@@ -8,6 +10,7 @@ interface GalleryPreviewProps {
 
 export function GalleryPreview({ images }: GalleryPreviewProps) {
   const displayImages = images.slice(0, 6);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Map categories to tall flags for visual variety
   const layoutFlags = [true, false, false, false, false, true];
@@ -37,8 +40,9 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
       ) : (
         <div className="mt-10 grid auto-rows-[180px] grid-cols-2 gap-3 md:grid-cols-3 md:auto-rows-[220px]">
           {displayImages.map((img, i) => (
-            <div
+            <button
               key={img.id}
+              onClick={() => setLightboxIndex(i)}
               className={`group relative overflow-hidden rounded-2xl ${
                 layoutFlags[i] ? "row-span-2" : ""
               }`}
@@ -55,10 +59,17 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
               <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
                 {img.title}
               </span>
-            </div>
+            </button>
           ))}
         </div>
       )}
+
+      <Lightbox
+        images={displayImages.map((img) => ({ id: img.id, image_url: img.image_url, title: img.title }))}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={setLightboxIndex}
+      />
     </section>
   );
 }

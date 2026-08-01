@@ -8,6 +8,7 @@ import { BookOpen, FileText, Download, ArrowLeft, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { getDocuments } from "@/lib/content.functions";
 import { GRADE_LABELS, GRADE_ORDER, type Grade } from "@/lib/content.types";
+import { formatDateES } from "@/lib/utils";
 
 const guiasSearchSchema = z.object({
   grado: fallback(z.string(), "").default(""),
@@ -197,11 +198,7 @@ function GuiasPage() {
                         <div>
                           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                             <span>
-                              {new Date(doc.published_at).toLocaleDateString("es-CO", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
+                              {formatDateES(doc.published_at)}
                             </span>
                             {doc.grade && (
                               <span className="rounded-full bg-secondary px-2 py-0.5 font-semibold text-secondary-foreground">

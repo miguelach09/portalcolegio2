@@ -1,5 +1,6 @@
 import { Calendar, ArrowUpRight, FileText } from "lucide-react";
 import type { NewsItem, Document } from "@/lib/content.types";
+import { formatDateES } from "@/lib/utils";
 
 interface NewsProps {
   news: NewsItem[];
@@ -43,7 +44,7 @@ export function News({ news, interestDocs }: NewsProps) {
                     <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                       <span className="inline-flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5" />
-                        {new Date(n.published_at).toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}
+                        {formatDateES(n.published_at)}
                       </span>
                       <span className="rounded-full bg-primary-soft px-2.5 py-0.5 font-semibold uppercase tracking-wider text-primary">
                         {categoryLabels[n.category] || n.category}

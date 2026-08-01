@@ -1,9 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { FileText, Image, Newspaper, Plus, LogOut } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import {
+  FileText,
+  Image,
+  Newspaper,
+  Plus,
+  LogOut,
+  CalendarDays,
+  HelpCircle,
+  Vote,
+  Mail,
+  Users,
+  MessageSquare,
+  Megaphone,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouter } from "@tanstack/react-router";
-import { getDocuments, getGalleryImages, getNews } from "@/lib/content.functions";
+import { getDashboardStats } from "@/lib/features.functions";
+import { getContactMessages, updateContactMessageStatus, deleteContactMessage } from "@/lib/features.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminDashboard,
@@ -11,20 +26,10 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 
 function AdminDashboard() {
   const router = useRouter();
-
-  const { data: documents = [] } = useQuery({
-    queryKey: ["admin-documents"],
-    queryFn: () => getDocuments({ data: {} }),
-  });
-
-  const { data: news = [] } = useQuery({
-    queryKey: ["admin-news"],
-    queryFn: () => getNews({ data: { limit: 100 } }),
-  });
-
-  const { data: images = [] } = useQuery({
-    queryKey: ["admin-gallery"],
-    queryFn: () => getGalleryImages({ data: { limit: 100 } }),
+  const stats = useServerFn(getDashboardStats);
+  const { data: dashboard } = useQuery({
+    queryKey: ["dashboard-stats"],
+    queryFn: () => stats(),
   });
 
   async function handleSignOut() {
@@ -48,79 +53,89 @@ function AdminDashboard() {
       </header>
 
       <main className="container-app py-10">
-        <div className="grid gap-6 md:grid-cols-3">
-          <AdminCard
-            title="Documentos"
-            count={documents.length}
-            icon={<FileText className="h-5 w-5" />}
-            href="/admin/documentos"
-            color="bg-blue-100 text-blue-700"
-          />
-          <AdminCard
-            title="Noticias"
-            count={news.length}
-            icon={<Newspaper className="h-5 w-5" />}
-            href="/admin/noticias"
-            color="bg-amber-100 text-amber-700"
-          />
-          <AdminCard
-            title="Galería"
-            count={images.length}
-            icon={<Image className="h-5 w-5" />}
-            href="/admin/galeria"
-            color="bg-emerald-100 text-emerald-700"
-          />
+        <h2 className="text-lg font-semibold text-foreground">Resumen</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <StatCard label="Noticias" count={dashboard?.news ?? "—"} icon={<Newspaper className="h-5 w-5" />} color="bg-amber-100 text-amber-700" />
+          <StatCard label="Documentos" count={dashboard?.documents ?? "—"} icon={<FileText className="h-5 w-5" />} color="bg-blue-100 text-blue-700" />
+          <StatCard label="Galería" count={dashboard?.gallery ?? "—"} icon={<Image className="h-5 w-5" />} color="bg-emerald-100 text-emerald-700" />
+          <StatCard label="Eventos" count={dashboard?.events ?? "—"} icon={<CalendarDays className="h-5 w-5" />} color="bg-purple-100 text-purple-700" />
+          <StatCard label="Mensajes nuevos" count={dashboard?.newMessages ?? "—"} icon={<Mail className="h-5 w-5" />} color="bg-red-100 text-red-700" href="/admin/mensajes" />
+          <StatCard label="Suscriptores" count={dashboard?.subscribers ?? "—"} icon={<Users className="h-5 w-5" />} color="bg-cyan-100 text-cyan-700" href="/admin/suscriptores" />
+          <StatCard label="Preguntas FAQ" count={dashboard?.faqs ?? "—"} icon={<HelpCircle className="h-5 w-5" />} color="bg-indigo-100 text-indigo-700" href="/admin/faqs" />
+          <StatCard label="Encuestas" count={dashboard ? "—": "—"} icon={<Vote className="h-5 w-5" />} color="bg-pink-100 text-pink-700" href="/admin/encuestas" />
         </div>
 
-        <section className="mt-10">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Acciones rápidas</h2>
-          </div>
-          <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <QuickActionCard
-              title="Subir circular o revisa"
-              desc="PDF para Circulares, Revisas, Admisiones o Herramientas"
-              href="/admin/documentos/nuevo"
-            />
-            <QuickActionCard
-              title="Publicar noticia"
-              desc="Crear entrada para la sección de noticias"
-              href="/admin/noticias/nueva"
-            />
-            <QuickActionCard
-              title="Agregar imagen a galería"
-              desc="Subir foto a la galería de vida escolar"
-              href="/admin/galeria/nueva"
-            />
-          </div>
-        </section>
+        <h2 className="mt-10 text-lg font-semibold text-foreground">Gestión de contenido</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ManageCard title="Documentos" desc="Circulares, revisas, guías y herramientas" href="/admin/documentos" icon={<FileText className="h-5 w-5" />} />
+          <ManageCard title="Noticias" desc="Publicar y editar noticias" href="/admin/noticias" icon={<Newspaper className="h-5 w-5" />} />
+          <ManageCard title="Galería" desc="Imágenes de vida escolar" href="/admin/galeria" icon={<Image className="h-5 w-5" />} />
+          <ManageCard title="Eventos" desc="Calendario escolar" href="/admin/eventos" icon={<CalendarDays className="h-5 w-5" />} />
+          <ManageCard title="Preguntas FAQ" desc="Preguntas frecuentes" href="/admin/faqs" icon={<HelpCircle className="h-5 w-5" />} />
+          <ManageCard title="Encuestas" desc="Crear y gestionar encuestas" href="/admin/encuestas" icon={<Vote className="h-5 w-5" />} />
+          <ManageCard title="Mensajes" desc="Buzón de contacto" href="/admin/mensajes" icon={<MessageSquare className="h-5 w-5" />} />
+          <ManageCard title="Suscriptores" desc="Lista de correos" href="/admin/suscriptores" icon={<Users className="h-5 w-5" />} />
+          <ManageCard title="Avisos" desc="Banner de aviso urgente" href="/admin/avisos" icon={<Megaphone className="h-5 w-5" />} />
+        </div>
+
+        <h2 className="mt-10 text-lg font-semibold text-foreground">Acciones rápidas</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <QuickActionCard title="Subir circular o revisa" desc="PDF para Circulares, Revisas, Admisiones o Herramientas" href="/admin/documentos/nuevo" />
+          <QuickActionCard title="Publicar noticia" desc="Crear entrada para la sección de noticias" href="/admin/noticias/nueva" />
+          <QuickActionCard title="Agregar imagen a galería" desc="Subir foto a la galería de vida escolar" href="/admin/galeria/nueva" />
+        </div>
       </main>
     </div>
   );
 }
 
-function AdminCard({
-  title,
+function StatCard({
+  label,
   count,
   icon,
-  href,
   color,
+  href,
+}: {
+  label: string;
+  count: number | string;
+  icon: React.ReactNode;
+  color: string;
+  href?: string;
+}) {
+  const content = (
+    <div className="flex items-center gap-4 rounded-xl border bg-card p-5 shadow-sm transition hover:shadow-md">
+      <div className={`rounded-lg p-3 ${color}`}>{icon}</div>
+      <div>
+        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="text-2xl font-bold text-foreground">{count}</p>
+      </div>
+    </div>
+  );
+  return href ? <Link to={href}>{content}</Link> : content;
+}
+
+function ManageCard({
+  title,
+  desc,
+  href,
+  icon,
 }: {
   title: string;
-  count: number;
-  icon: React.ReactNode;
+  desc: string;
   href: string;
-  color: string;
+  icon: React.ReactNode;
 }) {
   return (
     <Link
       to={href}
-      className="flex items-center gap-4 rounded-xl border bg-card p-5 shadow-sm transition hover:shadow-md"
+      className="group flex items-center gap-3 rounded-xl border border-border bg-card p-4 transition hover:border-primary hover:bg-accent"
     >
-      <div className={`rounded-lg p-3 ${color}`}>{icon}</div>
+      <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary-soft text-primary">
+        {icon}
+      </div>
       <div>
-        <p className="text-sm text-muted-foreground">{title}</p>
-        <p className="text-2xl font-bold text-foreground">{count}</p>
+        <p className="font-semibold text-foreground">{title}</p>
+        <p className="text-sm text-muted-foreground">{desc}</p>
       </div>
     </Link>
   );

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions } from "@tanstack/react-query";
 import { Header } from "@/components/site/Header";
+import { AnnouncementBanner } from "@/components/site/AnnouncementBanner";
 import { Footer } from "@/components/site/Footer";
 import { AIAssistant } from "@/components/site/AIAssistant";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
@@ -44,6 +45,7 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnnouncementBanner />
       <Header />
       <main>
         <HeroCarousel />

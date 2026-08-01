@@ -12,7 +12,10 @@ const nav = [
   { to: "/admisiones", label: "Admisiones" },
   { to: "/galeria", label: "Galería" },
   { to: "/circulares", label: "Circulares" },
-  { to: "/herramientas", label: "Herramientas" },
+  { to: "/guias", label: "Guías" },
+  { to: "/calendario", label: "Calendario" },
+  { to: "/encuestas", label: "Encuestas" },
+  { to: "/faq", label: "FAQ" },
   { to: "/contacto", label: "Contáctenos" },
 ] as const;
 
