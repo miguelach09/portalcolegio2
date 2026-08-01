@@ -13,8 +13,11 @@ import { Route as MiColegioRouteImport } from './routes/mi-colegio'
 import { Route as HerramientasRouteImport } from './routes/herramientas'
 import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as EncuestasRouteImport } from './routes/encuestas'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CircularesRouteImport } from './routes/circulares'
+import { Route as CalendarioRouteImport } from './routes/calendario'
 import { Route as BienestarRouteImport } from './routes/bienestar'
 import { Route as BibliotecaRouteImport } from './routes/biblioteca'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -22,9 +25,15 @@ import { Route as AdmisionesRouteImport } from './routes/admisiones'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminSuscriptoresIndexRouteImport } from './routes/_authenticated/admin/suscriptores/index'
 import { Route as AuthenticatedAdminNoticiasIndexRouteImport } from './routes/_authenticated/admin/noticias/index'
+import { Route as AuthenticatedAdminMensajesIndexRouteImport } from './routes/_authenticated/admin/mensajes/index'
 import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_authenticated/admin/galeria/index'
+import { Route as AuthenticatedAdminFaqsIndexRouteImport } from './routes/_authenticated/admin/faqs/index'
+import { Route as AuthenticatedAdminEventosIndexRouteImport } from './routes/_authenticated/admin/eventos/index'
+import { Route as AuthenticatedAdminEncuestasIndexRouteImport } from './routes/_authenticated/admin/encuestas/index'
 import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/_authenticated/admin/documentos/index'
+import { Route as AuthenticatedAdminAvisosIndexRouteImport } from './routes/_authenticated/admin/avisos/index'
 import { Route as AuthenticatedAdminNoticiasNuevaRouteImport } from './routes/_authenticated/admin/noticias/nueva'
 import { Route as AuthenticatedAdminGaleriaNuevaRouteImport } from './routes/_authenticated/admin/galeria/nueva'
 import { Route as AuthenticatedAdminDocumentosNuevoRouteImport } from './routes/_authenticated/admin/documentos/nuevo'
@@ -49,6 +58,16 @@ const GaleriaRoute = GaleriaRouteImport.update({
   path: '/galeria',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EncuestasRoute = EncuestasRouteImport.update({
+  id: '/encuestas',
+  path: '/encuestas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
   path: '/contacto',
@@ -57,6 +76,11 @@ const ContactoRoute = ContactoRouteImport.update({
 const CircularesRoute = CircularesRouteImport.update({
   id: '/circulares',
   path: '/circulares',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarioRoute = CalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BienestarRoute = BienestarRouteImport.update({
@@ -93,10 +117,22 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminSuscriptoresIndexRoute =
+  AuthenticatedAdminSuscriptoresIndexRouteImport.update({
+    id: '/admin/suscriptores/',
+    path: '/admin/suscriptores/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminNoticiasIndexRoute =
   AuthenticatedAdminNoticiasIndexRouteImport.update({
     id: '/admin/noticias/',
     path: '/admin/noticias/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminMensajesIndexRoute =
+  AuthenticatedAdminMensajesIndexRouteImport.update({
+    id: '/admin/mensajes/',
+    path: '/admin/mensajes/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminGaleriaIndexRoute =
@@ -105,10 +141,34 @@ const AuthenticatedAdminGaleriaIndexRoute =
     path: '/admin/galeria/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminFaqsIndexRoute =
+  AuthenticatedAdminFaqsIndexRouteImport.update({
+    id: '/admin/faqs/',
+    path: '/admin/faqs/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminEventosIndexRoute =
+  AuthenticatedAdminEventosIndexRouteImport.update({
+    id: '/admin/eventos/',
+    path: '/admin/eventos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminEncuestasIndexRoute =
+  AuthenticatedAdminEncuestasIndexRouteImport.update({
+    id: '/admin/encuestas/',
+    path: '/admin/encuestas/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminDocumentosIndexRoute =
   AuthenticatedAdminDocumentosIndexRouteImport.update({
     id: '/admin/documentos/',
     path: '/admin/documentos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAvisosIndexRoute =
+  AuthenticatedAdminAvisosIndexRouteImport.update({
+    id: '/admin/avisos/',
+    path: '/admin/avisos/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminNoticiasNuevaRoute =
@@ -136,8 +196,11 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
+  '/calendario': typeof CalendarioRoute
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
+  '/encuestas': typeof EncuestasRoute
+  '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
@@ -146,9 +209,15 @@ export interface FileRoutesByFullPath {
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
+  '/admin/encuestas/': typeof AuthenticatedAdminEncuestasIndexRoute
+  '/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
+  '/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/admin/mensajes/': typeof AuthenticatedAdminMensajesIndexRoute
   '/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
+  '/admin/suscriptores/': typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -156,8 +225,11 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
+  '/calendario': typeof CalendarioRoute
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
+  '/encuestas': typeof EncuestasRoute
+  '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
@@ -166,9 +238,15 @@ export interface FileRoutesByTo {
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/admin/avisos': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/documentos': typeof AuthenticatedAdminDocumentosIndexRoute
+  '/admin/encuestas': typeof AuthenticatedAdminEncuestasIndexRoute
+  '/admin/eventos': typeof AuthenticatedAdminEventosIndexRoute
+  '/admin/faqs': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/galeria': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/admin/mensajes': typeof AuthenticatedAdminMensajesIndexRoute
   '/admin/noticias': typeof AuthenticatedAdminNoticiasIndexRoute
+  '/admin/suscriptores': typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -178,8 +256,11 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
   '/bienestar': typeof BienestarRoute
+  '/calendario': typeof CalendarioRoute
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
+  '/encuestas': typeof EncuestasRoute
+  '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
@@ -188,9 +269,15 @@ export interface FileRoutesById {
   '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/_authenticated/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/_authenticated/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/_authenticated/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/_authenticated/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
+  '/_authenticated/admin/encuestas/': typeof AuthenticatedAdminEncuestasIndexRoute
+  '/_authenticated/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
+  '/_authenticated/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
   '/_authenticated/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/_authenticated/admin/mensajes/': typeof AuthenticatedAdminMensajesIndexRoute
   '/_authenticated/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
+  '/_authenticated/admin/suscriptores/': typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -200,8 +287,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/biblioteca'
     | '/bienestar'
+    | '/calendario'
     | '/circulares'
     | '/contacto'
+    | '/encuestas'
+    | '/faq'
     | '/galeria'
     | '/guias'
     | '/herramientas'
@@ -210,9 +300,15 @@ export interface FileRouteTypes {
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
     | '/admin/noticias/nueva'
+    | '/admin/avisos/'
     | '/admin/documentos/'
+    | '/admin/encuestas/'
+    | '/admin/eventos/'
+    | '/admin/faqs/'
     | '/admin/galeria/'
+    | '/admin/mensajes/'
     | '/admin/noticias/'
+    | '/admin/suscriptores/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -220,8 +316,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/biblioteca'
     | '/bienestar'
+    | '/calendario'
     | '/circulares'
     | '/contacto'
+    | '/encuestas'
+    | '/faq'
     | '/galeria'
     | '/guias'
     | '/herramientas'
@@ -230,9 +329,15 @@ export interface FileRouteTypes {
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
     | '/admin/noticias/nueva'
+    | '/admin/avisos'
     | '/admin/documentos'
+    | '/admin/encuestas'
+    | '/admin/eventos'
+    | '/admin/faqs'
     | '/admin/galeria'
+    | '/admin/mensajes'
     | '/admin/noticias'
+    | '/admin/suscriptores'
   id:
     | '__root__'
     | '/'
@@ -241,8 +346,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/biblioteca'
     | '/bienestar'
+    | '/calendario'
     | '/circulares'
     | '/contacto'
+    | '/encuestas'
+    | '/faq'
     | '/galeria'
     | '/guias'
     | '/herramientas'
@@ -251,9 +359,15 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/documentos/nuevo'
     | '/_authenticated/admin/galeria/nueva'
     | '/_authenticated/admin/noticias/nueva'
+    | '/_authenticated/admin/avisos/'
     | '/_authenticated/admin/documentos/'
+    | '/_authenticated/admin/encuestas/'
+    | '/_authenticated/admin/eventos/'
+    | '/_authenticated/admin/faqs/'
     | '/_authenticated/admin/galeria/'
+    | '/_authenticated/admin/mensajes/'
     | '/_authenticated/admin/noticias/'
+    | '/_authenticated/admin/suscriptores/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -263,8 +377,11 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BibliotecaRoute: typeof BibliotecaRoute
   BienestarRoute: typeof BienestarRoute
+  CalendarioRoute: typeof CalendarioRoute
   CircularesRoute: typeof CircularesRoute
   ContactoRoute: typeof ContactoRoute
+  EncuestasRoute: typeof EncuestasRoute
+  FaqRoute: typeof FaqRoute
   GaleriaRoute: typeof GaleriaRoute
   GuiasRoute: typeof GuiasRoute
   HerramientasRoute: typeof HerramientasRoute
@@ -301,6 +418,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GaleriaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/encuestas': {
+      id: '/encuestas'
+      path: '/encuestas'
+      fullPath: '/encuestas'
+      preLoaderRoute: typeof EncuestasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contacto': {
       id: '/contacto'
       path: '/contacto'
@@ -313,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/circulares'
       fullPath: '/circulares'
       preLoaderRoute: typeof CircularesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendario': {
+      id: '/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof CalendarioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bienestar': {
@@ -364,11 +502,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/suscriptores/': {
+      id: '/_authenticated/admin/suscriptores/'
+      path: '/admin/suscriptores'
+      fullPath: '/admin/suscriptores/'
+      preLoaderRoute: typeof AuthenticatedAdminSuscriptoresIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/noticias/': {
       id: '/_authenticated/admin/noticias/'
       path: '/admin/noticias'
       fullPath: '/admin/noticias/'
       preLoaderRoute: typeof AuthenticatedAdminNoticiasIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/mensajes/': {
+      id: '/_authenticated/admin/mensajes/'
+      path: '/admin/mensajes'
+      fullPath: '/admin/mensajes/'
+      preLoaderRoute: typeof AuthenticatedAdminMensajesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/galeria/': {
@@ -378,11 +530,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminGaleriaIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/faqs/': {
+      id: '/_authenticated/admin/faqs/'
+      path: '/admin/faqs'
+      fullPath: '/admin/faqs/'
+      preLoaderRoute: typeof AuthenticatedAdminFaqsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/eventos/': {
+      id: '/_authenticated/admin/eventos/'
+      path: '/admin/eventos'
+      fullPath: '/admin/eventos/'
+      preLoaderRoute: typeof AuthenticatedAdminEventosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/encuestas/': {
+      id: '/_authenticated/admin/encuestas/'
+      path: '/admin/encuestas'
+      fullPath: '/admin/encuestas/'
+      preLoaderRoute: typeof AuthenticatedAdminEncuestasIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/documentos/': {
       id: '/_authenticated/admin/documentos/'
       path: '/admin/documentos'
       fullPath: '/admin/documentos/'
       preLoaderRoute: typeof AuthenticatedAdminDocumentosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/avisos/': {
+      id: '/_authenticated/admin/avisos/'
+      path: '/admin/avisos'
+      fullPath: '/admin/avisos/'
+      preLoaderRoute: typeof AuthenticatedAdminAvisosIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/noticias/nueva': {
@@ -414,9 +594,15 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminDocumentosNuevoRoute: typeof AuthenticatedAdminDocumentosNuevoRoute
   AuthenticatedAdminGaleriaNuevaRoute: typeof AuthenticatedAdminGaleriaNuevaRoute
   AuthenticatedAdminNoticiasNuevaRoute: typeof AuthenticatedAdminNoticiasNuevaRoute
+  AuthenticatedAdminAvisosIndexRoute: typeof AuthenticatedAdminAvisosIndexRoute
   AuthenticatedAdminDocumentosIndexRoute: typeof AuthenticatedAdminDocumentosIndexRoute
+  AuthenticatedAdminEncuestasIndexRoute: typeof AuthenticatedAdminEncuestasIndexRoute
+  AuthenticatedAdminEventosIndexRoute: typeof AuthenticatedAdminEventosIndexRoute
+  AuthenticatedAdminFaqsIndexRoute: typeof AuthenticatedAdminFaqsIndexRoute
   AuthenticatedAdminGaleriaIndexRoute: typeof AuthenticatedAdminGaleriaIndexRoute
+  AuthenticatedAdminMensajesIndexRoute: typeof AuthenticatedAdminMensajesIndexRoute
   AuthenticatedAdminNoticiasIndexRoute: typeof AuthenticatedAdminNoticiasIndexRoute
+  AuthenticatedAdminSuscriptoresIndexRoute: typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -425,10 +611,17 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedAdminDocumentosNuevoRoute,
   AuthenticatedAdminGaleriaNuevaRoute: AuthenticatedAdminGaleriaNuevaRoute,
   AuthenticatedAdminNoticiasNuevaRoute: AuthenticatedAdminNoticiasNuevaRoute,
+  AuthenticatedAdminAvisosIndexRoute: AuthenticatedAdminAvisosIndexRoute,
   AuthenticatedAdminDocumentosIndexRoute:
     AuthenticatedAdminDocumentosIndexRoute,
+  AuthenticatedAdminEncuestasIndexRoute: AuthenticatedAdminEncuestasIndexRoute,
+  AuthenticatedAdminEventosIndexRoute: AuthenticatedAdminEventosIndexRoute,
+  AuthenticatedAdminFaqsIndexRoute: AuthenticatedAdminFaqsIndexRoute,
   AuthenticatedAdminGaleriaIndexRoute: AuthenticatedAdminGaleriaIndexRoute,
+  AuthenticatedAdminMensajesIndexRoute: AuthenticatedAdminMensajesIndexRoute,
   AuthenticatedAdminNoticiasIndexRoute: AuthenticatedAdminNoticiasIndexRoute,
+  AuthenticatedAdminSuscriptoresIndexRoute:
+    AuthenticatedAdminSuscriptoresIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -442,8 +635,11 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BibliotecaRoute: BibliotecaRoute,
   BienestarRoute: BienestarRoute,
+  CalendarioRoute: CalendarioRoute,
   CircularesRoute: CircularesRoute,
   ContactoRoute: ContactoRoute,
+  EncuestasRoute: EncuestasRoute,
+  FaqRoute: FaqRoute,
   GaleriaRoute: GaleriaRoute,
   GuiasRoute: GuiasRoute,
   HerramientasRoute: HerramientasRoute,
@@ -452,13 +648,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

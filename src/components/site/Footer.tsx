@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Youtube, Instagram, Music2, MapPin, Phone, Mail } from "lucide-react";
 import logoCafam from "@/assets/real/logo-cafam.png";
+import { NewsletterSignup } from "./NewsletterSignup";
 
 export function Footer() {
   return (
@@ -44,6 +45,19 @@ export function Footer() {
           </ul>
         </div>
       </div>
+
+      <div className="border-t border-white/10">
+        <div className="container-page flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-sm">
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-white">Boletín Cafam</h4>
+            <p className="mt-1 text-sm text-white/60">Recibe noticias y circulares en tu correo.</p>
+          </div>
+          <div className="w-full md:max-w-md">
+            <NewsletterSignup />
+          </div>
+        </div>
+      </div>
+
       <div className="border-t border-white/10">
         <div className="container-page flex flex-col items-center justify-between gap-2 py-5 text-xs text-white/50 md:flex-row">
           <p>© {new Date().getFullYear()} Colegio Cafam. Todos los derechos reservados.</p>

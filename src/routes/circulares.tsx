@@ -4,6 +4,7 @@ import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import { FileText, Download } from "lucide-react";
 import { getDocuments } from "@/lib/content.functions";
+import { formatDateES } from "@/lib/utils";
 
 const circularesQueryOptions = queryOptions({
   queryKey: ["documents", "circulares"],
@@ -72,7 +73,7 @@ function Circulares() {
                   </span>
                   <div>
                     <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      <span>{new Date(doc.published_at).toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}</span>
+                      <span>{formatDateES(doc.published_at)}</span>
                       <span className="rounded-full bg-secondary px-2 py-0.5 font-semibold">{categoryLabels[doc.category] || doc.category}</span>
                     </div>
                     <h3 className="mt-1 font-display font-semibold text-foreground">{doc.title}</h3>

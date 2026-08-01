@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import { ImageIcon } from "lucide-react";
 import { getGalleryImages } from "@/lib/content.functions";
+import { Lightbox } from "@/components/site/Lightbox";
 
 const galleryQueryOptions = queryOptions({
   queryKey: ["gallery"],
@@ -38,6 +40,7 @@ export const Route = createFileRoute("/galeria")({
 
 function Galeria() {
   const { data: images = [] } = useSuspenseQuery(galleryQueryOptions);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   return (
     <PageShell>
@@ -50,20 +53,31 @@ function Galeria() {
           </div>
         ) : (
           <div className="columns-2 gap-4 md:columns-3 lg:columns-4">
-            {images.map((it) => (
-              <figure key={it.id} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl">
+            {images.map((it, i) => (
+              <button
+                key={it.id}
+                onClick={() => setLightboxIndex(i)}
+                className="mb-4 block w-full break-inside-avoid overflow-hidden rounded-2xl text-left"
+              >
                 <img
                   src={it.image_url}
                   alt={it.title}
                   loading="lazy"
                   className="w-full transition-transform duration-500 hover:scale-105"
                 />
-                <figcaption className="mt-2 text-center text-xs text-muted-foreground">{it.title}</figcaption>
-              </figure>
+                <span className="block py-2 text-center text-xs text-muted-foreground">{it.title}</span>
+              </button>
             ))}
           </div>
         )}
       </section>
+
+      <Lightbox
+        images={images.map((img) => ({ id: img.id, image_url: img.image_url, title: img.title }))}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={setLightboxIndex}
+      />
     </PageShell>
   );
 }
