@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { ThemeToggle } from "./ThemeToggle";
+import { SiteSearch } from "./SiteSearch";
 import logoCafam from "@/assets/real/logo-cafam.png";
 
 const nav = [
@@ -49,6 +50,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <SiteSearch />
           <ThemeToggle />
           <AuthHeader />
           <Link
@@ -60,6 +62,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <SiteSearch />
           <ThemeToggle />
           <button
             onClick={() => setOpen((v) => !v)}
