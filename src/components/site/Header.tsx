@@ -29,10 +29,14 @@ export function Header() {
           <img
             src={logoCafam}
             alt="Colegio Cafam"
-            className="h-9 w-auto"
-            width={120}
-            height={38}
+            className="h-10 w-auto shrink-0 object-contain"
+            width={228}
+            height={64}
           />
+          <span className="hidden text-sm font-semibold leading-tight text-slate-900 dark:text-white sm:block">
+            Colegio Cafam
+          </span>
+
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
