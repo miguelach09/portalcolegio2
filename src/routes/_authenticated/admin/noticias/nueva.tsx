@@ -60,7 +60,6 @@ function NewNewsPage() {
     setUploading(true);
     try {
       let imagePath: string | undefined;
-      let imageUrl: string | undefined;
 
       if (file) {
         const ext = file.name.split(".").pop() || "jpg";
@@ -69,12 +68,9 @@ function NewNewsPage() {
           .from("site-assets")
           .upload(imagePath, file, { contentType: file.type });
         if (uploadError) throw uploadError;
-
-        const { data } = await supabase.storage.from("site-assets").getPublicUrl(imagePath);
-        imageUrl = data.publicUrl;
       }
 
-      await createNews({ data: { values: parse.data, imagePath, imageUrl } });
+      await createNews({ data: { values: parse.data, imagePath } });
       router.navigate({ to: "/admin/noticias" });
     } catch (err: any) {
       setErrors({ submit: err.message || "Error al guardar" });
