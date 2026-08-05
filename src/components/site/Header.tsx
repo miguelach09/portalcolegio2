@@ -62,6 +62,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <SiteSearch />
           <ThemeToggle />
           <button
             onClick={() => setOpen((v) => !v)}
