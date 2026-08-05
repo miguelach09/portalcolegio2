@@ -75,10 +75,7 @@ function NewGalleryImagePage() {
         .upload(imagePath, file, { contentType: file.type });
       if (uploadError) throw uploadError;
 
-      const { data } = await supabase.storage.from("site-assets").getPublicUrl(imagePath);
-      const imageUrl = data.publicUrl;
-
-      await createGalleryImage({ data: { values: parse.data, imagePath, imageUrl } });
+      await createGalleryImage({ data: { values: parse.data, imagePath } });
       router.navigate({ to: "/admin/galeria" });
     } catch (err: any) {
       setErrors({ submit: err.message || "Error al guardar" });
