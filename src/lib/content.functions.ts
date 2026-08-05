@@ -383,7 +383,7 @@ export const deleteNews = createServerFn({ method: "POST" })
 export const createGalleryImage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(
-    (input: { values: Record<string, unknown>; imagePath: string; imageUrl: string }) => input
+    (input: { values: Record<string, unknown>; imagePath: string }) => input
   )
   .handler(async ({ data, context }) => {
     await checkAdmin(context);
@@ -397,7 +397,9 @@ export const createGalleryImage = createServerFn({ method: "POST" })
         category: parsed.category,
         is_active: parsed.is_active,
         sort_order: parsed.sort_order,
-        image_url: data.imageUrl,
+        // Private bucket: public object URLs are never stored. Reads use
+        // short-lived signed URLs derived from image_path.
+        image_url: "",
         image_path: data.imagePath,
       })
       .select()
