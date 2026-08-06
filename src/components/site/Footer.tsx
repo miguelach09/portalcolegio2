@@ -29,6 +29,7 @@ export function Footer() {
           <ul className="mt-4 space-y-2 text-sm">
             <li><Link to="/mi-colegio" className="hover:text-white">Mi Colegio</Link></li>
             <li><Link to="/admisiones" className="hover:text-white">Admisiones 2027</Link></li>
+            <li><Link to="/docentes" className="hover:text-white">Directorio docente</Link></li>
             <li><Link to="/galeria" className="hover:text-white">Galería</Link></li>
             <li><Link to="/circulares" className="hover:text-white">Circulares</Link></li>
             <li><Link to="/bienestar" className="hover:text-white">Bienestar</Link></li>

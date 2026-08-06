@@ -11,6 +11,7 @@ const nav = [
   { to: "/", label: "Inicio" },
   { to: "/mi-colegio", label: "Mi Colegio" },
   { to: "/admisiones", label: "Admisiones" },
+  { to: "/docentes", label: "Docentes" },
   { to: "/galeria", label: "Galería" },
   { to: "/circulares", label: "Circulares" },
   { to: "/guias", label: "Guías" },
