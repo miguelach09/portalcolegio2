@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import { CheckCircle2, FileText, Calendar, Users, Download } from "lucide-react";
+import { AdmissionForm } from "@/components/site/AdmissionForm";
 import { getDocuments } from "@/lib/content.functions";
 
 const docsQueryOptions = queryOptions({
@@ -112,9 +113,23 @@ function Admisiones() {
               <li className="flex items-start gap-3"><Calendar className="mt-0.5 h-5 w-5" /><div><b>Nov 2026</b><br/><span className="text-white/80 text-sm">Entrevistas familiares</span></div></li>
               <li className="flex items-start gap-3"><Calendar className="mt-0.5 h-5 w-5" /><div><b>Ene 2027</b><br/><span className="text-white/80 text-sm">Matrículas e inicio de clases</span></div></li>
             </ul>
-            <a href="https://portalcolegio.com/admisiones.php" target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-primary">
+            <a href="#preinscripcion" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-primary">
               Iniciar preinscripción
             </a>
+          </div>
+        </div>
+
+        <div id="preinscripcion" className="mt-16 scroll-mt-24">
+          <span className="text-xs font-bold uppercase tracking-widest text-primary">Preinscripción en línea</span>
+          <h2 className="mt-2 font-display text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">
+            Diligencia el formulario
+          </h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Envía los datos del aspirante y del acudiente. El equipo de admisiones te contactará
+            para agendar la evaluación diagnóstica.
+          </p>
+          <div className="mt-8 max-w-3xl">
+            <AdmissionForm />
           </div>
         </div>
       </section>
