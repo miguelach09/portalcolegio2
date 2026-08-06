@@ -33,10 +33,6 @@ export function Header() {
             width={228}
             height={64}
           />
-          <span className="hidden text-sm font-semibold leading-tight text-slate-900 dark:text-white sm:block">
-            Colegio Cafam
-          </span>
-
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
