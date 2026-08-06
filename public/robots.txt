@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /auth
+
+Sitemap: https://proto-portalcolegio2.lovable.app/sitemap.xml
