@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      admission_applications: {
+        Row: {
+          birth_date: string | null
+          comments: string | null
+          created_at: string
+          grade: string
+          guardian_email: string
+          guardian_name: string
+          guardian_phone: string
+          id: string
+          previous_school: string | null
+          status: string
+          student_name: string
+          updated_at: string
+        }
+        Insert: {
+          birth_date?: string | null
+          comments?: string | null
+          created_at?: string
+          grade: string
+          guardian_email: string
+          guardian_name: string
+          guardian_phone: string
+          id?: string
+          previous_school?: string | null
+          status?: string
+          student_name: string
+          updated_at?: string
+        }
+        Update: {
+          birth_date?: string | null
+          comments?: string | null
+          created_at?: string
+          grade?: string
+          guardian_email?: string
+          guardian_name?: string
+          guardian_phone?: string
+          id?: string
+          previous_school?: string | null
+          status?: string
+          student_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -402,6 +447,51 @@ export type Database = {
           question?: string
           sort_order?: number
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      teachers: {
+        Row: {
+          area: string
+          bio: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          is_active: boolean
+          photo_path: string | null
+          photo_url: string | null
+          role_title: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          area?: string
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          is_active?: boolean
+          photo_path?: string | null
+          photo_url?: string | null
+          role_title?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          area?: string
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          photo_path?: string | null
+          photo_url?: string | null
+          role_title?: string
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []
