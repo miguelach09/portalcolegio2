@@ -144,6 +144,10 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
 
   return (
     <div className={`flex items-center gap-2 ${mobile ? "flex-col" : ""}`}>
+      <Link to="/familia" onClick={onClick} className={linkClass(mobile)}>
+        <Users className="h-4 w-4" />
+        Familias
+      </Link>
       <Link
         to="/admin"
         onClick={onClick}
