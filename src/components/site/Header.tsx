@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, LogIn, LayoutDashboard, LogOut } from "lucide-react";
+import { Menu, X, LogIn, LayoutDashboard, LogOut, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
@@ -116,18 +116,23 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
     return () => listener.subscription.unsubscribe();
   }, []);
 
+  const linkClass = (m?: boolean) =>
+    `inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-primary-soft hover:text-primary ${
+      m ? "justify-center border border-input" : ""
+    }`;
+
   if (!user) {
     return (
-      <Link
-        to="/auth"
-        onClick={onClick}
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-primary-soft hover:text-primary ${
-          mobile ? "justify-center border border-input" : ""
-        }`}
-      >
-        <LogIn className="h-4 w-4" />
-        Admin
-      </Link>
+      <div className={`flex items-center gap-2 ${mobile ? "mt-2 flex-col" : ""}`}>
+        <Link to="/familia" onClick={onClick} className={linkClass(mobile)}>
+          <Users className="h-4 w-4" />
+          Familias
+        </Link>
+        <Link to="/auth" onClick={onClick} className={linkClass(mobile)}>
+          <LogIn className="h-4 w-4" />
+          Admin
+        </Link>
+      </div>
     );
   }
 
@@ -139,6 +144,10 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
 
   return (
     <div className={`flex items-center gap-2 ${mobile ? "flex-col" : ""}`}>
+      <Link to="/familia" onClick={onClick} className={linkClass(mobile)}>
+        <Users className="h-4 w-4" />
+        Familias
+      </Link>
       <Link
         to="/admin"
         onClick={onClick}

@@ -5,9 +5,15 @@ import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 
 export const Route = createFileRoute("/auth")({
-  beforeLoad: async () => {
+  ssr: false,
+  beforeLoad: async ({ search }) => {
     const { data } = await supabase.auth.getUser();
-    if (data.user) throw redirect({ to: "/admin" });
+    if (!data.user) return;
+    const target = (search as { redirect?: string })?.redirect;
+    if (target && typeof window !== "undefined" && target.startsWith(window.location.origin)) {
+      throw redirect({ href: target.replace(window.location.origin, "") });
+    }
+    throw redirect({ to: "/admin" });
   },
   component: AuthPage,
 });

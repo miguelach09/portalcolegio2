@@ -59,6 +59,35 @@ export type Database = {
         }
         Relationships: []
       }
+      circular_reads: {
+        Row: {
+          document_id: string
+          id: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          document_id: string
+          id?: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          document_id?: string
+          id?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "circular_reads_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -257,6 +286,44 @@ export type Database = {
         }
         Relationships: []
       }
+      guardian_links: {
+        Row: {
+          code: string
+          created_at: string
+          expires_at: string
+          id: string
+          student_id: string
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          student_id: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          student_id?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guardian_links_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       news: {
         Row: {
           category: Database["public"]["Enums"]["news_category"]
@@ -323,6 +390,68 @@ export type Database = {
           key?: string
           updated_at?: string
           value?: string
+        }
+        Relationships: []
+      }
+      student_guardians: {
+        Row: {
+          created_at: string
+          id: string
+          relationship: string
+          student_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          relationship?: string
+          student_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          relationship?: string
+          student_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_guardians_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          created_at: string
+          full_name: string
+          grade: string
+          group_name: string | null
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          grade: string
+          group_name?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          grade?: string
+          group_name?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
         }
         Relationships: []
       }
@@ -529,9 +658,13 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_guardian_of: {
+        Args: { _student_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      app_role: "admin" | "editor"
+      app_role: "admin" | "editor" | "familia"
       document_category:
         | "circulares"
         | "revisas"
@@ -681,7 +814,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "editor"],
+      app_role: ["admin", "editor", "familia"],
       document_category: [
         "circulares",
         "revisas",
