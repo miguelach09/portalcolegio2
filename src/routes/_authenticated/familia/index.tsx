@@ -2,8 +2,22 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Users, FileText, Download, CheckCircle2, Plus, ArrowLeft } from "lucide-react";
+import {
+  Users,
+  FileText,
+  Download,
+  CheckCircle2,
+  Plus,
+  ArrowLeft,
+  Bell,
+  ExternalLink,
+} from "lucide-react";
 import { getMyStudents, getFamilyDocuments, markCircularRead } from "@/lib/family.functions";
+import {
+  getMyNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+} from "@/lib/notifications.functions";
 import { GRADE_LABELS, type Grade } from "@/lib/content.types";
 import { formatDateES } from "@/lib/utils";
 
