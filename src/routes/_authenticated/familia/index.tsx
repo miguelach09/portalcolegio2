@@ -91,6 +91,81 @@ function FamilyPortal() {
 
       <main className="container-page space-y-10 py-10">
         <section>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-slate-900 dark:text-white">
+              <Bell className="h-5 w-5 text-primary" /> Avisos del colegio
+              {unread > 0 && (
+                <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                  {unread} sin leer
+                </span>
+              )}
+            </h2>
+            {unread > 0 && (
+              <button
+                onClick={readAll}
+                className="rounded-full border border-input px-4 py-2 text-sm font-medium hover:bg-accent"
+              >
+                Marcar todo como leído
+              </button>
+            )}
+          </div>
+
+          {notifications.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              No tienes avisos por ahora.
+            </p>
+          ) : (
+            <ul className="mt-4 space-y-3">
+              {notifications.map((n) => (
+                <li
+                  key={n.id}
+                  className={`rounded-xl border bg-card p-4 ${
+                    n.is_read ? "border-border" : "border-primary/60"
+                  }`}
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-medium text-slate-900 dark:text-white">{n.title}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">{n.body}</p>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        {n.audience === "student" && n.student_name
+                          ? n.student_name
+                          : n.audience === "grade"
+                            ? gradeLabel(n.grade)
+                            : "Todas las familias"}{" "}
+                        · {formatDateES(n.created_at)}
+                      </p>
+                      {n.link && (
+                        <a
+                          href={n.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                        >
+                          Ver más <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      )}
+                    </div>
+                    {n.is_read ? (
+                      <span className="inline-flex items-center gap-1 text-xs font-medium text-primary">
+                        <CheckCircle2 className="h-4 w-4" /> Leído
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => readNotification(n.id)}
+                        className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                      >
+                        Marcar leído
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section>
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-display text-lg font-semibold text-slate-900 dark:text-white">
               Mis estudiantes
