@@ -16,6 +16,7 @@ import {
   Megaphone,
   GraduationCap,
   ClipboardList,
+  Bell,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouter } from "@tanstack/react-router";
@@ -81,6 +82,7 @@ function AdminDashboard() {
           <ManageCard title="Docentes" desc="Directorio docente y directivo" href="/admin/docentes" icon={<GraduationCap className="h-5 w-5" />} />
           <ManageCard title="Preinscripciones" desc="Solicitudes de admisión 2027" href="/admin/preinscripciones" icon={<ClipboardList className="h-5 w-5" />} />
           <ManageCard title="Estudiantes y familias" desc="Estudiantes y códigos de vinculación" href="/admin/estudiantes" icon={<Users className="h-5 w-5" />} />
+          <ManageCard title="Avisos a familias" desc="Notificaciones por grado o estudiante" href="/admin/notificaciones" icon={<Bell className="h-5 w-5" />} />
         </div>
 
         <h2 className="mt-10 text-lg font-semibold text-foreground">Acciones rápidas</h2>
