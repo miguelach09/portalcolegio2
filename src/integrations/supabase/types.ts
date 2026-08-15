@@ -375,6 +375,82 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_reads: {
+        Row: {
+          id: string
+          notification_id: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          notification_id: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          notification_id?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_reads_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          audience: string
+          body: string
+          created_at: string
+          created_by: string | null
+          grade: string | null
+          id: string
+          link: string | null
+          student_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          audience?: string
+          body: string
+          created_at?: string
+          created_by?: string | null
+          grade?: string | null
+          id?: string
+          link?: string | null
+          student_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          grade?: string | null
+          id?: string
+          link?: string | null
+          student_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       site_settings: {
         Row: {
           key: string
@@ -651,6 +727,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_view_notification: {
+        Args: {
+          _audience: string
+          _grade: string
+          _student_id: string
+          _user_id: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
