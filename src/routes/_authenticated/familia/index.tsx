@@ -44,6 +44,25 @@ function FamilyPortal() {
     queryFn: () => docsFn(),
   });
 
+  const notifsFn = useServerFn(getMyNotifications);
+  const markNotifFn = useServerFn(markNotificationRead);
+  const markAllFn = useServerFn(markAllNotificationsRead);
+  const { data: notifications = [], refetch: refetchNotifs } = useQuery({
+    queryKey: ["family", "notifications"],
+    queryFn: () => notifsFn(),
+  });
+  const unread = notifications.filter((n) => !n.is_read).length;
+
+  async function readNotification(id: string) {
+    await markNotifFn({ data: { notification_id: id } });
+    refetchNotifs();
+  }
+
+  async function readAll() {
+    await markAllFn();
+    refetchNotifs();
+  }
+
   const [filter, setFilter] = useState<string>("todas");
   const categories = Array.from(new Set(docs.map((d) => d.category)));
   const filtered = docs.filter((d) => filter === "todas" || d.category === filter);
