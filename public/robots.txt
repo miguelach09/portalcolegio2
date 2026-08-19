@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /auth
 
-Sitemap: https://proto-portalcolegio2.lovable.app/sitemap.xml
+Sitemap: https://connecteducafam.lovable.app/sitemap.xml
