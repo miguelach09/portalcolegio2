@@ -29,12 +29,31 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Colegio Cafam" },
       { name: "description", content: "Colegio Cafam: educación de calidad desde 1971. Admisiones 2027 abiertas, vida escolar, deporte, arte y tecnología." },
-      { property: "og:title", content: "Colegio Cafam" },
-      { property: "og:description", content: "Colegio Cafam: educación de calidad desde 1971. Admisiones 2027 abiertas, vida escolar, deporte, arte y tecnología." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://connecteducafam.lovable.app/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://connecteducafam.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "School",
+          name: "Colegio Cafam",
+          description:
+            "Colegio Cafam: educación de calidad desde 1971 en Bogotá. Formación académica, deportiva, artística y tecnológica de transición a once.",
+          url: "https://connecteducafam.lovable.app/",
+          logo: "https://connecteducafam.lovable.app/favicon.png",
+          telephone: "+57 601 307 8060",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Av. Cra. 68 No. 90-88",
+            addressLocality: "Bogotá",
+            addressCountry: "CO",
+          },
+        }),
+      },
+    ],
   }),
   component: Index,
 });
