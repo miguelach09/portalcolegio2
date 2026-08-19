@@ -34,8 +34,18 @@ const routeForDocument = (category: string | null) => {
   }
 };
 
+// Strip PostgREST filter control characters and SQL LIKE wildcards so the term
+// can never alter the structure of an `.or()` / `.ilike()` filter string.
+function sanitizeTerm(input: string): string {
+  return input
+    .replace(/[,.()"'\\%*:{}\[\]]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+}
+
 export async function runSiteSearch(rawQuery: string): Promise<SearchResult[]> {
-  const q = rawQuery.trim();
+  const q = sanitizeTerm(rawQuery);
   if (q.length < 2) return [];
   const like = `%${q}%`;
   const supabase = client();
