@@ -1,0 +1,25 @@
+# Colegio Cafam
+
+> Portal oficial del Colegio Cafam (Bogotá, Colombia): información institucional, admisiones 2027, circulares, guías de aprendizaje, calendario escolar y vida escolar.
+
+El Colegio Cafam ofrece educación de transición a once en Bogotá, con énfasis en formación académica, deportiva, artística y tecnológica. El portal publica comunicados para familias, documentos descargables, galería de actividades y canales de contacto.
+
+## Pages
+
+- [Inicio](/): Resumen del colegio, noticias destacadas y accesos rápidos.
+- [Mi Colegio](/mi-colegio): Historia, misión, visión y modelo pedagógico.
+- [Admisiones 2027](/admisiones): Proceso, requisitos y formulario de preinscripción.
+- [Docentes](/docentes): Directorio del equipo docente por área académica.
+- [Guías de Aprendizaje](/guias): Guías por grado, de transición a once.
+- [Circulares](/circulares): Comunicados oficiales para familias.
+- [Calendario](/calendario): Fechas y eventos del año escolar.
+- [Galería](/galeria): Imágenes de la vida escolar.
+- [Biblioteca](/biblioteca): Colección física, bases digitales y club de lectura.
+- [Bienestar](/bienestar): Psicología, enfermería, trabajo social y convivencia.
+- [Herramientas](/herramientas): Enlaces a plataformas institucionales.
+- [Preguntas frecuentes](/faq): Respuestas a dudas comunes de las familias.
+- [Contáctenos](/contacto): Dirección, teléfonos, correo y horarios.
+
+## Optional
+
+- [Encuestas](/encuestas): Encuestas activas para la comunidad educativa.

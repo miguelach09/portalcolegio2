@@ -12,10 +12,29 @@ export const Route = createFileRoute("/contacto")({
       { title: "Contáctenos — Colegio Cafam" },
       { name: "description", content: "Datos de contacto del Colegio Cafam: dirección, teléfonos, correo y horarios de atención." },
       { property: "og:title", content: "Contáctenos — Colegio Cafam" },
-      { property: "og:description", content: "Estamos para atender tus consultas." },
-      { property: "og:url", content: "/contacto" },
+      { property: "og:description", content: "Contacta al Colegio Cafam: Av. Cra. 68 No. 90-88, Bogotá. Teléfono (601) 307 8060, correo institucional y horarios de atención para familias y aspirantes." },
+      { property: "og:url", content: "https://connecteducafam.lovable.app/contacto" },
     ],
-    links: [{ rel: "canonical", href: "/contacto" }],
+    links: [{ rel: "canonical", href: "https://connecteducafam.lovable.app/contacto" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "School",
+          name: "Colegio Cafam",
+          url: "https://connecteducafam.lovable.app/",
+          telephone: "+57 601 307 8060",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Av. Cra. 68 No. 90-88",
+            addressLocality: "Bogotá",
+            addressRegion: "Bogotá D.C.",
+            addressCountry: "CO",
+          },
+        }),
+      },
+    ],
   }),
   component: Contacto,
 });

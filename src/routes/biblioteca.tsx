@@ -10,10 +10,10 @@ export const Route = createFileRoute("/biblioteca")({
       { title: "Biblioteca — Colegio Cafam" },
       { name: "description", content: "Biblioteca del Colegio Cafam: recursos, bases de datos y espacios de lectura para toda la comunidad." },
       { property: "og:title", content: "Biblioteca — Colegio Cafam" },
-      { property: "og:description", content: "Recursos y espacios de lectura." },
-      { property: "og:url", content: "/biblioteca" },
+      { property: "og:description", content: "Biblioteca del Colegio Cafam: más de 20.000 títulos, bases de datos académicas, catálogo en línea, club de lectura y espacios de estudio para estudiantes y familias." },
+      { property: "og:url", content: "https://connecteducafam.lovable.app/biblioteca" },
     ],
-    links: [{ rel: "canonical", href: "/biblioteca" }],
+    links: [{ rel: "canonical", href: "https://connecteducafam.lovable.app/biblioteca" }],
   }),
   component: Biblioteca,
 });
@@ -38,7 +38,7 @@ function Biblioteca() {
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 font-display text-lg font-bold">{title}</h3>
+                <h2 className="mt-4 font-display text-lg font-bold">{title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{text}</p>
               </div>
             ))}

@@ -92,9 +92,9 @@ export function HeroCarousel() {
                         <span className={`inline-flex items-center rounded-full ${s.accent} px-3 py-1 text-xs font-bold uppercase tracking-widest text-black/85`}>
                           {s.eyebrow}
                         </span>
-                        <h1 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-5xl md:text-6xl">
+                        <h2 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-5xl md:text-6xl">
                           {s.title}
-                        </h1>
+                        </h2>
                         <p className="mt-3 max-w-md text-base text-white/85 sm:text-lg">
                           {s.subtitle}
                         </p>

@@ -16,10 +16,10 @@ export const Route = createFileRoute("/bienestar")({
       { title: "Bienestar — Colegio Cafam" },
       { name: "description", content: "Programas de bienestar del Colegio Cafam: psicología, enfermería, trabajo social y convivencia." },
       { property: "og:title", content: "Bienestar — Colegio Cafam" },
-      { property: "og:description", content: "Acompañamiento integral a la comunidad educativa." },
-      { property: "og:url", content: "/bienestar" },
+      { property: "og:description", content: "Programas de bienestar del Colegio Cafam: psicología, enfermería, trabajo social y convivencia escolar para acompañar el desarrollo integral de estudiantes y familias." },
+      { property: "og:url", content: "https://connecteducafam.lovable.app/bienestar" },
     ],
-    links: [{ rel: "canonical", href: "/bienestar" }],
+    links: [{ rel: "canonical", href: "https://connecteducafam.lovable.app/bienestar" }],
   }),
   component: Bienestar,
 });

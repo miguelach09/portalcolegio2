@@ -19,10 +19,24 @@ export const Route = createFileRoute("/galeria")({
       { title: "Galería — Colegio Cafam" },
       { name: "description", content: "Momentos de vida escolar en el Colegio Cafam: aulas, deporte, arte, ciencia y celebraciones." },
       { property: "og:title", content: "Galería — Colegio Cafam" },
-      { property: "og:description", content: "Vida escolar en imágenes." },
-      { property: "og:url", content: "/galeria" },
+      { property: "og:description", content: "Vida escolar en imágenes: aulas, deporte, arte, ciencia, izadas de bandera y celebraciones de la comunidad del Colegio Cafam." },
+      { property: "og:url", content: "https://connecteducafam.lovable.app/galeria" },
     ],
-    links: [{ rel: "canonical", href: "/galeria" }],
+    links: [{ rel: "canonical", href: "https://connecteducafam.lovable.app/galeria" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ImageGallery",
+          name: "Galería — Colegio Cafam",
+          description:
+            "Momentos de vida escolar en el Colegio Cafam: aulas, deporte, arte, ciencia y celebraciones.",
+          url: "https://connecteducafam.lovable.app/galeria",
+          isPartOf: { "@type": "School", name: "Colegio Cafam", url: "https://connecteducafam.lovable.app/" },
+        }),
+      },
+    ],
   }),
   component: Galeria,
   errorComponent: ({ error }) => {
