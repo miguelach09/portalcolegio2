@@ -67,6 +67,7 @@ function Index() {
       <AnnouncementBanner />
       <Header />
       <main>
+        <h1 className="sr-only">Colegio Cafam — educación de calidad en Bogotá desde 1971</h1>
         <HeroCarousel />
         <QuickAccess />
         <News news={news} interestDocs={interestDocs} />
