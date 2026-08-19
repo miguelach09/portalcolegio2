@@ -10,10 +10,10 @@ export const Route = createFileRoute("/biblioteca")({
       { title: "Biblioteca — Colegio Cafam" },
       { name: "description", content: "Biblioteca del Colegio Cafam: recursos, bases de datos y espacios de lectura para toda la comunidad." },
       { property: "og:title", content: "Biblioteca — Colegio Cafam" },
-      { property: "og:description", content: "Recursos y espacios de lectura." },
-      { property: "og:url", content: "/biblioteca" },
+      { property: "og:description", content: "Biblioteca del Colegio Cafam: más de 20.000 títulos, bases de datos académicas, catálogo en línea, club de lectura y espacios de estudio para estudiantes y familias." },
+      { property: "og:url", content: "https://connecteducafam.lovable.app/biblioteca" },
     ],
-    links: [{ rel: "canonical", href: "/biblioteca" }],
+    links: [{ rel: "canonical", href: "https://connecteducafam.lovable.app/biblioteca" }],
   }),
   component: Biblioteca,
 });
