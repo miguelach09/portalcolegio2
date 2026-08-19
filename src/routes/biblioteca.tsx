@@ -38,7 +38,7 @@ function Biblioteca() {
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 font-display text-lg font-bold">{title}</h3>
+                <h2 className="mt-4 font-display text-lg font-bold">{title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{text}</p>
               </div>
             ))}
