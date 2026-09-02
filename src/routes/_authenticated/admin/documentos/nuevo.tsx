@@ -149,7 +149,12 @@ function NewDocumentPage() {
                 value={values.category}
                 onChange={(e) => {
                   const cat = e.target.value as DocumentCategory;
-                  setValues((v) => ({ ...v, category: cat, grade: cat === "guias" ? v.grade : null }));
+                  setValues((v) => ({
+                    ...v,
+                    category: cat,
+                    grade: cat === "guias" ? v.grade : null,
+                    period: cat === "guias" ? v.period : null,
+                  }));
                 }}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
               >
