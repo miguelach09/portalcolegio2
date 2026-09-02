@@ -28,6 +28,7 @@ function NewDocumentPage() {
     title: "",
     category: "circulares" as DocumentCategory,
     grade: null as Grade | null,
+    period: null as Period | null,
     published_at: new Date().toISOString().split("T")[0],
     is_active: true,
     sort_order: 0,
