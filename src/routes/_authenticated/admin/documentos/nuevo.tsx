@@ -4,8 +4,8 @@ import { Upload, FileText, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { createDocument } from "@/lib/content.functions";
 import { documentFormSchema } from "@/lib/content.schemas";
-import type { DocumentCategory, Grade } from "@/lib/content.types";
-import { GRADE_LABELS, GRADE_ORDER } from "@/lib/content.types";
+import type { DocumentCategory, Grade, Period } from "@/lib/content.types";
+import { GRADE_LABELS, GRADE_ORDER, PERIOD_LABELS, PERIOD_ORDER } from "@/lib/content.types";
 
 export const Route = createFileRoute("/_authenticated/admin/documentos/nuevo")({
   component: NewDocumentPage,
