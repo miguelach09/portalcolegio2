@@ -178,23 +178,46 @@ function NewDocumentPage() {
           </div>
 
           {showGrade && (
-            <div>
-              <label className="mb-1 block text-sm font-medium">Grado</label>
-              <select
-                value={values.grade ?? ""}
-                onChange={(e) =>
-                  setValues({ ...values, grade: (e.target.value || null) as Grade | null })
-                }
-                className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="">— Selecciona grado —</option>
-                {GRADE_ORDER.map((g) => (
-                  <option key={g} value={g}>
-                    {GRADE_LABELS[g]}
-                  </option>
-                ))}
-              </select>
-              {errors.grade && <p className="mt-1 text-sm text-destructive">{errors.grade}</p>}
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-sm font-medium">Grado</label>
+                <select
+                  value={values.grade ?? ""}
+                  onChange={(e) =>
+                    setValues({ ...values, grade: (e.target.value || null) as Grade | null })
+                  }
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">— Selecciona grado —</option>
+                  {GRADE_ORDER.map((g) => (
+                    <option key={g} value={g}>
+                      {GRADE_LABELS[g]}
+                    </option>
+                  ))}
+                </select>
+                {errors.grade && <p className="mt-1 text-sm text-destructive">{errors.grade}</p>}
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Periodo</label>
+                <select
+                  value={values.period ?? ""}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      period: (e.target.value ? Number(e.target.value) : null) as Period | null,
+                    })
+                  }
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">— Selecciona periodo —</option>
+                  {PERIOD_ORDER.map((p) => (
+                    <option key={p} value={p}>
+                      {PERIOD_LABELS[p]}
+                    </option>
+                  ))}
+                </select>
+                {errors.period && <p className="mt-1 text-sm text-destructive">{errors.period}</p>}
+              </div>
             </div>
           )}
 
