@@ -205,6 +205,11 @@ function GuiasPage() {
                                 {GRADE_LABELS[doc.grade as Grade]}
                               </span>
                             )}
+                            {doc.period && (
+                              <span className="rounded-full bg-primary-soft px-2 py-0.5 font-semibold text-primary">
+                                Periodo {doc.period}
+                              </span>
+                            )}
                           </div>
                           <h3 className="mt-1 font-display font-semibold text-foreground">
                             {doc.title}
