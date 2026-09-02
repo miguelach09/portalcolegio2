@@ -70,7 +70,7 @@ async function getSignedUrl(filePath: string, options?: { download?: boolean }) 
 // Public reads
 export const getDocuments = createServerFn({ method: "GET" })
   .inputValidator(
-    (input: { category?: DocumentCategory; grade?: string; limit?: number } = {}) => input
+    (input: { category?: DocumentCategory; grade?: string; period?: number; limit?: number } = {}) => input
   )
   .handler(async ({ data }) => {
     const supabase = createPublicClient();
@@ -86,6 +86,9 @@ export const getDocuments = createServerFn({ method: "GET" })
     }
     if (data.grade) {
       query = query.eq("grade", data.grade);
+    }
+    if (data.period) {
+      query = query.eq("period", data.period);
     }
     if (data.limit) {
       query = query.limit(data.limit);
@@ -239,6 +242,7 @@ export const createDocument = createServerFn({ method: "POST" })
         title: parsed.title,
         category: parsed.category,
         grade: parsed.grade ?? null,
+        period: parsed.period ?? null,
         file_path: data.filePath,
         published_at: parsed.published_at,
         is_active: parsed.is_active,
@@ -266,6 +270,7 @@ export const updateDocument = createServerFn({ method: "POST" })
         title: rest.title,
         category: rest.category,
         grade: rest.grade ?? null,
+        period: rest.period ?? null,
         published_at: rest.published_at,
         is_active: rest.is_active,
         sort_order: rest.sort_order,
