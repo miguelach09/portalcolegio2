@@ -67,11 +67,23 @@ export type GalleryCategory =
   | "eventos"
   | "graduacion";
 
+export type Period = 1 | 2 | 3 | 4;
+
+export const PERIOD_ORDER: Period[] = [1, 2, 3, 4];
+
+export const PERIOD_LABELS: Record<Period, string> = {
+  1: "Periodo 1",
+  2: "Periodo 2",
+  3: "Periodo 3",
+  4: "Periodo 4",
+};
+
 export interface Document {
   id: string;
   title: string;
   category: DocumentCategory;
   grade: Grade | null;
+  period: Period | null;
   file_path: string;
   file_url: string | null;
   file_size: number | null;
