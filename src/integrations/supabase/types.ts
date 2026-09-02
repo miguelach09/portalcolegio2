@@ -132,6 +132,7 @@ export type Database = {
           grade: string | null
           id: string
           is_active: boolean
+          period: number | null
           published_at: string
           sort_order: number
           title: string
@@ -147,6 +148,7 @@ export type Database = {
           grade?: string | null
           id?: string
           is_active?: boolean
+          period?: number | null
           published_at?: string
           sort_order?: number
           title: string
@@ -162,6 +164,7 @@ export type Database = {
           grade?: string | null
           id?: string
           is_active?: boolean
+          period?: number | null
           published_at?: string
           sort_order?: number
           title?: string
