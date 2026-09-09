@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, LogIn, LayoutDashboard, LogOut, Users } from "lucide-react";
+import { Menu, X, LogIn, LayoutDashboard, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
@@ -16,7 +16,7 @@ const nav = [
   { to: "/circulares", label: "Circulares" },
   { to: "/guias", label: "Guías" },
   { to: "/calendario", label: "Calendario" },
-  { to: "/encuestas", label: "Encuestas" },
+  { to: "/biblioteca", label: "CRE" },
   { to: "/faq", label: "FAQ" },
   { to: "/contacto", label: "Contáctenos" },
 ] as const;
@@ -124,10 +124,6 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
   if (!user) {
     return (
       <div className={`flex items-center gap-2 ${mobile ? "mt-2 flex-col" : ""}`}>
-        <Link to="/familia" onClick={onClick} className={linkClass(mobile)}>
-          <Users className="h-4 w-4" />
-          Familias
-        </Link>
         <Link to="/auth" onClick={onClick} className={linkClass(mobile)}>
           <LogIn className="h-4 w-4" />
           Admin
@@ -144,10 +140,7 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
 
   return (
     <div className={`flex items-center gap-2 ${mobile ? "flex-col" : ""}`}>
-      <Link to="/familia" onClick={onClick} className={linkClass(mobile)}>
-        <Users className="h-4 w-4" />
-        Familias
-      </Link>
+
       <Link
         to="/admin"
         onClick={onClick}

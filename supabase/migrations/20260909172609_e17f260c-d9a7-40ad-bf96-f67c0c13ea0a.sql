@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS public.survey_votes;
+DROP TABLE IF EXISTS public.survey_options;
+DROP TABLE IF EXISTS public.surveys;
+DROP TABLE IF EXISTS public.notification_reads;
+DROP TABLE IF EXISTS public.notifications;
+DROP TABLE IF EXISTS public.circular_reads;
+DROP TABLE IF EXISTS public.student_guardians;
+DROP TABLE IF EXISTS public.guardian_links;
+DROP TABLE IF EXISTS public.students;
+DROP FUNCTION IF EXISTS private.is_guardian_of(uuid, uuid);
+DROP FUNCTION IF EXISTS private.can_view_notification(uuid, text, text, uuid);

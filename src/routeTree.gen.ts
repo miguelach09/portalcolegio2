@@ -14,7 +14,6 @@ import { Route as HerramientasRouteImport } from './routes/herramientas'
 import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as FaqRouteImport } from './routes/faq'
-import { Route as EncuestasRouteImport } from './routes/encuestas'
 import { Route as DocentesRouteImport } from './routes/docentes'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CircularesRouteImport } from './routes/circulares'
@@ -25,19 +24,14 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdmisionesRouteImport } from './routes/admisiones'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedFamiliaIndexRouteImport } from './routes/_authenticated/familia/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
-import { Route as AuthenticatedFamiliaVincularRouteImport } from './routes/_authenticated/familia/vincular'
 import { Route as AuthenticatedAdminSuscriptoresIndexRouteImport } from './routes/_authenticated/admin/suscriptores/index'
 import { Route as AuthenticatedAdminPreinscripcionesIndexRouteImport } from './routes/_authenticated/admin/preinscripciones/index'
-import { Route as AuthenticatedAdminNotificacionesIndexRouteImport } from './routes/_authenticated/admin/notificaciones/index'
 import { Route as AuthenticatedAdminNoticiasIndexRouteImport } from './routes/_authenticated/admin/noticias/index'
 import { Route as AuthenticatedAdminMensajesIndexRouteImport } from './routes/_authenticated/admin/mensajes/index'
 import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_authenticated/admin/galeria/index'
 import { Route as AuthenticatedAdminFaqsIndexRouteImport } from './routes/_authenticated/admin/faqs/index'
 import { Route as AuthenticatedAdminEventosIndexRouteImport } from './routes/_authenticated/admin/eventos/index'
-import { Route as AuthenticatedAdminEstudiantesIndexRouteImport } from './routes/_authenticated/admin/estudiantes/index'
-import { Route as AuthenticatedAdminEncuestasIndexRouteImport } from './routes/_authenticated/admin/encuestas/index'
 import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/_authenticated/admin/documentos/index'
 import { Route as AuthenticatedAdminDocentesIndexRouteImport } from './routes/_authenticated/admin/docentes/index'
 import { Route as AuthenticatedAdminAvisosIndexRouteImport } from './routes/_authenticated/admin/avisos/index'
@@ -68,11 +62,6 @@ const GaleriaRoute = GaleriaRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EncuestasRoute = EncuestasRouteImport.update({
-  id: '/encuestas',
-  path: '/encuestas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocentesRoute = DocentesRouteImport.update({
@@ -124,23 +113,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedFamiliaIndexRoute =
-  AuthenticatedFamiliaIndexRouteImport.update({
-    id: '/familia/',
-    path: '/familia/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedFamiliaVincularRoute =
-  AuthenticatedFamiliaVincularRouteImport.update({
-    id: '/familia/vincular',
-    path: '/familia/vincular',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedAdminSuscriptoresIndexRoute =
   AuthenticatedAdminSuscriptoresIndexRouteImport.update({
     id: '/admin/suscriptores/',
@@ -151,12 +128,6 @@ const AuthenticatedAdminPreinscripcionesIndexRoute =
   AuthenticatedAdminPreinscripcionesIndexRouteImport.update({
     id: '/admin/preinscripciones/',
     path: '/admin/preinscripciones/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminNotificacionesIndexRoute =
-  AuthenticatedAdminNotificacionesIndexRouteImport.update({
-    id: '/admin/notificaciones/',
-    path: '/admin/notificaciones/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminNoticiasIndexRoute =
@@ -187,18 +158,6 @@ const AuthenticatedAdminEventosIndexRoute =
   AuthenticatedAdminEventosIndexRouteImport.update({
     id: '/admin/eventos/',
     path: '/admin/eventos/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminEstudiantesIndexRoute =
-  AuthenticatedAdminEstudiantesIndexRouteImport.update({
-    id: '/admin/estudiantes/',
-    path: '/admin/estudiantes/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminEncuestasIndexRoute =
-  AuthenticatedAdminEncuestasIndexRouteImport.update({
-    id: '/admin/encuestas/',
-    path: '/admin/encuestas/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminDocumentosIndexRoute =
@@ -248,29 +207,23 @@ export interface FileRoutesByFullPath {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/docentes': typeof DocentesRoute
-  '/encuestas': typeof EncuestasRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
-  '/familia/vincular': typeof AuthenticatedFamiliaVincularRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
-  '/familia/': typeof AuthenticatedFamiliaIndexRoute
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
   '/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/docentes/': typeof AuthenticatedAdminDocentesIndexRoute
   '/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
-  '/admin/encuestas/': typeof AuthenticatedAdminEncuestasIndexRoute
-  '/admin/estudiantes/': typeof AuthenticatedAdminEstudiantesIndexRoute
   '/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
   '/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
   '/admin/mensajes/': typeof AuthenticatedAdminMensajesIndexRoute
   '/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
-  '/admin/notificaciones/': typeof AuthenticatedAdminNotificacionesIndexRoute
   '/admin/preinscripciones/': typeof AuthenticatedAdminPreinscripcionesIndexRoute
   '/admin/suscriptores/': typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
@@ -284,29 +237,23 @@ export interface FileRoutesByTo {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/docentes': typeof DocentesRoute
-  '/encuestas': typeof EncuestasRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
-  '/familia/vincular': typeof AuthenticatedFamiliaVincularRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
-  '/familia': typeof AuthenticatedFamiliaIndexRoute
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
   '/admin/avisos': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/docentes': typeof AuthenticatedAdminDocentesIndexRoute
   '/admin/documentos': typeof AuthenticatedAdminDocumentosIndexRoute
-  '/admin/encuestas': typeof AuthenticatedAdminEncuestasIndexRoute
-  '/admin/estudiantes': typeof AuthenticatedAdminEstudiantesIndexRoute
   '/admin/eventos': typeof AuthenticatedAdminEventosIndexRoute
   '/admin/faqs': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/galeria': typeof AuthenticatedAdminGaleriaIndexRoute
   '/admin/mensajes': typeof AuthenticatedAdminMensajesIndexRoute
   '/admin/noticias': typeof AuthenticatedAdminNoticiasIndexRoute
-  '/admin/notificaciones': typeof AuthenticatedAdminNotificacionesIndexRoute
   '/admin/preinscripciones': typeof AuthenticatedAdminPreinscripcionesIndexRoute
   '/admin/suscriptores': typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
@@ -322,29 +269,23 @@ export interface FileRoutesById {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/docentes': typeof DocentesRoute
-  '/encuestas': typeof EncuestasRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
-  '/_authenticated/familia/vincular': typeof AuthenticatedFamiliaVincularRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
-  '/_authenticated/familia/': typeof AuthenticatedFamiliaIndexRoute
   '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/_authenticated/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/_authenticated/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
   '/_authenticated/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/_authenticated/admin/docentes/': typeof AuthenticatedAdminDocentesIndexRoute
   '/_authenticated/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
-  '/_authenticated/admin/encuestas/': typeof AuthenticatedAdminEncuestasIndexRoute
-  '/_authenticated/admin/estudiantes/': typeof AuthenticatedAdminEstudiantesIndexRoute
   '/_authenticated/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
   '/_authenticated/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
   '/_authenticated/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
   '/_authenticated/admin/mensajes/': typeof AuthenticatedAdminMensajesIndexRoute
   '/_authenticated/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
-  '/_authenticated/admin/notificaciones/': typeof AuthenticatedAdminNotificacionesIndexRoute
   '/_authenticated/admin/preinscripciones/': typeof AuthenticatedAdminPreinscripcionesIndexRoute
   '/_authenticated/admin/suscriptores/': typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
@@ -360,29 +301,23 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/docentes'
-    | '/encuestas'
     | '/faq'
     | '/galeria'
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
-    | '/familia/vincular'
     | '/admin/'
-    | '/familia/'
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
     | '/admin/noticias/nueva'
     | '/admin/avisos/'
     | '/admin/docentes/'
     | '/admin/documentos/'
-    | '/admin/encuestas/'
-    | '/admin/estudiantes/'
     | '/admin/eventos/'
     | '/admin/faqs/'
     | '/admin/galeria/'
     | '/admin/mensajes/'
     | '/admin/noticias/'
-    | '/admin/notificaciones/'
     | '/admin/preinscripciones/'
     | '/admin/suscriptores/'
   fileRoutesByTo: FileRoutesByTo
@@ -396,29 +331,23 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/docentes'
-    | '/encuestas'
     | '/faq'
     | '/galeria'
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
-    | '/familia/vincular'
     | '/admin'
-    | '/familia'
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
     | '/admin/noticias/nueva'
     | '/admin/avisos'
     | '/admin/docentes'
     | '/admin/documentos'
-    | '/admin/encuestas'
-    | '/admin/estudiantes'
     | '/admin/eventos'
     | '/admin/faqs'
     | '/admin/galeria'
     | '/admin/mensajes'
     | '/admin/noticias'
-    | '/admin/notificaciones'
     | '/admin/preinscripciones'
     | '/admin/suscriptores'
   id:
@@ -433,29 +362,23 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/docentes'
-    | '/encuestas'
     | '/faq'
     | '/galeria'
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
-    | '/_authenticated/familia/vincular'
     | '/_authenticated/admin/'
-    | '/_authenticated/familia/'
     | '/_authenticated/admin/documentos/nuevo'
     | '/_authenticated/admin/galeria/nueva'
     | '/_authenticated/admin/noticias/nueva'
     | '/_authenticated/admin/avisos/'
     | '/_authenticated/admin/docentes/'
     | '/_authenticated/admin/documentos/'
-    | '/_authenticated/admin/encuestas/'
-    | '/_authenticated/admin/estudiantes/'
     | '/_authenticated/admin/eventos/'
     | '/_authenticated/admin/faqs/'
     | '/_authenticated/admin/galeria/'
     | '/_authenticated/admin/mensajes/'
     | '/_authenticated/admin/noticias/'
-    | '/_authenticated/admin/notificaciones/'
     | '/_authenticated/admin/preinscripciones/'
     | '/_authenticated/admin/suscriptores/'
   fileRoutesById: FileRoutesById
@@ -471,7 +394,6 @@ export interface RootRouteChildren {
   CircularesRoute: typeof CircularesRoute
   ContactoRoute: typeof ContactoRoute
   DocentesRoute: typeof DocentesRoute
-  EncuestasRoute: typeof EncuestasRoute
   FaqRoute: typeof FaqRoute
   GaleriaRoute: typeof GaleriaRoute
   GuiasRoute: typeof GuiasRoute
@@ -514,13 +436,6 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/encuestas': {
-      id: '/encuestas'
-      path: '/encuestas'
-      fullPath: '/encuestas'
-      preLoaderRoute: typeof EncuestasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docentes': {
@@ -593,25 +508,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/familia/': {
-      id: '/_authenticated/familia/'
-      path: '/familia'
-      fullPath: '/familia/'
-      preLoaderRoute: typeof AuthenticatedFamiliaIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/familia/vincular': {
-      id: '/_authenticated/familia/vincular'
-      path: '/familia/vincular'
-      fullPath: '/familia/vincular'
-      preLoaderRoute: typeof AuthenticatedFamiliaVincularRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/suscriptores/': {
@@ -626,13 +527,6 @@ declare module '@tanstack/react-router' {
       path: '/admin/preinscripciones'
       fullPath: '/admin/preinscripciones/'
       preLoaderRoute: typeof AuthenticatedAdminPreinscripcionesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/notificaciones/': {
-      id: '/_authenticated/admin/notificaciones/'
-      path: '/admin/notificaciones'
-      fullPath: '/admin/notificaciones/'
-      preLoaderRoute: typeof AuthenticatedAdminNotificacionesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/noticias/': {
@@ -668,20 +562,6 @@ declare module '@tanstack/react-router' {
       path: '/admin/eventos'
       fullPath: '/admin/eventos/'
       preLoaderRoute: typeof AuthenticatedAdminEventosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/estudiantes/': {
-      id: '/_authenticated/admin/estudiantes/'
-      path: '/admin/estudiantes'
-      fullPath: '/admin/estudiantes/'
-      preLoaderRoute: typeof AuthenticatedAdminEstudiantesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/encuestas/': {
-      id: '/_authenticated/admin/encuestas/'
-      path: '/admin/encuestas'
-      fullPath: '/admin/encuestas/'
-      preLoaderRoute: typeof AuthenticatedAdminEncuestasIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/documentos/': {
@@ -730,31 +610,24 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedFamiliaVincularRoute: typeof AuthenticatedFamiliaVincularRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
-  AuthenticatedFamiliaIndexRoute: typeof AuthenticatedFamiliaIndexRoute
   AuthenticatedAdminDocumentosNuevoRoute: typeof AuthenticatedAdminDocumentosNuevoRoute
   AuthenticatedAdminGaleriaNuevaRoute: typeof AuthenticatedAdminGaleriaNuevaRoute
   AuthenticatedAdminNoticiasNuevaRoute: typeof AuthenticatedAdminNoticiasNuevaRoute
   AuthenticatedAdminAvisosIndexRoute: typeof AuthenticatedAdminAvisosIndexRoute
   AuthenticatedAdminDocentesIndexRoute: typeof AuthenticatedAdminDocentesIndexRoute
   AuthenticatedAdminDocumentosIndexRoute: typeof AuthenticatedAdminDocumentosIndexRoute
-  AuthenticatedAdminEncuestasIndexRoute: typeof AuthenticatedAdminEncuestasIndexRoute
-  AuthenticatedAdminEstudiantesIndexRoute: typeof AuthenticatedAdminEstudiantesIndexRoute
   AuthenticatedAdminEventosIndexRoute: typeof AuthenticatedAdminEventosIndexRoute
   AuthenticatedAdminFaqsIndexRoute: typeof AuthenticatedAdminFaqsIndexRoute
   AuthenticatedAdminGaleriaIndexRoute: typeof AuthenticatedAdminGaleriaIndexRoute
   AuthenticatedAdminMensajesIndexRoute: typeof AuthenticatedAdminMensajesIndexRoute
   AuthenticatedAdminNoticiasIndexRoute: typeof AuthenticatedAdminNoticiasIndexRoute
-  AuthenticatedAdminNotificacionesIndexRoute: typeof AuthenticatedAdminNotificacionesIndexRoute
   AuthenticatedAdminPreinscripcionesIndexRoute: typeof AuthenticatedAdminPreinscripcionesIndexRoute
   AuthenticatedAdminSuscriptoresIndexRoute: typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedFamiliaVincularRoute: AuthenticatedFamiliaVincularRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
-  AuthenticatedFamiliaIndexRoute: AuthenticatedFamiliaIndexRoute,
   AuthenticatedAdminDocumentosNuevoRoute:
     AuthenticatedAdminDocumentosNuevoRoute,
   AuthenticatedAdminGaleriaNuevaRoute: AuthenticatedAdminGaleriaNuevaRoute,
@@ -763,16 +636,11 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminDocentesIndexRoute: AuthenticatedAdminDocentesIndexRoute,
   AuthenticatedAdminDocumentosIndexRoute:
     AuthenticatedAdminDocumentosIndexRoute,
-  AuthenticatedAdminEncuestasIndexRoute: AuthenticatedAdminEncuestasIndexRoute,
-  AuthenticatedAdminEstudiantesIndexRoute:
-    AuthenticatedAdminEstudiantesIndexRoute,
   AuthenticatedAdminEventosIndexRoute: AuthenticatedAdminEventosIndexRoute,
   AuthenticatedAdminFaqsIndexRoute: AuthenticatedAdminFaqsIndexRoute,
   AuthenticatedAdminGaleriaIndexRoute: AuthenticatedAdminGaleriaIndexRoute,
   AuthenticatedAdminMensajesIndexRoute: AuthenticatedAdminMensajesIndexRoute,
   AuthenticatedAdminNoticiasIndexRoute: AuthenticatedAdminNoticiasIndexRoute,
-  AuthenticatedAdminNotificacionesIndexRoute:
-    AuthenticatedAdminNotificacionesIndexRoute,
   AuthenticatedAdminPreinscripcionesIndexRoute:
     AuthenticatedAdminPreinscripcionesIndexRoute,
   AuthenticatedAdminSuscriptoresIndexRoute:
@@ -794,7 +662,6 @@ const rootRouteChildren: RootRouteChildren = {
   CircularesRoute: CircularesRoute,
   ContactoRoute: ContactoRoute,
   DocentesRoute: DocentesRoute,
-  EncuestasRoute: EncuestasRoute,
   FaqRoute: FaqRoute,
   GaleriaRoute: GaleriaRoute,
   GuiasRoute: GuiasRoute,

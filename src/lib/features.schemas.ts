@@ -22,21 +22,6 @@ export const faqFormSchema = z.object({
   sort_order: z.number().int().min(0).default(0),
 });
 
-export const surveyFormSchema = z.object({
-  id: z.string().uuid().optional(),
-  title: z.string().min(1, "El título es obligatorio"),
-  question: z.string().min(1, "La pregunta es obligatoria"),
-  is_active: z.boolean().default(true),
-  expires_at: z.string().nullable().optional(),
-  sort_order: z.number().int().min(0).default(0),
-});
-
-export const surveyOptionFormSchema = z.object({
-  id: z.string().uuid().optional(),
-  survey_id: z.string().uuid(),
-  label: z.string().min(1, "La opción es obligatoria"),
-  sort_order: z.number().int().min(0).default(0),
-});
 
 export const contactFormSchema = z.object({
   name: z.string().trim().min(1, "El nombre es obligatorio").max(100),
@@ -56,6 +41,4 @@ export const siteSettingSchema = z.object({
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 export type FaqFormValues = z.infer<typeof faqFormSchema>;
-export type SurveyFormValues = z.infer<typeof surveyFormSchema>;
-export type SurveyOptionFormValues = z.infer<typeof surveyOptionFormSchema>;
 export type ContactFormValues = z.infer<typeof contactFormSchema>;

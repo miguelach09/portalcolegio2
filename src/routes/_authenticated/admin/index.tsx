@@ -9,14 +9,13 @@ import {
   LogOut,
   CalendarDays,
   HelpCircle,
-  Vote,
   Mail,
   Users,
   MessageSquare,
   Megaphone,
   GraduationCap,
   ClipboardList,
-  Bell,
+  BookOpen,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouter } from "@tanstack/react-router";
@@ -65,7 +64,6 @@ function AdminDashboard() {
           <StatCard label="Mensajes nuevos" count={dashboard?.newMessages ?? "—"} icon={<Mail className="h-5 w-5" />} color="bg-red-100 text-red-700" href="/admin/mensajes" />
           <StatCard label="Suscriptores" count={dashboard?.subscribers ?? "—"} icon={<Users className="h-5 w-5" />} color="bg-cyan-100 text-cyan-700" href="/admin/suscriptores" />
           <StatCard label="Preguntas FAQ" count={dashboard?.faqs ?? "—"} icon={<HelpCircle className="h-5 w-5" />} color="bg-indigo-100 text-indigo-700" href="/admin/faqs" />
-          <StatCard label="Encuestas" count={dashboard ? "—": "—"} icon={<Vote className="h-5 w-5" />} color="bg-pink-100 text-pink-700" href="/admin/encuestas" />
         </div>
 
         <h2 className="mt-10 text-lg font-semibold text-foreground">Gestión de contenido</h2>
@@ -75,14 +73,12 @@ function AdminDashboard() {
           <ManageCard title="Galería" desc="Imágenes de vida escolar" href="/admin/galeria" icon={<Image className="h-5 w-5" />} />
           <ManageCard title="Eventos" desc="Calendario escolar" href="/admin/eventos" icon={<CalendarDays className="h-5 w-5" />} />
           <ManageCard title="Preguntas FAQ" desc="Preguntas frecuentes" href="/admin/faqs" icon={<HelpCircle className="h-5 w-5" />} />
-          <ManageCard title="Encuestas" desc="Crear y gestionar encuestas" href="/admin/encuestas" icon={<Vote className="h-5 w-5" />} />
           <ManageCard title="Mensajes" desc="Buzón de contacto" href="/admin/mensajes" icon={<MessageSquare className="h-5 w-5" />} />
           <ManageCard title="Suscriptores" desc="Lista de correos" href="/admin/suscriptores" icon={<Users className="h-5 w-5" />} />
           <ManageCard title="Avisos" desc="Banner de aviso urgente" href="/admin/avisos" icon={<Megaphone className="h-5 w-5" />} />
           <ManageCard title="Docentes" desc="Directorio docente y directivo" href="/admin/docentes" icon={<GraduationCap className="h-5 w-5" />} />
           <ManageCard title="Preinscripciones" desc="Solicitudes de admisión 2027" href="/admin/preinscripciones" icon={<ClipboardList className="h-5 w-5" />} />
-          <ManageCard title="Estudiantes y familias" desc="Estudiantes y códigos de vinculación" href="/admin/estudiantes" icon={<Users className="h-5 w-5" />} />
-          <ManageCard title="Avisos a familias" desc="Notificaciones por grado o estudiante" href="/admin/notificaciones" icon={<Bell className="h-5 w-5" />} />
+          <ManageCard title="Libros CRE" desc="Catálogo del Centro de Recursos Educativos" href="/admin/libros" icon={<BookOpen className="h-5 w-5" />} />
         </div>
 
         <h2 className="mt-10 text-lg font-semibold text-foreground">Acciones rápidas</h2>
