@@ -5,17 +5,12 @@ import type { Database } from "@/integrations/supabase/types";
 import type {
   EventItem,
   FaqItem,
-  Survey,
-  SurveyOption,
   ContactMessage,
   Subscriber,
-  SiteSetting,
 } from "./features.types";
 import {
   eventFormSchema,
   faqFormSchema,
-  surveyFormSchema,
-  surveyOptionFormSchema,
   contactFormSchema,
   subscriberSchema,
   siteSettingSchema,
@@ -79,49 +74,6 @@ export const getFaqs = createServerFn({ method: "GET" })
     return (rows || []) as unknown as FaqItem[];
   });
 
-export const getActiveSurveys = createServerFn({ method: "GET" })
-  .handler(async () => {
-    const supabase = createPublicClient();
-    const { data: surveys, error } = await supabase
-      .from("surveys")
-      .select("*")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true });
-    if (error) throw error;
-
-    const result: (Survey & { options: SurveyOption[] })[] = [];
-    for (const s of surveys || []) {
-      const { data: options } = await supabase
-        .from("survey_options")
-        .select("*")
-        .eq("survey_id", s.id)
-        .order("sort_order", { ascending: true });
-      result.push({ ...(s as unknown as Survey), options: (options || []) as unknown as SurveyOption[] });
-    }
-    return result;
-  });
-
-export const getSurveyResults = createServerFn({ method: "GET" })
-  .inputValidator((input: { survey_id: string }) => input)
-  .handler(async ({ data }) => {
-    const supabase = createPublicClient();
-    const { data: options, error } = await supabase
-      .from("survey_options")
-      .select("id, label, sort_order")
-      .eq("survey_id", data.survey_id)
-      .order("sort_order", { ascending: true });
-    if (error) throw error;
-
-    const results: SurveyOption[] = [];
-    for (const opt of options || []) {
-      const { count } = await supabase
-        .from("survey_votes")
-        .select("id", { count: "exact", head: true })
-        .eq("option_id", opt.id);
-      results.push({ ...(opt as unknown as SurveyOption), vote_count: count || 0 });
-    }
-    return results;
-  });
 
 export const getSiteSettings = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -167,23 +119,6 @@ export const subscribeEmail = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const castVote = createServerFn({ method: "POST" })
-  .inputValidator((input: { survey_id: string; option_id: string; voter_hash: string }) => input)
-  .handler(async ({ data }) => {
-    const supabase = createPublicClient();
-    const { error } = await supabase.from("survey_votes").insert({
-      survey_id: data.survey_id,
-      option_id: data.option_id,
-      voter_hash: data.voter_hash,
-    });
-    if (error) {
-      if (error.code === "23505") {
-        throw new Error("Ya votaste en esta encuesta.");
-      }
-      throw error;
-    }
-    return { ok: true };
-  });
 
 // ===================== PROTECTED: EVENTS =====================
 
@@ -285,94 +220,6 @@ export const deleteFaq = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-// ===================== PROTECTED: SURVEYS =====================
-
-export const getAllSurveysAdmin = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    await checkStaff(context);
-    const { data, error } = await context.supabase
-      .from("surveys")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (error) throw error;
-    return (data || []) as unknown as Survey[];
-  });
-
-export const saveSurvey = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: { values: Record<string, unknown> }) => input)
-  .handler(async ({ data, context }) => {
-    await checkStaff(context);
-    const parsed = surveyFormSchema.parse(data.values);
-    const { id, ...rest } = parsed;
-    if (id) {
-      const { data: row, error } = await context.supabase
-        .from("surveys")
-        .update(rest)
-        .eq("id", id)
-        .select()
-        .single();
-      if (error) throw error;
-      return row as Survey;
-    }
-    const { data: row, error } = await context.supabase
-      .from("surveys")
-      .insert(rest)
-      .select()
-      .single();
-    if (error) throw error;
-    return row as Survey;
-  });
-
-export const deleteSurvey = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data, context }) => {
-    await checkStaff(context);
-    const { error } = await context.supabase.from("surveys").delete().eq("id", data.id);
-    if (error) throw error;
-    return { ok: true };
-  });
-
-export const saveSurveyOption = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: { values: Record<string, unknown> }) => input)
-  .handler(async ({ data, context }) => {
-    await checkStaff(context);
-    const parsed = surveyOptionFormSchema.parse(data.values);
-    const { id, ...rest } = parsed;
-    if (id) {
-      const { data: row, error } = await context.supabase
-        .from("survey_options")
-        .update({ label: rest.label, sort_order: rest.sort_order })
-        .eq("id", id)
-        .select()
-        .single();
-      if (error) throw error;
-      return row as SurveyOption;
-    }
-    const { data: row, error } = await context.supabase
-      .from("survey_options")
-      .insert(rest)
-      .select()
-      .single();
-    if (error) throw error;
-    return row as SurveyOption;
-  });
-
-export const deleteSurveyOption = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data, context }) => {
-    await checkStaff(context);
-    const { error } = await context.supabase
-      .from("survey_options")
-      .delete()
-      .eq("id", data.id);
-    if (error) throw error;
-    return { ok: true };
-  });
 
 // ===================== PROTECTED: CONTACT MESSAGES =====================
 

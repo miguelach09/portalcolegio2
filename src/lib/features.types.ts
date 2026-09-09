@@ -25,25 +25,6 @@ export interface FaqItem {
   updated_at: string;
 }
 
-export interface Survey {
-  id: string;
-  title: string;
-  question: string;
-  is_active: boolean;
-  expires_at: string | null;
-  sort_order: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface SurveyOption {
-  id: string;
-  survey_id: string;
-  label: string;
-  sort_order: number;
-  created_at: string;
-  vote_count?: number;
-}
 
 export interface ContactMessage {
   id: string;
