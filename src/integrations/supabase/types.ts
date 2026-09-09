@@ -123,6 +123,7 @@ export type Database = {
       }
       documents: {
         Row: {
+          area: Database["public"]["Enums"]["document_area"] | null
           category: Database["public"]["Enums"]["document_category"]
           created_at: string
           file_path: string
@@ -139,6 +140,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          area?: Database["public"]["Enums"]["document_area"] | null
           category?: Database["public"]["Enums"]["document_category"]
           created_at?: string
           file_path: string
@@ -155,6 +157,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          area?: Database["public"]["Enums"]["document_area"] | null
           category?: Database["public"]["Enums"]["document_category"]
           created_at?: string
           file_path?: string
@@ -326,6 +329,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      library_books: {
+        Row: {
+          author: string
+          availability: string
+          cover_path: string | null
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          grade: string | null
+          id: string
+          is_active: boolean
+          kind: string
+          price_cop: number | null
+          publisher: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string
+          availability?: string
+          cover_path?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          grade?: string | null
+          id?: string
+          is_active?: boolean
+          kind?: string
+          price_cop?: number | null
+          publisher?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          availability?: string
+          cover_path?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          grade?: string | null
+          id?: string
+          is_active?: boolean
+          kind?: string
+          price_cop?: number | null
+          publisher?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       news: {
         Row: {
@@ -740,6 +797,16 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "editor" | "familia"
+      document_area:
+        | "ciencias"
+        | "matematicas"
+        | "ingles"
+        | "castellano"
+        | "humanidades"
+        | "tecnologia"
+        | "artes"
+        | "profundizacion"
+        | "ciencias_sociales"
       document_category:
         | "circulares"
         | "revisas"
@@ -890,6 +957,17 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "familia"],
+      document_area: [
+        "ciencias",
+        "matematicas",
+        "ingles",
+        "castellano",
+        "humanidades",
+        "tecnologia",
+        "artes",
+        "profundizacion",
+        "ciencias_sociales",
+      ],
       document_category: [
         "circulares",
         "revisas",
