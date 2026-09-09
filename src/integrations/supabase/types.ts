@@ -59,35 +59,6 @@ export type Database = {
         }
         Relationships: []
       }
-      circular_reads: {
-        Row: {
-          document_id: string
-          id: string
-          read_at: string
-          user_id: string
-        }
-        Insert: {
-          document_id: string
-          id?: string
-          read_at?: string
-          user_id: string
-        }
-        Update: {
-          document_id?: string
-          id?: string
-          read_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "circular_reads_document_id_fkey"
-            columns: ["document_id"]
-            isOneToOne: false
-            referencedRelation: "documents"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       contact_messages: {
         Row: {
           created_at: string
@@ -292,44 +263,6 @@ export type Database = {
         }
         Relationships: []
       }
-      guardian_links: {
-        Row: {
-          code: string
-          created_at: string
-          expires_at: string
-          id: string
-          student_id: string
-          used_at: string | null
-          used_by: string | null
-        }
-        Insert: {
-          code: string
-          created_at?: string
-          expires_at?: string
-          id?: string
-          student_id: string
-          used_at?: string | null
-          used_by?: string | null
-        }
-        Update: {
-          code?: string
-          created_at?: string
-          expires_at?: string
-          id?: string
-          student_id?: string
-          used_at?: string | null
-          used_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "guardian_links_student_id_fkey"
-            columns: ["student_id"]
-            isOneToOne: false
-            referencedRelation: "students"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       library_books: {
         Row: {
           author: string
@@ -435,82 +368,6 @@ export type Database = {
         }
         Relationships: []
       }
-      notification_reads: {
-        Row: {
-          id: string
-          notification_id: string
-          read_at: string
-          user_id: string
-        }
-        Insert: {
-          id?: string
-          notification_id: string
-          read_at?: string
-          user_id: string
-        }
-        Update: {
-          id?: string
-          notification_id?: string
-          read_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notification_reads_notification_id_fkey"
-            columns: ["notification_id"]
-            isOneToOne: false
-            referencedRelation: "notifications"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      notifications: {
-        Row: {
-          audience: string
-          body: string
-          created_at: string
-          created_by: string | null
-          grade: string | null
-          id: string
-          link: string | null
-          student_id: string | null
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          audience?: string
-          body: string
-          created_at?: string
-          created_by?: string | null
-          grade?: string | null
-          id?: string
-          link?: string | null
-          student_id?: string | null
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          audience?: string
-          body?: string
-          created_at?: string
-          created_by?: string | null
-          grade?: string | null
-          id?: string
-          link?: string | null
-          student_id?: string | null
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_student_id_fkey"
-            columns: ["student_id"]
-            isOneToOne: false
-            referencedRelation: "students"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       site_settings: {
         Row: {
           key: string
@@ -526,68 +383,6 @@ export type Database = {
           key?: string
           updated_at?: string
           value?: string
-        }
-        Relationships: []
-      }
-      student_guardians: {
-        Row: {
-          created_at: string
-          id: string
-          relationship: string
-          student_id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          relationship?: string
-          student_id: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          relationship?: string
-          student_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "student_guardians_student_id_fkey"
-            columns: ["student_id"]
-            isOneToOne: false
-            referencedRelation: "students"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      students: {
-        Row: {
-          created_at: string
-          full_name: string
-          grade: string
-          group_name: string | null
-          id: string
-          is_active: boolean
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          full_name: string
-          grade: string
-          group_name?: string | null
-          id?: string
-          is_active?: boolean
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          full_name?: string
-          grade?: string
-          group_name?: string | null
-          id?: string
-          is_active?: boolean
-          updated_at?: string
         }
         Relationships: []
       }
@@ -609,110 +404,6 @@ export type Database = {
           email?: string
           id?: string
           is_active?: boolean
-        }
-        Relationships: []
-      }
-      survey_options: {
-        Row: {
-          created_at: string
-          id: string
-          label: string
-          sort_order: number
-          survey_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          label: string
-          sort_order?: number
-          survey_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          label?: string
-          sort_order?: number
-          survey_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "survey_options_survey_id_fkey"
-            columns: ["survey_id"]
-            isOneToOne: false
-            referencedRelation: "surveys"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      survey_votes: {
-        Row: {
-          created_at: string
-          id: string
-          option_id: string
-          survey_id: string
-          voter_hash: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          option_id: string
-          survey_id: string
-          voter_hash: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          option_id?: string
-          survey_id?: string
-          voter_hash?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "survey_votes_option_id_fkey"
-            columns: ["option_id"]
-            isOneToOne: false
-            referencedRelation: "survey_options"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "survey_votes_survey_id_fkey"
-            columns: ["survey_id"]
-            isOneToOne: false
-            referencedRelation: "surveys"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      surveys: {
-        Row: {
-          created_at: string
-          expires_at: string | null
-          id: string
-          is_active: boolean
-          question: string
-          sort_order: number
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_active?: boolean
-          question: string
-          sort_order?: number
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_active?: boolean
-          question?: string
-          sort_order?: number
-          title?: string
-          updated_at?: string
         }
         Relationships: []
       }
