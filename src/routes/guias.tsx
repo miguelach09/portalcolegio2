@@ -7,7 +7,14 @@ import { PageHero } from "@/components/site/PageHero";
 import { BookOpen, FileText, Download, ArrowLeft, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { getDocuments } from "@/lib/content.functions";
-import { GRADE_LABELS, GRADE_ORDER, type Grade } from "@/lib/content.types";
+import {
+  GRADE_LABELS,
+  GRADE_ORDER,
+  AREA_LABELS,
+  areasForGrade,
+  type DocumentArea,
+  type Grade,
+} from "@/lib/content.types";
 import { formatDateES } from "@/lib/utils";
 
 const guiasSearchSchema = z.object({
@@ -73,6 +80,7 @@ function GuiasPage() {
   const { grado } = Route.useSearch();
   const { data: allDocs = [] } = useSuspenseQuery(allGuiasQueryOptions);
   const [q, setQ] = useState("");
+  const [area, setArea] = useState<DocumentArea | "">("");
 
   const selectedGrade = GRADE_ORDER.find((g) => g === grado) as Grade | undefined;
 
@@ -88,12 +96,13 @@ function GuiasPage() {
   const filteredDocs = useMemo(() => {
     let docs = allDocs.filter((d) => !!d.grade);
     if (selectedGrade) docs = docs.filter((d) => d.grade === selectedGrade);
+    if (area) docs = docs.filter((d) => d.area === area);
     if (q.trim()) {
       const s = q.trim().toLowerCase();
       docs = docs.filter((d) => d.title.toLowerCase().includes(s));
     }
     return docs;
-  }, [allDocs, selectedGrade, q]);
+  }, [allDocs, selectedGrade, area, q]);
 
   return (
     <PageShell>
@@ -173,6 +182,39 @@ function GuiasPage() {
               ))}
             </div>
 
+            <div className="mt-4">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                Área
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setArea("")}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    area === ""
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  Todas
+                </button>
+                {areasForGrade(selectedGrade).map((a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    onClick={() => setArea(a)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                      a === area
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
+                    }`}
+                  >
+                    {AREA_LABELS[a]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="mt-8">
               {filteredDocs.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
@@ -208,6 +250,11 @@ function GuiasPage() {
                             {doc.period && (
                               <span className="rounded-full bg-primary-soft px-2 py-0.5 font-semibold text-primary">
                                 Periodo {doc.period}
+                              </span>
+                            )}
+                            {doc.area && (
+                              <span className="rounded-full bg-accent/15 px-2 py-0.5 font-semibold text-accent">
+                                {AREA_LABELS[doc.area as DocumentArea]}
                               </span>
                             )}
                           </div>

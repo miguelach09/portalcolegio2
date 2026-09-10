@@ -15,6 +15,7 @@ import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DocentesRouteImport } from './routes/docentes'
+import { Route as CreRouteImport } from './routes/cre'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CircularesRouteImport } from './routes/circulares'
 import { Route as CalendarioRouteImport } from './routes/calendario'
@@ -67,6 +68,11 @@ const FaqRoute = FaqRouteImport.update({
 const DocentesRoute = DocentesRouteImport.update({
   id: '/docentes',
   path: '/docentes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreRoute = CreRouteImport.update({
+  id: '/cre',
+  path: '/cre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactoRoute = ContactoRouteImport.update({
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/calendario': typeof CalendarioRoute
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
+  '/cre': typeof CreRoute
   '/docentes': typeof DocentesRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
@@ -236,6 +243,7 @@ export interface FileRoutesByTo {
   '/calendario': typeof CalendarioRoute
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
+  '/cre': typeof CreRoute
   '/docentes': typeof DocentesRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
@@ -268,6 +276,7 @@ export interface FileRoutesById {
   '/calendario': typeof CalendarioRoute
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
+  '/cre': typeof CreRoute
   '/docentes': typeof DocentesRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
@@ -300,6 +309,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/circulares'
     | '/contacto'
+    | '/cre'
     | '/docentes'
     | '/faq'
     | '/galeria'
@@ -330,6 +340,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/circulares'
     | '/contacto'
+    | '/cre'
     | '/docentes'
     | '/faq'
     | '/galeria'
@@ -361,6 +372,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/circulares'
     | '/contacto'
+    | '/cre'
     | '/docentes'
     | '/faq'
     | '/galeria'
@@ -393,6 +405,7 @@ export interface RootRouteChildren {
   CalendarioRoute: typeof CalendarioRoute
   CircularesRoute: typeof CircularesRoute
   ContactoRoute: typeof ContactoRoute
+  CreRoute: typeof CreRoute
   DocentesRoute: typeof DocentesRoute
   FaqRoute: typeof FaqRoute
   GaleriaRoute: typeof GaleriaRoute
@@ -443,6 +456,13 @@ declare module '@tanstack/react-router' {
       path: '/docentes'
       fullPath: '/docentes'
       preLoaderRoute: typeof DocentesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cre': {
+      id: '/cre'
+      path: '/cre'
+      fullPath: '/cre'
+      preLoaderRoute: typeof CreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacto': {
@@ -661,6 +681,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalendarioRoute: CalendarioRoute,
   CircularesRoute: CircularesRoute,
   ContactoRoute: ContactoRoute,
+  CreRoute: CreRoute,
   DocentesRoute: DocentesRoute,
   FaqRoute: FaqRoute,
   GaleriaRoute: GaleriaRoute,
