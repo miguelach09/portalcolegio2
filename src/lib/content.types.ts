@@ -78,12 +78,54 @@ export const PERIOD_LABELS: Record<Period, string> = {
   4: "Periodo 4",
 };
 
+export type DocumentArea =
+  | "ciencias"
+  | "matematicas"
+  | "ingles"
+  | "castellano"
+  | "humanidades"
+  | "tecnologia"
+  | "artes"
+  | "profundizacion"
+  | "ciencias_sociales";
+
+export const AREA_ORDER: DocumentArea[] = [
+  "ciencias",
+  "matematicas",
+  "ingles",
+  "castellano",
+  "humanidades",
+  "tecnologia",
+  "artes",
+  "ciencias_sociales",
+  "profundizacion",
+];
+
+export const AREA_LABELS: Record<DocumentArea, string> = {
+  ciencias: "Ciencias",
+  matematicas: "Matemáticas",
+  ingles: "Inglés",
+  castellano: "Castellano",
+  humanidades: "Humanidades",
+  tecnologia: "Tecnología",
+  artes: "Artes",
+  ciencias_sociales: "Ciencias Sociales",
+  profundizacion: "Profundización",
+};
+
+/** Profundización solo existe en Décimo y Once. */
+export function areasForGrade(grade: Grade | null): DocumentArea[] {
+  if (grade === "decimo" || grade === "once") return AREA_ORDER;
+  return AREA_ORDER.filter((a) => a !== "profundizacion");
+}
+
 export interface Document {
   id: string;
   title: string;
   category: DocumentCategory;
   grade: Grade | null;
   period: Period | null;
+  area: DocumentArea | null;
   file_path: string;
   file_url: string | null;
   file_size: number | null;
