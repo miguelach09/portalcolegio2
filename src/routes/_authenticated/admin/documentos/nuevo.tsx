@@ -4,8 +4,15 @@ import { Upload, FileText, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { createDocument } from "@/lib/content.functions";
 import { documentFormSchema } from "@/lib/content.schemas";
-import type { DocumentCategory, Grade, Period } from "@/lib/content.types";
-import { GRADE_LABELS, GRADE_ORDER, PERIOD_LABELS, PERIOD_ORDER } from "@/lib/content.types";
+import type { DocumentArea, DocumentCategory, Grade, Period } from "@/lib/content.types";
+import {
+  GRADE_LABELS,
+  GRADE_ORDER,
+  PERIOD_LABELS,
+  PERIOD_ORDER,
+  AREA_LABELS,
+  areasForGrade,
+} from "@/lib/content.types";
 
 export const Route = createFileRoute("/_authenticated/admin/documentos/nuevo")({
   component: NewDocumentPage,
@@ -29,6 +36,7 @@ function NewDocumentPage() {
     category: "circulares" as DocumentCategory,
     grade: null as Grade | null,
     period: null as Period | null,
+    area: null as DocumentArea | null,
     published_at: new Date().toISOString().split("T")[0],
     is_active: true,
     sort_order: 0,
@@ -154,6 +162,7 @@ function NewDocumentPage() {
                     category: cat,
                     grade: cat === "guias" ? v.grade : null,
                     period: cat === "guias" ? v.period : null,
+                    area: cat === "guias" ? v.area : null,
                   }));
                 }}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
@@ -183,9 +192,17 @@ function NewDocumentPage() {
                 <label className="mb-1 block text-sm font-medium">Grado</label>
                 <select
                   value={values.grade ?? ""}
-                  onChange={(e) =>
-                    setValues({ ...values, grade: (e.target.value || null) as Grade | null })
-                  }
+                  onChange={(e) => {
+                    const grade = (e.target.value || null) as Grade | null;
+                    setValues((v) => ({
+                      ...v,
+                      grade,
+                      area:
+                        v.area && !areasForGrade(grade).includes(v.area)
+                          ? null
+                          : v.area,
+                    }));
+                  }}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="">— Selecciona grado —</option>
@@ -217,6 +234,27 @@ function NewDocumentPage() {
                   ))}
                 </select>
                 {errors.period && <p className="mt-1 text-sm text-destructive">{errors.period}</p>}
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Área</label>
+                <select
+                  value={values.area ?? ""}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      area: (e.target.value || null) as DocumentArea | null,
+                    })
+                  }
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">— Selecciona área —</option>
+                  {areasForGrade(values.grade).map((a) => (
+                    <option key={a} value={a}>
+                      {AREA_LABELS[a]}
+                    </option>
+                  ))}
+                </select>
+                {errors.area && <p className="mt-1 text-sm text-destructive">{errors.area}</p>}
               </div>
             </div>
           )}
