@@ -7,7 +7,14 @@ import { PageHero } from "@/components/site/PageHero";
 import { BookOpen, FileText, Download, ArrowLeft, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { getDocuments } from "@/lib/content.functions";
-import { GRADE_LABELS, GRADE_ORDER, type Grade } from "@/lib/content.types";
+import {
+  GRADE_LABELS,
+  GRADE_ORDER,
+  AREA_LABELS,
+  areasForGrade,
+  type DocumentArea,
+  type Grade,
+} from "@/lib/content.types";
 import { formatDateES } from "@/lib/utils";
 
 const guiasSearchSchema = z.object({
@@ -73,6 +80,7 @@ function GuiasPage() {
   const { grado } = Route.useSearch();
   const { data: allDocs = [] } = useSuspenseQuery(allGuiasQueryOptions);
   const [q, setQ] = useState("");
+  const [area, setArea] = useState<DocumentArea | "">("");
 
   const selectedGrade = GRADE_ORDER.find((g) => g === grado) as Grade | undefined;
 
@@ -88,12 +96,13 @@ function GuiasPage() {
   const filteredDocs = useMemo(() => {
     let docs = allDocs.filter((d) => !!d.grade);
     if (selectedGrade) docs = docs.filter((d) => d.grade === selectedGrade);
+    if (area) docs = docs.filter((d) => d.area === area);
     if (q.trim()) {
       const s = q.trim().toLowerCase();
       docs = docs.filter((d) => d.title.toLowerCase().includes(s));
     }
     return docs;
-  }, [allDocs, selectedGrade, q]);
+  }, [allDocs, selectedGrade, area, q]);
 
   return (
     <PageShell>
