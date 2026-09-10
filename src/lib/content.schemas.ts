@@ -50,12 +50,25 @@ export const periodSchema = z.union([
   z.literal(4),
 ]);
 
+export const documentAreaSchema = z.enum([
+  "ciencias",
+  "matematicas",
+  "ingles",
+  "castellano",
+  "humanidades",
+  "tecnologia",
+  "artes",
+  "profundizacion",
+  "ciencias_sociales",
+]);
+
 export const documentFormSchema = z
   .object({
     title: z.string().min(1, "El título es obligatorio"),
     category: documentCategorySchema,
     grade: gradeSchema.nullable().optional(),
     period: periodSchema.nullable().optional(),
+    area: documentAreaSchema.nullable().optional(),
     published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
     is_active: z.boolean().default(true),
     sort_order: z.number().int().min(0).default(0),
@@ -67,7 +80,19 @@ export const documentFormSchema = z
   .refine((v) => v.category !== "guias" || !!v.period, {
     message: "Selecciona el periodo para la guía",
     path: ["period"],
-  });
+  })
+  .refine((v) => v.category !== "guias" || !!v.area, {
+    message: "Selecciona el área para la guía",
+    path: ["area"],
+  })
+  .refine(
+    (v) =>
+      v.area !== "profundizacion" || v.grade === "decimo" || v.grade === "once",
+    {
+      message: "Profundización solo está disponible en Décimo y Once",
+      path: ["area"],
+    }
+  );
 
 export const documentUpdateSchema = z.object({
   id: z.string().uuid(),
@@ -75,6 +100,7 @@ export const documentUpdateSchema = z.object({
   category: documentCategorySchema,
   grade: gradeSchema.nullable().optional(),
   period: periodSchema.nullable().optional(),
+  area: documentAreaSchema.nullable().optional(),
   published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   is_active: z.boolean().default(true),
   sort_order: z.number().int().min(0).default(0),
