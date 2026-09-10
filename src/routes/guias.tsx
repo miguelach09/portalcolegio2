@@ -182,6 +182,39 @@ function GuiasPage() {
               ))}
             </div>
 
+            <div className="mt-4">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                Área
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setArea("")}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    area === ""
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  Todas
+                </button>
+                {areasForGrade(selectedGrade).map((a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    onClick={() => setArea(a)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                      a === area
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
+                    }`}
+                  >
+                    {AREA_LABELS[a]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="mt-8">
               {filteredDocs.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
@@ -217,6 +250,11 @@ function GuiasPage() {
                             {doc.period && (
                               <span className="rounded-full bg-primary-soft px-2 py-0.5 font-semibold text-primary">
                                 Periodo {doc.period}
+                              </span>
+                            )}
+                            {doc.area && (
+                              <span className="rounded-full bg-accent/15 px-2 py-0.5 font-semibold text-accent">
+                                {AREA_LABELS[doc.area as DocumentArea]}
                               </span>
                             )}
                           </div>
