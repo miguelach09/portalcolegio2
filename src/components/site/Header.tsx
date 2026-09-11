@@ -16,7 +16,7 @@ const nav = [
   { to: "/circulares", label: "Circulares" },
   { to: "/guias", label: "Guías" },
   { to: "/calendario", label: "Calendario" },
-  { to: "/biblioteca", label: "CRE" },
+  { to: "/cre", label: "CRE" },
   { to: "/faq", label: "FAQ" },
   { to: "/contacto", label: "Contáctenos" },
 ] as const;
