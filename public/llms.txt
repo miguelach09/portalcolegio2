@@ -22,4 +22,4 @@ El Colegio Cafam ofrece educación de transición a once en Bogotá, con énfasi
 
 ## Optional
 
-- [Encuestas](/encuestas): Encuestas activas para la comunidad educativa.
+- [CRE](/cre): Catálogo del Centro de Recursos Educativos: libros de consulta en sala y libros de Plan Lector con precios.

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import lib from "@/assets/gallery-library.jpg";
@@ -29,6 +29,20 @@ function Biblioteca() {
   return (
     <PageShell>
       <PageHero eyebrow="Biblioteca" title="Un mundo de conocimiento." subtitle="Espacios y recursos para promover la lectura, la investigación y el pensamiento crítico." />
+      <section className="container-page pt-10">
+        <Link
+          to="/cre"
+          className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-6 transition hover:border-primary"
+        >
+          <span className="text-xs font-bold uppercase tracking-widest text-primary">CRE</span>
+          <span className="font-display text-xl font-bold text-slate-900 dark:text-white">
+            Catálogo del Centro de Recursos Educativos
+          </span>
+          <span className="text-sm text-muted-foreground">
+            Consulta los libros disponibles en sala y los libros de Plan Lector con sus precios.
+          </span>
+        </Link>
+      </section>
       <section className="container-page py-16 md:py-24">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <img src={lib} alt="Biblioteca Cafam" className="rounded-3xl shadow-[var(--shadow-lift)]" loading="lazy" />
