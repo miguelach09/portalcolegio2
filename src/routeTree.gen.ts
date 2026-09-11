@@ -30,6 +30,7 @@ import { Route as AuthenticatedAdminSuscriptoresIndexRouteImport } from './route
 import { Route as AuthenticatedAdminPreinscripcionesIndexRouteImport } from './routes/_authenticated/admin/preinscripciones/index'
 import { Route as AuthenticatedAdminNoticiasIndexRouteImport } from './routes/_authenticated/admin/noticias/index'
 import { Route as AuthenticatedAdminMensajesIndexRouteImport } from './routes/_authenticated/admin/mensajes/index'
+import { Route as AuthenticatedAdminLibrosIndexRouteImport } from './routes/_authenticated/admin/libros/index'
 import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_authenticated/admin/galeria/index'
 import { Route as AuthenticatedAdminFaqsIndexRouteImport } from './routes/_authenticated/admin/faqs/index'
 import { Route as AuthenticatedAdminEventosIndexRouteImport } from './routes/_authenticated/admin/eventos/index'
@@ -148,6 +149,12 @@ const AuthenticatedAdminMensajesIndexRoute =
     path: '/admin/mensajes/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminLibrosIndexRoute =
+  AuthenticatedAdminLibrosIndexRouteImport.update({
+    id: '/admin/libros/',
+    path: '/admin/libros/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminGaleriaIndexRoute =
   AuthenticatedAdminGaleriaIndexRouteImport.update({
     id: '/admin/galeria/',
@@ -229,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
   '/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/admin/libros/': typeof AuthenticatedAdminLibrosIndexRoute
   '/admin/mensajes/': typeof AuthenticatedAdminMensajesIndexRoute
   '/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
   '/admin/preinscripciones/': typeof AuthenticatedAdminPreinscripcionesIndexRoute
@@ -260,6 +268,7 @@ export interface FileRoutesByTo {
   '/admin/eventos': typeof AuthenticatedAdminEventosIndexRoute
   '/admin/faqs': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/galeria': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/admin/libros': typeof AuthenticatedAdminLibrosIndexRoute
   '/admin/mensajes': typeof AuthenticatedAdminMensajesIndexRoute
   '/admin/noticias': typeof AuthenticatedAdminNoticiasIndexRoute
   '/admin/preinscripciones': typeof AuthenticatedAdminPreinscripcionesIndexRoute
@@ -293,6 +302,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
   '/_authenticated/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
   '/_authenticated/admin/galeria/': typeof AuthenticatedAdminGaleriaIndexRoute
+  '/_authenticated/admin/libros/': typeof AuthenticatedAdminLibrosIndexRoute
   '/_authenticated/admin/mensajes/': typeof AuthenticatedAdminMensajesIndexRoute
   '/_authenticated/admin/noticias/': typeof AuthenticatedAdminNoticiasIndexRoute
   '/_authenticated/admin/preinscripciones/': typeof AuthenticatedAdminPreinscripcionesIndexRoute
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/admin/eventos/'
     | '/admin/faqs/'
     | '/admin/galeria/'
+    | '/admin/libros/'
     | '/admin/mensajes/'
     | '/admin/noticias/'
     | '/admin/preinscripciones/'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
     | '/admin/eventos'
     | '/admin/faqs'
     | '/admin/galeria'
+    | '/admin/libros'
     | '/admin/mensajes'
     | '/admin/noticias'
     | '/admin/preinscripciones'
@@ -389,6 +401,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/eventos/'
     | '/_authenticated/admin/faqs/'
     | '/_authenticated/admin/galeria/'
+    | '/_authenticated/admin/libros/'
     | '/_authenticated/admin/mensajes/'
     | '/_authenticated/admin/noticias/'
     | '/_authenticated/admin/preinscripciones/'
@@ -563,6 +576,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminMensajesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/libros/': {
+      id: '/_authenticated/admin/libros/'
+      path: '/admin/libros'
+      fullPath: '/admin/libros/'
+      preLoaderRoute: typeof AuthenticatedAdminLibrosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/galeria/': {
       id: '/_authenticated/admin/galeria/'
       path: '/admin/galeria'
@@ -640,6 +660,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminEventosIndexRoute: typeof AuthenticatedAdminEventosIndexRoute
   AuthenticatedAdminFaqsIndexRoute: typeof AuthenticatedAdminFaqsIndexRoute
   AuthenticatedAdminGaleriaIndexRoute: typeof AuthenticatedAdminGaleriaIndexRoute
+  AuthenticatedAdminLibrosIndexRoute: typeof AuthenticatedAdminLibrosIndexRoute
   AuthenticatedAdminMensajesIndexRoute: typeof AuthenticatedAdminMensajesIndexRoute
   AuthenticatedAdminNoticiasIndexRoute: typeof AuthenticatedAdminNoticiasIndexRoute
   AuthenticatedAdminPreinscripcionesIndexRoute: typeof AuthenticatedAdminPreinscripcionesIndexRoute
@@ -659,6 +680,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminEventosIndexRoute: AuthenticatedAdminEventosIndexRoute,
   AuthenticatedAdminFaqsIndexRoute: AuthenticatedAdminFaqsIndexRoute,
   AuthenticatedAdminGaleriaIndexRoute: AuthenticatedAdminGaleriaIndexRoute,
+  AuthenticatedAdminLibrosIndexRoute: AuthenticatedAdminLibrosIndexRoute,
   AuthenticatedAdminMensajesIndexRoute: AuthenticatedAdminMensajesIndexRoute,
   AuthenticatedAdminNoticiasIndexRoute: AuthenticatedAdminNoticiasIndexRoute,
   AuthenticatedAdminPreinscripcionesIndexRoute:
