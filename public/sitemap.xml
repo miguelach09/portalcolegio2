@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://connecteducafam.lovable.app/</loc><priority>1.0</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/mi-colegio</loc><priority>0.8</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/admisiones</loc><priority>0.9</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/docentes</loc><priority>0.7</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/galeria</loc><priority>0.6</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/circulares</loc><priority>0.7</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/guias</loc><priority>0.6</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/calendario</loc><priority>0.6</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/cre</loc><priority>0.6</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/faq</loc><priority>0.5</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/bienestar</loc><priority>0.5</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/biblioteca</loc><priority>0.5</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/herramientas</loc><priority>0.5</priority></url>
-  <url><loc>https://connecteducafam.lovable.app/contacto</loc><priority>0.6</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/</loc><lastmod>2026-09-14</lastmod><priority>1.0</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/mi-colegio</loc><lastmod>2026-09-14</lastmod><priority>0.8</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/admisiones</loc><lastmod>2026-09-14</lastmod><priority>0.9</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/docentes</loc><lastmod>2026-09-14</lastmod><priority>0.7</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/galeria</loc><lastmod>2026-09-14</lastmod><priority>0.6</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/circulares</loc><lastmod>2026-09-14</lastmod><priority>0.7</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/guias</loc><lastmod>2026-09-14</lastmod><priority>0.6</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/calendario</loc><lastmod>2026-09-14</lastmod><priority>0.6</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/cre</loc><lastmod>2026-09-14</lastmod><priority>0.6</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/faq</loc><lastmod>2026-09-14</lastmod><priority>0.5</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/bienestar</loc><lastmod>2026-09-14</lastmod><priority>0.5</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/herramientas</loc><lastmod>2026-09-14</lastmod><priority>0.5</priority></url>
+  <url><loc>https://connecteducafam.lovable.app/contacto</loc><lastmod>2026-09-14</lastmod><priority>0.6</priority></url>
 </urlset>

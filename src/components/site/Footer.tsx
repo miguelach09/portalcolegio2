@@ -33,7 +33,7 @@ export function Footer() {
             <li><Link to="/galeria" className="hover:text-white">Galería</Link></li>
             <li><Link to="/circulares" className="hover:text-white">Circulares</Link></li>
             <li><Link to="/bienestar" className="hover:text-white">Bienestar</Link></li>
-            <li><Link to="/biblioteca" className="hover:text-white">Biblioteca</Link></li>
+            <li><Link to="/cre" className="hover:text-white">CRE — Biblioteca</Link></li>
           </ul>
         </div>
 

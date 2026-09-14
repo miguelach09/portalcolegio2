@@ -33,6 +33,20 @@ function AdminDashboard() {
     queryKey: ["dashboard-stats"],
     queryFn: () => stats(),
   });
+  const { data: role } = useQuery({
+    queryKey: ["my-role"],
+    queryFn: async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return null;
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id);
+      return (data?.[0]?.role as string | undefined) ?? null;
+    },
+  });
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -42,8 +56,15 @@ function AdminDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
-        <div className="container-app flex h-16 items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground">Panel administrativo</h1>
+          <div className="container-app flex h-16 items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-bold text-foreground">Panel administrativo</h1>
+            {role && (
+              <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-primary">
+                {role === "admin" ? "Administrador" : role === "editor" ? "Editor" : role}
+              </span>
+            )}
+          </div>
           <button
             onClick={handleSignOut}
             className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent"
@@ -64,6 +85,7 @@ function AdminDashboard() {
           <StatCard label="Mensajes nuevos" count={dashboard?.newMessages ?? "—"} icon={<Mail className="h-5 w-5" />} color="bg-red-100 text-red-700" href="/admin/mensajes" />
           <StatCard label="Suscriptores" count={dashboard?.subscribers ?? "—"} icon={<Users className="h-5 w-5" />} color="bg-cyan-100 text-cyan-700" href="/admin/suscriptores" />
           <StatCard label="Preguntas FAQ" count={dashboard?.faqs ?? "—"} icon={<HelpCircle className="h-5 w-5" />} color="bg-indigo-100 text-indigo-700" href="/admin/faqs" />
+          <StatCard label="Libros CRE" count={dashboard?.libraryBooks ?? "—"} icon={<BookOpen className="h-5 w-5" />} color="bg-teal-100 text-teal-700" href="/admin/libros" />
         </div>
 
         <h2 className="mt-10 text-lg font-semibold text-foreground">Gestión de contenido</h2>
@@ -86,6 +108,7 @@ function AdminDashboard() {
           <QuickActionCard title="Subir circular o revisa" desc="PDF para Circulares, Revisas, Admisiones o Herramientas" href="/admin/documentos/nuevo" />
           <QuickActionCard title="Publicar noticia" desc="Crear entrada para la sección de noticias" href="/admin/noticias/nueva" />
           <QuickActionCard title="Agregar imagen a galería" desc="Subir foto a la galería de vida escolar" href="/admin/galeria/nueva" />
+          <QuickActionCard title="Agregar libro al CRE" desc="Nuevo libro de consulta o Plan Lector" href="/admin/libros" />
         </div>
       </main>
     </div>
