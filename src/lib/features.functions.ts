@@ -314,7 +314,7 @@ export const getDashboardStats = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await checkStaff(context);
     const supabase = context.supabase;
-    const [news, docs, gallery, events, msgs, subs, faqs] = await Promise.all([
+    const [news, docs, gallery, events, msgs, subs, faqs, books] = await Promise.all([
       supabase.from("news").select("id", { count: "exact", head: true }),
       supabase.from("documents").select("id", { count: "exact", head: true }),
       supabase.from("gallery_images").select("id", { count: "exact", head: true }),
@@ -322,6 +322,7 @@ export const getDashboardStats = createServerFn({ method: "GET" })
       supabase.from("contact_messages").select("id, status", { count: "exact" }),
       supabase.from("subscribers").select("id", { count: "exact", head: true }),
       supabase.from("faqs").select("id", { count: "exact", head: true }),
+      supabase.from("library_books").select("id", { count: "exact", head: true }),
     ]);
     return {
       news: news.count || 0,
@@ -332,5 +333,6 @@ export const getDashboardStats = createServerFn({ method: "GET" })
       newMessages: (msgs.data || []).filter((m: any) => m.status === "nuevo").length,
       subscribers: subs.count || 0,
       faqs: faqs.count || 0,
+      libraryBooks: books.count || 0,
     };
   });

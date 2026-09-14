@@ -33,6 +33,20 @@ function AdminDashboard() {
     queryKey: ["dashboard-stats"],
     queryFn: () => stats(),
   });
+  const { data: role } = useQuery({
+    queryKey: ["my-role"],
+    queryFn: async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return null;
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id);
+      return (data?.[0]?.role as string | undefined) ?? null;
+    },
+  });
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -42,8 +56,15 @@ function AdminDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
-        <div className="container-app flex h-16 items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground">Panel administrativo</h1>
+          <div className="container-app flex h-16 items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-bold text-foreground">Panel administrativo</h1>
+            {role && (
+              <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-primary">
+                {role === "admin" ? "Administrador" : role === "editor" ? "Editor" : role}
+              </span>
+            )}
+          </div>
           <button
             onClick={handleSignOut}
             className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent"
