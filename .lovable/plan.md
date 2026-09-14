@@ -21,6 +21,17 @@
 ## 5. Inicio (home)
 - Sección destacada del CRE: una franja con 4 portadas recientes y botón "Ver catálogo completo", visible solo si hay libros publicados.
 
+## 5b. Rediseño visual del inicio (misma información, más impacto)
+Sin cambiar textos, secciones ni contenido, solo presentación:
+- **Hero más cinematográfico**: imagen a pantalla casi completa con degradado institucional, titular grande con animación de entrada (aparece palabra por palabra o con fade escalonado) y botones con efecto hover elegante.
+- **Indicador de scroll** animado (flecha flotante) invitando a bajar.
+- **Animaciones al hacer scroll**: cada sección (accesos rápidos, noticias, galería, banner de admisiones) entra con fade-in/desplazamiento suave al aparecer en pantalla (IntersectionObserver), respetando `prefers-reduced-motion`.
+- **Accesos rápidos**: tarjetas con hover que eleva y realza el ícono/imagen, con transición suave.
+- **Noticias**: tarjeta principal destacada más grande con la imagen como fondo y degradado; las secundarias a un lado.
+- **Galería**: presentación tipo mosaico con zoom suave al pasar el cursor.
+- **Banner de admisiones**: más protagonismo visual con fondo en gradiente Cafam y llamado a la acción destacado.
+- Se propone generar 2-3 direcciones visuales (prototipos) del hero para que elijas antes de implementar.
+
 ## 6. Rendimiento y SEO
 - Imágenes de portada y galería: `loading="lazy"` ya aplicado; verificar `alt` descriptivos en todas las imágenes dinámicas.
 - Añadir `/guias` y `/cre` verificados en `sitemap.xml` con fecha de actualización.
