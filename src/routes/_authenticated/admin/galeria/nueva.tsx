@@ -30,6 +30,7 @@ function NewGalleryImagePage() {
   const [values, setValues] = useState({
     title: "",
     category: "aulas" as GalleryCategory,
+    year: new Date().getFullYear() as number | null,
     is_active: true,
     sort_order: 0,
   });
