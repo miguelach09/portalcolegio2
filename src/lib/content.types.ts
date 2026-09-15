@@ -4,6 +4,7 @@ export type DocumentCategory =
   | "admisiones"
   | "herramientas"
   | "guias"
+  | "institucionales"
   | "general";
 
 export type Grade =
