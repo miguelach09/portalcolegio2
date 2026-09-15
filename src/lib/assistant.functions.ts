@@ -246,9 +246,6 @@ async function findResources(query: string): Promise<AssistantLink[]> {
   return links.slice(0, 8);
 }
 
-const STAFF_INTENT =
-  /(docent|profesor|profesora|maestr|coordinad|coordinaci|rector|direct|titular|staff|bienestar|enfermer|secretar|psicolog|extension|extensión|telefon|teléfon|contact|correo de|quien es|quién es|area de|área de)/i;
-
 async function buildContext() {
   const supabase = createPublicClient();
   const [{ data: docs }, { data: news }, { data: gallery }, { data: books }, { data: knowledge }] = await Promise.all([
@@ -297,7 +294,7 @@ DATOS INSTITUCIONALES:
 - Teléfono: (601) 307 8060
 - Admisiones 2027: preinscripciones del 15 de julio al 17 de agosto de 2026
 - Plataformas: PAC (portalcolegio.com/ingresoPac.php), Q10 (site.q10.com), Correo Office 365
-- Secciones del sitio: Mi Colegio, Admisiones, Galería, Circulares, Guías de Aprendizaje, Herramientas, Bienestar, CRE (Biblioteca), Docentes, Calendario, Contacto`;
+- Secciones del sitio: Mi Colegio, Admisiones, Galería, Circulares, Guías de Aprendizaje, Herramientas, Bienestar, CRE (Biblioteca), Calendario, Contacto`;
 }
 
 export const askAssistant = createServerFn({ method: "POST" })
@@ -326,9 +323,7 @@ Reglas:
 - No escribas URLs ni enlaces en markdown: los botones se muestran automáticamente.
 - Si no tienes la información, dilo con honestidad y sugiere contactar al colegio (601) 307 8060 o escribir a info@portalcolegio.com.
 - No inventes fechas, cifras ni datos que no estén en el contexto.
-- Preguntas sobre docentes, coordinaciones, directivos, bienestar, enfermería, secretarías o teléfonos: responde ÚNICAMENTE con el DIRECTORIO OFICIAL de abajo. Presenta los datos ordenados (nombre, cargo o curso, área, correo, día de atención o extensión) usando listas o tablas simples, e indica la fuente ("Directorio funcionarios" o "Líneas telefónicas atención a padres").
-- El "día de atención" es un número: 1 lunes, 2 martes, 3 miércoles, 4 jueves, 5 viernes. Traduce el número al nombre del día.
-- Si un docente o cargo no aparece en el directorio, dilo amablemente y ofrece derivar la consulta: PBX (601) 437 8999, correo colegio@cafam.com.co o la página de Contáctenos.
+- Preguntas sobre docentes, coordinaciones, directivos, bienestar, enfermería, secretarías o teléfonos: usa el CONOCIMIENTO ADICIONAL cargado por el colegio. Si no está allí, dilo amablemente y ofrece derivar la consulta: PBX (601) 437 8999, correo colegio@cafam.com.co o la página de Contáctenos.
 
 ${context}${matchesBlock}${staffBlock}`;
 

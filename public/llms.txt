@@ -9,7 +9,6 @@ El Colegio Cafam ofrece educación de transición a once en Bogotá, con énfasi
 - [Inicio](/): Resumen del colegio, noticias destacadas y accesos rápidos.
 - [Mi Colegio](/mi-colegio): Historia, misión, visión y modelo pedagógico.
 - [Admisiones 2027](/admisiones): Proceso, requisitos y formulario de preinscripción.
-- [Docentes](/docentes): Directorio del equipo docente por área académica.
 - [Guías de Aprendizaje](/guias): Guías por grado, de transición a once.
 - [Circulares](/circulares): Comunicados oficiales para familias.
 - [Calendario](/calendario): Fechas y eventos del año escolar.
