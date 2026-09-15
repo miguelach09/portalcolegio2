@@ -475,36 +475,7 @@ export type Database = {
       }
     }
     Views: {
-      teachers_public: {
-        Row: {
-          area: string | null
-          bio: string | null
-          full_name: string | null
-          id: string | null
-          photo_url: string | null
-          role_title: string | null
-          sort_order: number | null
-        }
-        Insert: {
-          area?: string | null
-          bio?: string | null
-          full_name?: string | null
-          id?: string | null
-          photo_url?: string | null
-          role_title?: string | null
-          sort_order?: number | null
-        }
-        Update: {
-          area?: string | null
-          bio?: string | null
-          full_name?: string | null
-          id?: string | null
-          photo_url?: string | null
-          role_title?: string | null
-          sort_order?: number | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       has_role: {
