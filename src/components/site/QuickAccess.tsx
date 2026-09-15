@@ -35,7 +35,7 @@ const items: Item[] = [
   { label: "Bienestar", desc: "Programas de bienestar", href: "/bienestar", image: btnBienestar },
   { label: "Q10 – Recibo matrícula", desc: "Descarga tu recibo", href: "https://site.q10.com/login?aplentId=242506df-1822-4f95-b1ac-2842f6896513", image: btnQ10, external: true },
   { label: "Correo institucional", desc: "Office 365 estudiantes", href: "https://login.microsoftonline.com/", image: btnCorreo, external: true },
-  { label: "Biblioteca", desc: "Recursos digitales", href: "/biblioteca", image: btnBiblioteca },
+  { label: "CRE – Biblioteca", desc: "Catálogo y Plan Lector", href: "/cre", image: btnBiblioteca },
   { label: "Manual de Convivencia", desc: "Documento institucional", href: "https://portalcolegio.com/MANUAL_CONVIVENCIA_COLEGIO_CAFAM.pdf", image: btnManual, external: true },
   { label: "Documentos", desc: "Circulares y comunicados", href: "/circulares", image: btnDocumentos },
 ];
