@@ -49,9 +49,17 @@ function sanitizeTerm(input: string): string {
 }
 
 const STOPWORDS = new Set([
-  "hola","que","qué","cual","cuál","cuales","cuáles","como","cómo","donde","dónde","para","por","los","las","del","con","una","uno","unos","unas","the","and","sobre","tiene","tienen","hay","dame","dime","puedo","puedes","quiero","necesito","favor","gracias","buscar","busca","muestrame","muéstrame","enviame","envíame","acceso","link","enlace","informacion","información","colegio","cafam","este","esta","esto","son","ser","mas","más","año","ano","todo","todos","toda","todas","pdf","archivo","archivos","documento","documentos",
+  "hola","que","qué","cual","cuál","cuales","cuáles","como","cómo","donde","dónde","para","por","los","las","del","con","una","uno","unos","unas","the","and","sobre","tiene","tienen","hay","dame","dime","puedo","puedes","quiero","necesito","favor","gracias","buscar","busca","muestrame","muéstrame","enviame","envíame","link","enlace","informacion","información","colegio","cafam","este","esta","esto","son","ser","mas","más","año","ano","todo","todos","toda","todas","pdf","archivo","archivos",
   // Palabras conversacionales que antes provocaban botones sin relación.
   "cualquier","lugar","creas","cosa","cosas","algo","alguien","interesado","sorprender","sorprenderá","sorprendera","mandame","mándame","llevame","llévame","recomienda","recomiendas","recomiendame","ayuda","ayudame","ayúdame","gustaria","gustaría","tema","temas","detalle","detalles","detallado","hacer","saber","conocer","tengo","estoy","sirve","sirves","eres","haces","hablar","cuenta","cuentame","cuéntame","mucho","muchas","poco","bien","gracias","porfavor","entonces","tambien","también","aqui","aquí","ahora","luego","persona","personas","nombre","manera","forma","amplio","amplia","eficiente","amigable","objetivo","contenido","pagina","página","web","sitio","seccion","sección","secciones","platform","plataforma","plataformas",
+  // Palabras de 4 letras que no aportan a la búsqueda.
+  "quien","desde","hasta","pero","sino","porque","otro","otra","otros","otras","ello","ella","esos","esas","aqui","alli","solo","sola","cada","muy","tan","sera","seria","estan","estar","puede","tipo","tipos","dias","dia","vez","veces","favor","hoja","ver","verlo","abrir","abre",
+]);
+
+// Términos cortos que sí importan (siglas y palabras del colegio) y que el
+// filtro de longitud descartaba antes.
+const SHORT_TERMS = new Set([
+  "pei","cre","faq","q10","guia","guias","arte","artes","once","diez","nueve","ocho","siete","seis","cinco","icfes","pta","tics","ingles","math","10","11","1","2","3","4","5","6","7","8","9","0","yoga",
 ]);
 
 function normalize(text: string): string {
@@ -64,7 +72,7 @@ function normalize(text: string): string {
 function keywords(text: string): string[] {
   const words = normalize(sanitizeTerm(text))
     .split(" ")
-    .filter((w) => w.length >= 5 && !STOPWORDS.has(w));
+    .filter((w) => !STOPWORDS.has(w) && (w.length >= 4 || SHORT_TERMS.has(w)));
   return Array.from(new Set(words)).slice(0, 5);
 }
 
