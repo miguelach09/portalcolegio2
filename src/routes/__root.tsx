@@ -79,6 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Colegio Cafam" },
       { name: "description", content: "Colegio Cafam: educación de calidad desde 1971. Admisiones 2027 abiertas, vida escolar, deporte, arte y tecnología." },
+      { name: "google-site-verification", content: "Xjf_nKnsNmO8yXowwGNqhMOmk-N7ceqz1G9xPycyZOE" },
       { property: "og:site_name", content: "Colegio Cafam" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
