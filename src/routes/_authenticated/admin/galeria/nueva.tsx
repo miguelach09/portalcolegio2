@@ -145,7 +145,7 @@ function NewGalleryImagePage() {
             {errors.title && <p className="mt-1 text-sm text-destructive">{errors.title}</p>}
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-3">
             <div>
               <label className="mb-1 block text-sm font-medium">Categoría</label>
               <select
