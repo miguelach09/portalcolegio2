@@ -9,7 +9,7 @@ import { Lightbox } from "@/components/site/Lightbox";
 
 const galleryQueryOptions = queryOptions({
   queryKey: ["gallery"],
-  queryFn: () => getGalleryImages({ data: { limit: 200 } }),
+  queryFn: () => getGalleryImages({ data: { limit: 500 } }),
 });
 
 export const Route = createFileRoute("/galeria")({
