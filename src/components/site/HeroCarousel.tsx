@@ -70,76 +70,113 @@ export function HeroCarousel() {
   }, [emblaApi]);
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="container-page pt-6">
-        <div className="relative overflow-hidden rounded-3xl shadow-[var(--shadow-lift)]">
-          <div ref={emblaRef} className="overflow-hidden">
-            <div className="flex">
-              {slides.map((s, i) => (
-                <div key={i} className="relative min-w-0 flex-[0_0_100%]">
-                  <div className="relative aspect-[16/10] w-full sm:aspect-[16/8] md:aspect-[21/9]">
-                    <img
-                      src={s.image}
-                      alt={s.title}
-                      loading={i === 0 ? "eager" : "lazy"}
-                      width={1600}
-                      height={1000}
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-transparent" />
-                    <div className="relative flex h-full items-end p-6 sm:items-center sm:p-12 md:p-16">
-                      <div className="max-w-xl text-white">
-                        <span className={`inline-flex items-center rounded-full ${s.accent} px-3 py-1 text-xs font-bold uppercase tracking-widest text-black/85`}>
-                          {s.eyebrow}
-                        </span>
-                        <h2 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-5xl md:text-6xl">
-                          {s.title}
-                        </h2>
-                        <p className="mt-3 max-w-md text-base text-white/85 sm:text-lg">
-                          {s.subtitle}
-                        </p>
-                        <Link
-                          to={s.cta.to}
-                          className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-primary shadow-lg transition-transform hover:-translate-y-0.5"
-                        >
-                          {s.cta.label} <ArrowRight className="h-4 w-4" />
-                        </Link>
-                      </div>
-                    </div>
+    <section className="group relative h-[82vh] max-h-[820px] min-h-[540px] w-full overflow-hidden bg-primary">
+      <div ref={emblaRef} className="h-full overflow-hidden">
+        <div className="flex h-full">
+          {slides.map((s, i) => (
+            <div key={i} className="relative h-full min-w-0 flex-[0_0_100%]">
+              {/* Imagen de fondo */}
+              <div className="absolute inset-0">
+                <img
+                  src={s.image}
+                  alt={s.title}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  width={1920}
+                  height={1080}
+                  className="h-full w-full object-cover opacity-80 transition-transform duration-[2000ms] ease-out group-hover:scale-[1.03]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/60 to-transparent" />
+              </div>
+
+              {/* Contenido */}
+              <div className="container-page relative z-10 flex h-full flex-col justify-center">
+                <div className="max-w-3xl space-y-6 md:space-y-8">
+                  <div
+                    className={`inline-flex items-center gap-2 rounded-full ${s.accent} px-5 py-2 text-white shadow-xl transition-transform hover:scale-105 ${
+                      selected === i ? "animate-fade-in" : ""
+                    }`}
+                  >
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+                    </span>
+                    <span className="font-display text-xs font-bold uppercase tracking-widest md:text-sm">
+                      {s.eyebrow}
+                    </span>
+                  </div>
+
+                  <h2 className="font-display text-4xl font-extrabold leading-[0.98] tracking-tight text-white sm:text-6xl md:text-7xl">
+                    {s.title}
+                  </h2>
+
+                  <p className="max-w-xl text-lg font-medium leading-relaxed text-white/90 md:text-xl">
+                    {s.subtitle}
+                  </p>
+
+                  <div className="flex items-center gap-6 pt-2">
+                    <Link
+                      to={s.cta.to}
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-display text-base font-extrabold text-primary shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-sky hover:text-white md:px-10 md:text-lg"
+                    >
+                      {s.cta.label} <ArrowRight className="h-5 w-5" />
+                    </Link>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-
-          <button
-            onClick={() => emblaApi?.scrollPrev()}
-            className="absolute left-3 top-1/2 hidden -translate-y-1/2 rounded-full bg-white/90 p-2.5 text-primary shadow-md hover:bg-white sm:block"
-            aria-label="Anterior"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            onClick={() => emblaApi?.scrollNext()}
-            className="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-full bg-white/90 p-2.5 text-primary shadow-md hover:bg-white sm:block"
-            aria-label="Siguiente"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-
-          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollTo(i)}
-                aria-label={`Slide ${i + 1}`}
-                className={`h-2 rounded-full transition-all ${
-                  selected === i ? "w-8 bg-white" : "w-2 bg-white/60"
-                }`}
-              />
-            ))}
-          </div>
+          ))}
         </div>
+      </div>
+
+      {/* Paginación: barras + contador */}
+      <div className="absolute bottom-16 left-5 z-20 flex items-center gap-4 md:left-12">
+        <div className="flex items-center gap-2">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollTo(i)}
+              aria-label={`Slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                selected === i ? "w-12 bg-yellow-brand" : "w-2 bg-white/30 hover:bg-white/60"
+              }`}
+            />
+          ))}
+        </div>
+        <span className="font-display text-xs font-bold uppercase tracking-widest text-white/50">
+          {String(selected + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+        </span>
+      </div>
+
+      {/* Flechas */}
+      <div className="absolute bottom-14 right-12 z-20 hidden items-center gap-4 md:flex">
+        <button
+          onClick={() => emblaApi?.scrollPrev()}
+          className="flex h-14 w-14 items-center justify-center rounded-full border border-white/30 text-white backdrop-blur-sm transition-all hover:bg-white/10"
+          aria-label="Anterior"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+        <button
+          onClick={() => emblaApi?.scrollNext()}
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-sky text-white shadow-lg transition-all hover:bg-primary"
+          aria-label="Siguiente"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </button>
+      </div>
+
+      {/* Indicador de scroll */}
+      <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 flex-col items-center hidden sm:flex">
+        <div className="h-12 w-px animate-pulse bg-gradient-to-b from-transparent via-white to-transparent" />
+      </div>
+
+      {/* Franja de colores de marca */}
+      <div className="absolute bottom-0 left-0 z-20 flex h-2 w-full">
+        <div className="flex-1 bg-primary" />
+        <div className="flex-1 bg-sky" />
+        <div className="flex-1 bg-yellow-brand" />
+        <div className="flex-1 bg-green-brand" />
+        <div className="flex-1 bg-orange-brand" />
       </div>
     </section>
   );
