@@ -128,9 +128,73 @@ function sectionShortcuts(raw: string, exclude: string[] = []): AssistantLink[] 
   return out;
 }
 
+// ---------------------------------------------------------------------------
+// Seguridad: temas que el asistente nunca debe buscar ni enlazar. Cubre el
+// panel de administración, el historial de archivos, credenciales y datos
+// personales (SPI/SPII) de estudiantes, familias y funcionarios.
+// ---------------------------------------------------------------------------
+const SENSITIVE_TOPICS = [
+  "historial de archivos",
+  "historial del panel",
+  "panel de administracion",
+  "panel admin",
+  "panel de admin",
+  "/admin",
+  "administrador del sitio",
+  "contrasena",
+  "contrasenas",
+  "clave de acceso",
+  "claves de acceso",
+  "credencial",
+  "credenciales",
+  "usuario y clave",
+  "token",
+  "api key",
+  "llave secreta",
+  "service role",
+  "base de datos",
+  "supabase",
+  "sql",
+  "tabla de usuarios",
+  "lista de usuarios",
+  "correos de los usuarios",
+  "quien subio",
+  "quien elimino",
+  "quien modifico",
+  "cedula",
+  "documento de identidad",
+  "numero de identificacion",
+  "datos personales",
+  "dato sensible",
+  "datos sensibles",
+  "spi",
+  "spii",
+  "historia clinica",
+  "diagnostico medico",
+  "notas de un estudiante",
+  "calificaciones de",
+  "direccion de un estudiante",
+  "telefono de un acudiente",
+];
+
+function isSensitiveQuery(raw: string) {
+  return SENSITIVE_TOPICS.some((topic) => raw.includes(normalize(topic)));
+}
+
+// El asistente solo ofrece rutas públicas: nunca enlaces al panel, al
+// historial ni a rutas protegidas.
+const isPublicLink = (l: AssistantLink) => {
+  const href = (l.href || "").toLowerCase();
+  if (href.startsWith("/admin") || href.includes("/_authenticated") || href.includes("/admin/")) return false;
+  if (href.startsWith("/auth")) return false;
+  return true;
+};
 
 async function findResources(query: string, conversationContext = ""): Promise<AssistantLink[]> {
   const rawCurrent = normalize(query);
+  // Preguntas sobre el panel, el historial, credenciales o datos personales:
+  // no se busca nada ni se ofrece ningún botón.
+  if (isSensitiveQuery(rawCurrent)) return [];
   const isFollowUp = [
     "boton",
     "botón",
