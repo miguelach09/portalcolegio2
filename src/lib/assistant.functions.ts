@@ -102,7 +102,7 @@ async function findResources(query: string): Promise<AssistantLink[]> {
         .limit(4),
       supabase
         .from("library_books")
-        .select("id,title,author,publisher,book_type,grade")
+        .select("id,title,author,publisher,kind,grade")
         .eq("is_active", true)
         .or(`title.ilike.${like},author.ilike.${like},publisher.ilike.${like}`)
         .limit(4),
@@ -114,7 +114,7 @@ async function findResources(query: string): Promise<AssistantLink[]> {
         .limit(4),
       supabase
         .from("events")
-        .select("id,title,description,starts_at")
+        .select("id,title,description,start_date")
         .eq("is_active", true)
         .or(`title.ilike.${like},description.ilike.${like}`)
         .limit(3),
@@ -154,7 +154,7 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     for (const b of books.data ?? []) {
       push({
         label: b.title,
-        sublabel: [b.author, b.publisher, b.book_type === "plan_lector" ? "Plan Lector" : "Consulta en sala", b.grade]
+        sublabel: [b.author, b.publisher, b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala", b.grade]
           .filter(Boolean)
           .join(" · "),
         href: "/cre",
@@ -194,7 +194,7 @@ async function buildContext() {
     supabase.from("documents").select("title, category, grade, period, area, published_at").eq("is_active", true).order("published_at", { ascending: false }).limit(80),
     supabase.from("news").select("title, summary, content, category, published_at").eq("is_active", true).order("published_at", { ascending: false }).limit(20),
     supabase.from("gallery_images").select("title, category").eq("is_active", true).limit(30),
-    supabase.from("library_books").select("title, author, publisher, book_type, grade, price_cop").eq("is_active", true).limit(60),
+    supabase.from("library_books").select("title, author, publisher, kind, grade, price_cop").eq("is_active", true).limit(60),
   ]);
 
   const docLines = (docs || [])
@@ -203,7 +203,7 @@ async function buildContext() {
   const newsLines = (news || []).map((n) => `- [${n.category}] ${n.title}${n.summary ? ` — ${n.summary}` : ""}${n.content ? `\n  ${String(n.content).slice(0, 400)}` : ""}`).join("\n");
   const galleryLines = (gallery || []).map((g) => `- [${g.category}] ${g.title}`).join("\n");
   const bookLines = (books || [])
-    .map((b) => `- [${b.book_type === "plan_lector" ? "Plan Lector" : "Consulta en sala"}] ${b.title}${b.author ? ` — ${b.author}` : ""}${b.publisher ? ` (${b.publisher})` : ""}${b.grade ? ` · ${b.grade}` : ""}${b.price_cop ? ` · $${b.price_cop}` : ""}`)
+    .map((b) => `- [${b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala"}] ${b.title}${b.author ? ` — ${b.author}` : ""}${b.publisher ? ` (${b.publisher})` : ""}${b.grade ? ` · ${b.grade}` : ""}${b.price_cop ? ` · $${b.price_cop}` : ""}`)
     .join("\n");
 
   return `INFORMACIÓN DEL COLEGIO CAFAM (contenido publicado en la web):
