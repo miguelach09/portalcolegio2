@@ -214,15 +214,14 @@ export const getGalleryImages = createServerFn({ method: "GET" })
     const { data: rows, error } = await query;
     if (error) throw error;
 
-    const images = await Promise.all(
-      (rows || []).map(async (row) => {
-        const signedUrl = row.image_path ? await getSignedUrl(row.image_path) : null;
-        return {
-          ...(row as unknown as GalleryImage),
-          image_url: signedUrl || row.image_url || "",
-        };
-      })
+    const signed = await signManyUrls(
+      (rows || []).map((r) => r.image_path).filter((p): p is string => !!p)
     );
+    const images = (rows || []).map((row) => ({
+      ...(row as unknown as GalleryImage),
+      image_url: (row.image_path ? signed.get(row.image_path) : null) || row.image_url || "",
+    }));
+
 
     return images;
   });
