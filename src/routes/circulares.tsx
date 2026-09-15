@@ -5,6 +5,8 @@ import { PageHero } from "@/components/site/PageHero";
 import { FileText, Download } from "lucide-react";
 import { getDocuments } from "@/lib/content.functions";
 import { formatDateES } from "@/lib/utils";
+import { GRADE_ORDER, GRADE_LABELS, type Grade } from "@/lib/content.types";
+import { useState } from "react";
 
 const circularesQueryOptions = queryOptions({
   queryKey: ["documents", "circulares"],
@@ -47,19 +49,44 @@ const categoryLabels: Record<string, string> = {
 
 function Circulares() {
   const { data: documents = [] } = useSuspenseQuery(circularesQueryOptions);
+  const [grade, setGrade] = useState<Grade | "todos">("todos");
+
+  const gradesOf = (doc: (typeof documents)[number]): Grade[] =>
+    doc.grades && doc.grades.length > 0 ? doc.grades : doc.grade ? [doc.grade] : [];
+  const available = GRADE_ORDER.filter((g) => documents.some((d) => gradesOf(d).includes(g)));
+  const filtered = grade === "todos" ? documents : documents.filter((d) => gradesOf(d).includes(grade));
 
   return (
     <PageShell>
       <PageHero eyebrow="Circulares" title="Comunicaciones oficiales." subtitle="Mantente al día con la información institucional." />
       <section className="container-page py-16 md:py-24">
-        {documents.length === 0 ? (
+        {available.length > 0 && (
+          <div className="mb-8 flex flex-wrap gap-2">
+            {(["todos", ...available] as const).map((g) => (
+              <button
+                key={g}
+                type="button"
+                onClick={() => setGrade(g as Grade | "todos")}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                  grade === g
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
+                }`}
+              >
+                {g === "todos" ? "Todos los grados" : GRADE_LABELS[g as Grade]}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {filtered.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
             <FileText className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-4 text-muted-foreground">No hay circulares publicadas aún.</p>
           </div>
         ) : (
           <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-            {documents.map((doc) => (
+            {filtered.map((doc) => (
               <a
                 key={doc.id}
                 href={doc.file_url || "#"}
