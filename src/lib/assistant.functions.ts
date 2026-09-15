@@ -104,6 +104,23 @@ async function findResources(query: string, conversationContext = ""): Promise<A
   // propio asistente) no se muestra ningún botón.
   if (!terms.length) return [];
 
+  const normalizedQuery = normalize(effectiveQuery);
+  const specificGalleryTerms = terms.filter(
+    (term) => !["galeria", "galerias", "fotos", "imagen", "imagenes"].includes(term)
+  );
+  if (
+    ["galeria", "galería", "fotos", "imagenes", "imágenes"].some((word) => normalizedQuery.includes(normalize(word))) &&
+    specificGalleryTerms.length === 0
+  ) {
+    return [{
+      label: "Galería",
+      sublabel: "Fotos y momentos de la vida escolar",
+      href: "/galeria",
+      kind: "galeria",
+      external: false,
+    }];
+  }
+
   const supabase = createPublicClient();
   type Candidate = { link: AssistantLink; haystack: string; boost: number };
   const candidates: Candidate[] = [];
