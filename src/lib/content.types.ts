@@ -124,6 +124,7 @@ export interface Document {
   title: string;
   category: DocumentCategory;
   grade: Grade | null;
+  grades: Grade[];
   period: Period | null;
   area: DocumentArea | null;
   file_path: string;

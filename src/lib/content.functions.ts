@@ -85,7 +85,8 @@ export const getDocuments = createServerFn({ method: "GET" })
       query = query.eq("category", data.category);
     }
     if (data.grade) {
-      query = query.eq("grade", data.grade);
+      // Un documento puede aplicar a varios grados (columna grades) o a uno solo (grade).
+      query = query.or(`grade.eq.${data.grade},grades.cs.{${data.grade}}`);
     }
     if (data.period) {
       query = query.eq("period", data.period);
@@ -248,7 +249,8 @@ export const createDocument = createServerFn({ method: "POST" })
       .insert({
         title: parsed.title,
         category: parsed.category,
-        grade: parsed.grade ?? null,
+        grade: parsed.grade ?? parsed.grades[0] ?? null,
+        grades: parsed.grades ?? [],
         period: parsed.period ?? null,
         area: parsed.area ?? null,
         file_path: data.filePath,
@@ -277,7 +279,8 @@ export const updateDocument = createServerFn({ method: "POST" })
       .update({
         title: rest.title,
         category: rest.category,
-        grade: rest.grade ?? null,
+        grade: rest.grade ?? rest.grades[0] ?? null,
+        grades: rest.grades ?? [],
         period: rest.period ?? null,
         area: rest.area ?? null,
         published_at: rest.published_at,
