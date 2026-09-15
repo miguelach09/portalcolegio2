@@ -315,14 +315,7 @@ export const askAssistant = createServerFn({ method: "POST" })
           .join("\n")}`
       : "";
 
-    // Directorio oficial de funcionarios: se inyecta solo cuando la pregunta
-    // trata de docentes, coordinaciones, directivos o líneas de atención.
-    const staffBlock = STAFF_INTENT.test(lastUser)
-      ? `\n\nDIRECTORIO OFICIAL DE FUNCIONARIOS Y LÍNEAS DE ATENCIÓN
-Fuentes: "${STAFF_DIRECTORY_SOURCE}" y "${PHONE_LINES_SOURCE}".
-Formato de filas de docentes: CURSO | DOCENTE | CORREO | ÁREA | DÍA DE ATENCIÓN (1=lunes, 2=martes, 3=miércoles, 4=jueves, 5=viernes) | UNIDAD | SALÓN.
-${STAFF_DIRECTORY_TEXT}`
-      : "";
+    const staffBlock = "";
 
     const systemPrompt = `Eres el asistente virtual del Colegio Cafam. Ayudas a acudientes y estudiantes con información sobre el colegio: admisiones, circulares, guías de aprendizaje, libros del CRE, docentes, eventos, plataformas, bienestar y vida escolar.
 
