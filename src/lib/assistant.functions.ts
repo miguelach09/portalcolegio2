@@ -49,9 +49,17 @@ function sanitizeTerm(input: string): string {
 }
 
 const STOPWORDS = new Set([
-  "hola","que","qué","cual","cuál","cuales","cuáles","como","cómo","donde","dónde","para","por","los","las","del","con","una","uno","unos","unas","the","and","sobre","tiene","tienen","hay","dame","dime","puedo","puedes","quiero","necesito","favor","gracias","buscar","busca","muestrame","muéstrame","enviame","envíame","acceso","link","enlace","informacion","información","colegio","cafam","este","esta","esto","son","ser","mas","más","año","ano","todo","todos","toda","todas","pdf","archivo","archivos","documento","documentos",
+  "hola","que","qué","cual","cuál","cuales","cuáles","como","cómo","donde","dónde","para","por","los","las","del","con","una","uno","unos","unas","the","and","sobre","tiene","tienen","hay","dame","dime","puedo","puedes","quiero","necesito","favor","gracias","buscar","busca","muestrame","muéstrame","enviame","envíame","link","enlace","informacion","información","colegio","cafam","este","esta","esto","son","ser","mas","más","año","ano","todo","todos","toda","todas","pdf","archivo","archivos",
   // Palabras conversacionales que antes provocaban botones sin relación.
   "cualquier","lugar","creas","cosa","cosas","algo","alguien","interesado","sorprender","sorprenderá","sorprendera","mandame","mándame","llevame","llévame","recomienda","recomiendas","recomiendame","ayuda","ayudame","ayúdame","gustaria","gustaría","tema","temas","detalle","detalles","detallado","hacer","saber","conocer","tengo","estoy","sirve","sirves","eres","haces","hablar","cuenta","cuentame","cuéntame","mucho","muchas","poco","bien","gracias","porfavor","entonces","tambien","también","aqui","aquí","ahora","luego","persona","personas","nombre","manera","forma","amplio","amplia","eficiente","amigable","objetivo","contenido","pagina","página","web","sitio","seccion","sección","secciones","platform","plataforma","plataformas",
+  // Palabras de 4 letras que no aportan a la búsqueda.
+  "quien","desde","hasta","pero","sino","porque","otro","otra","otros","otras","ello","ella","esos","esas","aqui","alli","solo","sola","cada","muy","tan","sera","seria","estan","estar","puede","tipo","tipos","dias","dia","vez","veces","favor","hoja","ver","verlo","abrir","abre",
+]);
+
+// Términos cortos que sí importan (siglas y palabras del colegio) y que el
+// filtro de longitud descartaba antes.
+const SHORT_TERMS = new Set([
+  "pei","cre","faq","q10","guia","guias","arte","artes","once","diez","nueve","ocho","siete","seis","cinco","icfes","pta","tics","ingles","math","10","11","1","2","3","4","5","6","7","8","9","0","yoga",
 ]);
 
 function normalize(text: string): string {
@@ -64,7 +72,7 @@ function normalize(text: string): string {
 function keywords(text: string): string[] {
   const words = normalize(sanitizeTerm(text))
     .split(" ")
-    .filter((w) => w.length >= 5 && !STOPWORDS.has(w));
+    .filter((w) => !STOPWORDS.has(w) && (w.length >= 4 || SHORT_TERMS.has(w)));
   return Array.from(new Set(words)).slice(0, 5);
 }
 
@@ -85,6 +93,42 @@ const routeForDocument = (category: string | null) => {
 
 const MAX_LINKS = 4;
 
+// Atajos de sección: se ofrecen cuando la pregunta nombra un tema del colegio,
+// como complemento (o respaldo) de los resultados concretos.
+function sectionShortcuts(raw: string, exclude: string[] = []): AssistantLink[] {
+  const wants = (...needles: string[]) => needles.some((n) => raw.includes(normalize(n)));
+  const out: AssistantLink[] = [];
+  const shortcut = (l: AssistantLink) => {
+    if (!exclude.includes(l.label) && !out.some((x) => x.label === l.label)) out.push(l);
+  };
+
+  if (wants("plan lector", "consulta en sala", "biblioteca", "libros del cre", "cre"))
+    shortcut({ label: "CRE — Biblioteca", sublabel: "Consulta en sala y Plan Lector", href: "/cre", kind: "pagina", external: false });
+  if (wants("guia", "guias"))
+    shortcut({ label: "Guías de Aprendizaje", sublabel: "Escoge tu grado y descarga", href: "/guias", kind: "pagina", external: false });
+  if (wants("circular"))
+    shortcut({ label: "Circulares", sublabel: "Comunicados institucionales", href: "/circulares", kind: "pagina", external: false });
+  if (wants("noticia"))
+    shortcut({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
+  if (wants("evento", "calendario"))
+    shortcut({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
+  if (wants("galeria", "foto", "fotos", "imagen", "imagenes"))
+    shortcut({ label: "Galería", sublabel: "Fotos y momentos de la vida escolar", href: "/galeria", kind: "galeria", external: false });
+  if (wants("mi colegio", "pei", "manual de convivencia", "convivencia", "recorrido virtual", "mision", "vision", "historia"))
+    shortcut({ label: "Mi Colegio", sublabel: "PEI, manuales y recorrido virtual", href: "/mi-colegio", kind: "pagina", external: false });
+  if (wants("bienestar", "enfermeria", "orientacion"))
+    shortcut({ label: "Bienestar", sublabel: "Servicios de apoyo para estudiantes", href: "/bienestar", kind: "pagina", external: false });
+  if (wants("herramienta", "q10", "office 365", "correo institucional", "plataforma"))
+    shortcut({ label: "Herramientas", sublabel: "Accesos y plataformas institucionales", href: "/herramientas", kind: "pagina", external: false });
+  if (wants("docente", "profesor", "profesora", "coordinador", "coordinacion", "rector", "directivo", "telefono", "contacto"))
+    shortcut({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
+  if (wants("admision", "inscrib", "matricul"))
+    shortcut({ label: "Admisiones 2027", sublabel: "Proceso y preinscripción", href: "/admisiones", kind: "pagina", external: false });
+
+  return out;
+}
+
+
 async function findResources(query: string, conversationContext = ""): Promise<AssistantLink[]> {
   const rawCurrent = normalize(query);
   const isFollowUp = [
@@ -100,11 +144,12 @@ async function findResources(query: string, conversationContext = ""): Promise<A
   ].some((phrase) => rawCurrent.includes(normalize(phrase)));
   const effectiveQuery = isFollowUp ? `${conversationContext} ${query}` : query;
   const terms = keywords(effectiveQuery);
-  // Sin palabras con contenido (saludos, charla general, preguntas sobre el
-  // propio asistente) no se muestra ningún botón.
-  if (!terms.length) return [];
-
   const normalizedQuery = normalize(effectiveQuery);
+  // Sin palabras con contenido (saludos, charla general, preguntas sobre el
+  // propio asistente) solo quedan los atajos de sección si el usuario nombró
+  // un tema del colegio.
+  if (!terms.length) return sectionShortcuts(rawCurrent).slice(0, 2);
+
   const specificGalleryTerms = terms.filter(
     (term) => !["galeria", "galerias", "fotos", "imagen", "imagenes"].includes(term)
   );
@@ -268,35 +313,9 @@ async function findResources(query: string, conversationContext = ""): Promise<A
 
   // Atajos de sección: solo cuando la pregunta los nombra explícitamente y
   // como complemento, nunca reemplazando resultados concretos.
-  const raw = normalize(effectiveQuery);
-  const wants = (...needles: string[]) => needles.some((n) => raw.includes(n));
-  const shortcuts: AssistantLink[] = [];
-  const shortcut = (l: AssistantLink) => {
-    if (!links.some((x) => x.label === l.label)) shortcuts.push(l);
-  };
-
-  if (wants("plan lector", "consulta en sala", "biblioteca", "libros del cre"))
-    shortcut({ label: "CRE — Biblioteca", sublabel: "Consulta en sala y Plan Lector", href: "/cre", kind: "pagina", external: false });
-  if (wants("guia", "guias"))
-    shortcut({ label: "Guías de Aprendizaje", sublabel: "Escoge tu grado y descarga", href: "/guias", kind: "pagina", external: false });
-  if (wants("circular"))
-    shortcut({ label: "Circulares", sublabel: "Comunicados institucionales", href: "/circulares", kind: "pagina", external: false });
-  if (wants("noticia"))
-    shortcut({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
-  if (wants("evento", "calendario"))
-    shortcut({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
-  if (wants("galeria", "galería", "foto", "fotos", "imagen", "imagenes", "imágenes"))
-    shortcut({ label: "Galería", sublabel: "Fotos y momentos de la vida escolar", href: "/galeria", kind: "galeria", external: false });
-  if (wants("mi colegio", "pei", "manual de convivencia", "recorrido virtual"))
-    shortcut({ label: "Mi Colegio", sublabel: "PEI, manuales y recorrido virtual", href: "/mi-colegio", kind: "pagina", external: false });
-  if (wants("bienestar", "enfermeria", "enfermería", "orientacion", "orientación"))
-    shortcut({ label: "Bienestar", sublabel: "Servicios de apoyo para estudiantes", href: "/bienestar", kind: "pagina", external: false });
-  if (wants("herramienta", "q10", "office 365", "correo institucional", "plataforma"))
-    shortcut({ label: "Herramientas", sublabel: "Accesos y plataformas institucionales", href: "/herramientas", kind: "pagina", external: false });
-  if (wants("docente", "profesor", "profesora", "coordinador", "coordinacion", "rector", "directivo"))
-    shortcut({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
-  if (wants("admision", "inscrib", "matricul"))
-    shortcut({ label: "Admisiones 2027", sublabel: "Proceso y preinscripción", href: "/admisiones", kind: "pagina", external: false });
+  const shortcuts = links.length
+    ? []
+    : sectionShortcuts(rawCurrent, []).slice(0, 2);
 
   return [...links, ...shortcuts].slice(0, MAX_LINKS);
 }
@@ -361,8 +380,12 @@ export const askAssistant = createServerFn({ method: "POST" })
 
     const lastUserIndex = data.messages.map((m) => m.role).lastIndexOf("user");
     const lastUser = lastUserIndex >= 0 ? data.messages[lastUserIndex]?.content ?? "" : "";
+    // Solo el texto del propio usuario: el saludo del asistente enumera todas
+    // las secciones y contaminaba la búsqueda con botones sin relación.
     const conversationContext = data.messages
-      .slice(Math.max(0, lastUserIndex - 2), lastUserIndex)
+      .slice(0, lastUserIndex)
+      .filter((m) => m.role === "user")
+      .slice(-2)
       .map((m) => m.content)
       .join(" ");
     const [context, links] = await Promise.all([buildContext(), findResources(lastUser, conversationContext)]);
@@ -375,7 +398,7 @@ export const askAssistant = createServerFn({ method: "POST" })
 
     const staffBlock = links.length
       ? ""
-      : "\n\nNO HAY RESULTADOS PARA ESTA PREGUNTA: no menciones botones ni digas que abajo aparecen enlaces; responde solo con texto.";
+      : "\n\nNO HAY RESULTADOS PARA ESTA PREGUNTA. PROHIBIDO ABSOLUTAMENTE: escribir \"botón\", \"botones\", \"enlace\", \"link\", \"abajo encontrarás\", \"a continuación\" o cualquier promesa de acceso. Responde solo con texto e indica en qué sección del sitio puede buscarlo (por ejemplo Mi Colegio, Circulares, Guías, CRE, Galería).";
 
     const systemPrompt = `Eres el asistente virtual del Colegio Cafam. Ayudas a acudientes y estudiantes con información sobre el colegio: admisiones, circulares, guías de aprendizaje, libros del CRE, docentes, eventos, plataformas, bienestar y vida escolar.
 
