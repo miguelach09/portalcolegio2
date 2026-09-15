@@ -161,6 +161,20 @@ function NewGalleryImagePage() {
               </select>
             </div>
             <div>
+              <label className="mb-1 block text-sm font-medium">Año</label>
+              <input
+                type="number"
+                min={1990}
+                max={2100}
+                value={values.year ?? ""}
+                onChange={(e) =>
+                  setValues({ ...values, year: e.target.value ? Number(e.target.value) : null })
+                }
+                className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
+              />
+              {errors.year && <p className="mt-1 text-sm text-destructive">{errors.year}</p>}
+            </div>
+            <div>
               <label className="mb-1 block text-sm font-medium">Orden</label>
               <input
                 type="number"
