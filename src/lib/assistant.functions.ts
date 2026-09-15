@@ -265,8 +265,12 @@ async function buildContext() {
 
   return `INFORMACIÓN DEL COLEGIO CAFAM (contenido publicado en la web):
 
+CONOCIMIENTO ADICIONAL CARGADO POR EL COLEGIO (información oficial y prioritaria; si responde la pregunta, úsala antes que cualquier otra fuente):
+${knowledgeLines || "(sin entradas)"}
+
 DOCUMENTOS, CIRCULARES Y GUÍAS DISPONIBLES:
 ${docLines || "(sin documentos)"}
+
 
 LIBROS DEL CRE (Centro de Recursos Educativos):
 ${bookLines || "(sin libros)"}
