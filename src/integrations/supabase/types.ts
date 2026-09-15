@@ -266,6 +266,54 @@ export type Database = {
         }
         Relationships: []
       }
+      file_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          entity: string
+          entity_id: string | null
+          file_extension: string | null
+          file_name: string | null
+          file_path: string | null
+          file_size: number | null
+          file_type: string | null
+          id: string
+          title: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          entity: string
+          entity_id?: string | null
+          file_extension?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          title?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          entity?: string
+          entity_id?: string | null
+          file_extension?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          title?: string | null
+        }
+        Relationships: []
+      }
       gallery_images: {
         Row: {
           category: Database["public"]["Enums"]["gallery_category"]
