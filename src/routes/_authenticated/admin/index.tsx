@@ -13,7 +13,6 @@ import {
   Users,
   MessageSquare,
   Megaphone,
-  GraduationCap,
   ClipboardList,
   BookOpen,
   Images,
