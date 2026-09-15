@@ -14,14 +14,14 @@ export const ADMISSION_GRADES = [
 ] as const;
 
 export const APPLICATION_STATUSES = [
-  "nuevo",
-  "contactado",
-  "en_proceso",
-  "admitido",
-  "descartado",
+  { value: "nuevo", label: "Nuevo" },
+  { value: "contactado", label: "Contactado" },
+  { value: "en_proceso", label: "En proceso" },
+  { value: "admitido", label: "Admitido" },
+  { value: "descartado", label: "Descartado" },
 ] as const;
 
-export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
+export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number]["value"];
 
 export type AdmissionApplication = {
   id: string;

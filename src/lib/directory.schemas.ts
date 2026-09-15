@@ -24,6 +24,8 @@ export const admissionFormSchema = z.object({
   comments: z.string().trim().max(2000).optional(),
 });
 
-export const applicationStatusSchema = z.enum(APPLICATION_STATUSES);
+export const applicationStatusSchema = z.enum(
+  APPLICATION_STATUSES.map((s) => s.value) as [string, ...string[]]
+);
 
 export type AdmissionFormValues = z.infer<typeof admissionFormSchema>;
