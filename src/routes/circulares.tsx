@@ -54,11 +54,16 @@ function Circulares() {
 
   const gradesOf = (doc: (typeof documents)[number]): Grade[] =>
     doc.grades && doc.grades.length > 0 ? doc.grades : doc.grade ? [doc.grade] : [];
+  // Las circulares sin grado son generales: aplican a toda la comunidad.
+  const appliesTo = (doc: (typeof documents)[number], g: Grade | null): boolean => {
+    const gs = gradesOf(doc);
+    return gs.length === 0 || (g !== null && gs.includes(g));
+  };
   const available = GRADE_ORDER.filter((g) => documents.some((d) => gradesOf(d).includes(g)));
 
   const [grade, setGrade] = useState<Grade | null>(() => available[0] ?? null);
 
-  const filtered = (grade ? documents.filter((d) => gradesOf(d).includes(grade)) : []).slice().sort(
+  const filtered = documents.filter((d) => appliesTo(d, grade)).slice().sort(
     (a, b) => (a.published_at < b.published_at ? 1 : a.published_at > b.published_at ? -1 : 0)
   );
 
