@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRouter } from "@tanstack/react-router";
 import { getDashboardStats } from "@/lib/features.functions";
 import { getContactMessages, updateContactMessageStatus, deleteContactMessage } from "@/lib/features.functions";
+import { ThemeToggle } from "@/components/site/ThemeToggle";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminDashboard,
@@ -67,19 +68,22 @@ function AdminDashboard() {
               </span>
             )}
           </div>
-          <button
-            onClick={handleSignOut}
-            className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent"
-          >
-            <LogOut className="h-4 w-4" />
-            Cerrar sesión
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={handleSignOut}
+              className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Cerrar sesión</span>
+            </button>
+          </div>
         </div>
       </header>
 
-      <main className="container-app py-10">
+      <main className="container-app mx-auto max-w-6xl py-10">
         <h2 className="text-lg font-semibold text-foreground">Resumen</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard label="Noticias" count={dashboard?.news ?? "—"} icon={<Newspaper className="h-5 w-5" />} color="bg-amber-100 text-amber-700" />
           <StatCard label="Documentos" count={dashboard?.documents ?? "—"} icon={<FileText className="h-5 w-5" />} color="bg-blue-100 text-blue-700" />
           <StatCard label="Galería" count={dashboard?.gallery ?? "—"} icon={<Image className="h-5 w-5" />} color="bg-emerald-100 text-emerald-700" />
@@ -91,7 +95,7 @@ function AdminDashboard() {
         </div>
 
         <h2 className="mt-10 text-lg font-semibold text-foreground">Gestión de contenido</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <ManageCard title="Documentos" desc="Circulares, revisas, guías y herramientas" href="/admin/documentos" icon={<FileText className="h-5 w-5" />} />
           <ManageCard title="Noticias" desc="Publicar y editar noticias" href="/admin/noticias" icon={<Newspaper className="h-5 w-5" />} />
           <ManageCard title="Galería" desc="Imágenes de vida escolar" href="/admin/galeria" icon={<Image className="h-5 w-5" />} />
@@ -109,7 +113,7 @@ function AdminDashboard() {
         </div>
 
         <h2 className="mt-10 text-lg font-semibold text-foreground">Acciones rápidas</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <QuickActionCard title="Subir circular o revisa" desc="PDF para Circulares, Revisas, Admisiones o Herramientas" href="/admin/documentos/nuevo" />
           <QuickActionCard title="Publicar noticia" desc="Crear entrada para la sección de noticias" href="/admin/noticias/nueva" />
           <QuickActionCard title="Agregar imagen a galería" desc="Subir foto a la galería de vida escolar" href="/admin/galeria/nueva" />
@@ -134,8 +138,8 @@ function StatCard({
   href?: string;
 }) {
   const content = (
-    <div className="flex items-center gap-4 rounded-xl border bg-card p-5 shadow-sm transition hover:shadow-md">
-      <div className={`rounded-lg p-3 ${color}`}>{icon}</div>
+    <div className="flex min-h-20 items-center gap-3 rounded-lg border bg-card p-4 shadow-sm transition hover:shadow-md">
+      <div className={`rounded-lg p-2.5 ${color}`}>{icon}</div>
       <div>
         <p className="text-sm text-muted-foreground">{label}</p>
         <p className="text-2xl font-bold text-foreground">{count}</p>
@@ -159,14 +163,14 @@ function ManageCard({
   return (
     <Link
       to={href}
-      className="group flex items-center gap-3 rounded-xl border border-border bg-card p-4 transition hover:border-primary hover:bg-accent"
+      className="group flex min-h-20 items-center gap-3 rounded-lg border border-border bg-card p-3.5 transition hover:border-primary hover:bg-accent"
     >
       <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary-soft text-primary">
         {icon}
       </div>
-      <div>
+      <div className="min-w-0">
         <p className="font-semibold text-foreground">{title}</p>
-        <p className="text-sm text-muted-foreground">{desc}</p>
+        <p className="line-clamp-2 text-sm text-muted-foreground">{desc}</p>
       </div>
     </Link>
   );
@@ -184,7 +188,7 @@ function QuickActionCard({
   return (
     <Link
       to={href}
-      className="group flex flex-col gap-2 rounded-xl border border-dashed bg-card p-5 transition hover:border-primary hover:bg-accent"
+      className="group flex min-h-24 flex-col gap-1.5 rounded-lg border border-dashed bg-card p-4 transition hover:border-primary hover:bg-accent"
     >
       <div className="flex items-center gap-2 text-primary">
         <Plus className="h-4 w-4" />

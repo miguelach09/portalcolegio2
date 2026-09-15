@@ -4,6 +4,13 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
 import { ArrowLeft, History, Lock, RefreshCw, Search } from "lucide-react";
 import { getFileAuditLog, type FileAuditEntry } from "@/lib/audit.functions";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/admin/historial/")({
   component: HistorialPage,
@@ -52,19 +59,26 @@ function HistorialPage() {
   if (!unlocked) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="container-app flex min-h-screen max-w-md flex-col justify-center py-10">
-          <div className="rounded-xl border bg-card p-8 shadow-sm">
-            <div className="flex items-center gap-3">
+        <div className="container-app py-8">
+          <Link to="/admin" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Panel
+          </Link>
+        </div>
+        <Dialog open>
+          <DialogContent className="w-[calc(100vw-2rem)] max-w-lg rounded-xl p-6 sm:p-8" onInteractOutside={(e) => e.preventDefault()}>
+            <DialogHeader className="pr-8 text-left">
+              <div className="flex items-center gap-3">
               <span className="rounded-lg bg-primary-soft p-3 text-primary">
                 <Lock className="h-5 w-5" />
               </span>
               <div>
-                <h1 className="text-lg font-bold text-foreground">Historial de archivos</h1>
-                <p className="text-sm text-muted-foreground">Ingresa la contraseña para continuar.</p>
+                <DialogTitle>Historial de archivos</DialogTitle>
+                <DialogDescription>Ingresa la contraseña para continuar.</DialogDescription>
               </div>
-            </div>
+              </div>
+            </DialogHeader>
             <form
-              className="mt-6 space-y-3"
+              className="space-y-3"
               onSubmit={(e) => {
                 e.preventDefault();
                 if (pwd === HISTORIAL_PASSWORD) {
@@ -72,7 +86,7 @@ function HistorialPage() {
                   setError("");
                   setPwd("");
                 } else {
-                  setError("contraseña invalida");
+                  setError("Contraseña inválida");
                 }
               }}
             >
@@ -98,8 +112,8 @@ function HistorialPage() {
                 Volver al panel
               </Link>
             </form>
-          </div>
-        </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }

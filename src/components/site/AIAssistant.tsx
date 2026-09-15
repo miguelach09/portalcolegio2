@@ -18,6 +18,18 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { askAssistant, type AssistantLink } from "@/lib/assistant.functions";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
+import {
+  PromptInput,
+  PromptInputFooter,
+  PromptInputSubmit,
+  PromptInputTextarea,
+} from "@/components/ai-elements/prompt-input";
 
 type Msg = { role: "user" | "assistant"; content: string; links?: AssistantLink[] };
 
@@ -34,7 +46,7 @@ const KIND_ICON: Record<AssistantLink["kind"], typeof FileText> = {
 
 function LinkButtons({ links }: { links: AssistantLink[] }) {
   return (
-    <div className="mt-2 flex max-w-[92%] flex-col gap-1.5">
+    <div className="mt-2 flex w-full max-w-full flex-col gap-2 sm:max-w-[92%]">
       {links.map((l, i) => {
         const Icon = KIND_ICON[l.kind] ?? ArrowRight;
         const inner = (
@@ -52,7 +64,7 @@ function LinkButtons({ links }: { links: AssistantLink[] }) {
           </>
         );
         const cls =
-          "flex items-start gap-2 rounded-xl border border-border bg-card px-2.5 py-2 text-left transition-colors hover:border-primary/50 hover:bg-muted";
+          "flex min-h-12 w-full items-start gap-2 rounded-xl border border-primary/30 bg-card px-3 py-2.5 text-left shadow-sm transition-colors hover:border-primary hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
         return l.external ? (
           <a key={i} href={l.href} target="_blank" rel="noopener noreferrer" className={cls}>
             {inner}
@@ -101,11 +113,6 @@ export function AIAssistant() {
   const [box, setBox] = useState<Box | null>(null);
   const [expanded, setExpanded] = useState(false);
   const prevBox = useRef<Box | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading]);
 
   // Posición/tamaño inicial: esquina inferior derecha, sobre el botón flotante.
   useEffect(() => {
@@ -201,9 +208,8 @@ export function AIAssistant() {
     setExpanded(true);
   }
 
-  async function handleSend(e?: React.FormEvent) {
-    e?.preventDefault();
-    const text = input.trim();
+  async function handleSend(textOverride?: string) {
+    const text = (textOverride ?? input).trim();
     if (!text || loading) return;
     const next: Msg[] = [...messages, { role: "user", content: text }];
     setMessages(next);
@@ -289,25 +295,22 @@ export function AIAssistant() {
             </div>
           </div>
 
-          <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-background px-3 py-4">
+          <Conversation className="bg-background">
+            <ConversationContent className="gap-3 px-3 py-4">
             {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
-              >
-                <div
-                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
-                    m.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground"
-                  }`}
+              <Message key={i} from={m.role} className="max-w-full">
+                <MessageContent
+                  className={m.role === "user"
+                    ? "max-w-[88%] rounded-2xl bg-primary px-3.5 py-2 text-primary-foreground"
+                    : "max-w-full px-0 py-0"
+                  }
                 >
-                  {m.content}
-                </div>
+                  <MessageResponse>{m.content}</MessageResponse>
+                </MessageContent>
                 {m.role === "assistant" && m.links && m.links.length > 0 && (
                   <LinkButtons links={m.links} />
                 )}
-              </div>
+              </Message>
             ))}
             {loading && (
               <div className="flex justify-start">
@@ -316,34 +319,32 @@ export function AIAssistant() {
                 </div>
               </div>
             )}
-          </div>
+            </ConversationContent>
+            <ConversationScrollButton />
+          </Conversation>
 
-          <form
-            onSubmit={handleSend}
-            className="flex items-end gap-2 border-t border-border bg-card p-3"
+          <div className="border-t border-border bg-card p-3">
+          <PromptInput
+            onSubmit={(message) => handleSend(message.text)}
+            className="rounded-xl bg-background"
           >
-            <textarea
+            <PromptInputTextarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-              rows={1}
               placeholder="Escribe tu pregunta…"
-              className="max-h-32 min-h-[40px] flex-1 resize-none rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+              className="min-h-11 max-h-32"
             />
-            <button
-              type="submit"
-              disabled={loading || !input.trim()}
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-50"
-              aria-label="Enviar"
-            >
-              <Send className="h-4 w-4" />
-            </button>
-          </form>
+            <PromptInputFooter className="justify-end">
+              <PromptInputSubmit
+                status={loading ? "submitted" : "ready"}
+                disabled={loading || !input.trim()}
+                aria-label="Enviar"
+              >
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              </PromptInputSubmit>
+            </PromptInputFooter>
+          </PromptInput>
+          </div>
         </div>
       )}
     </>
