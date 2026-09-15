@@ -182,15 +182,17 @@ export const getNews = createServerFn({ method: "GET" })
     const { data: rows, error } = await query;
     if (error) throw error;
 
-    const items = await Promise.all(
-      (rows || []).map(async (row) => {
-        const signedUrl = (row as any).image_path ? await getSignedUrl((row as any).image_path) : null;
-        return {
-          ...(row as unknown as NewsItem),
-          image_url: signedUrl || (row as any).image_url || null,
-        } as NewsItem;
-      })
+    const signed = await signManyUrls(
+      (rows || []).map((r) => (r as any).image_path).filter((p): p is string => !!p)
     );
+    const items = (rows || []).map((row) => ({
+      ...(row as unknown as NewsItem),
+      image_url:
+        ((row as any).image_path ? signed.get((row as any).image_path) : null) ||
+        (row as any).image_url ||
+        null,
+    })) as NewsItem[];
+
 
     return items;
   });
