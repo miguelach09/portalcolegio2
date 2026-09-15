@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "assistant_knowledge_authenticated_read" ON public.assistant_knowledge;
+CREATE POLICY "assistant_knowledge_authenticated_read_active" ON public.assistant_knowledge FOR SELECT TO authenticated USING (is_active = true);
