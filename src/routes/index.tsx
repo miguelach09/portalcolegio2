@@ -67,7 +67,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const data = Route.useLoaderData();
-  const { news = [], interestDocs = [], gallery = [], books = [] } = data || {};
+  const { news = [], interestDocs = [], gallery = [], books = [], heroSlides = [] } = data || {};
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,7 +75,7 @@ function Index() {
       <Header />
       <main>
         <h1 className="sr-only">Colegio Cafam — educación de calidad en Bogotá desde 1971</h1>
-        <HeroCarousel />
+        <HeroCarousel slides={heroSlides} />
         <Reveal>
           <QuickAccess />
         </Reveal>
