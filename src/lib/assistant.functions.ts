@@ -108,11 +108,12 @@ async function findResources(query: string, conversationContext = ""): Promise<A
   ].some((phrase) => rawCurrent.includes(normalize(phrase)));
   const effectiveQuery = isFollowUp ? `${conversationContext} ${query}` : query;
   const terms = keywords(effectiveQuery);
-  // Sin palabras con contenido (saludos, charla general, preguntas sobre el
-  // propio asistente) no se muestra ningún botón.
-  if (!terms.length) return [];
-
   const normalizedQuery = normalize(effectiveQuery);
+  // Sin palabras con contenido (saludos, charla general, preguntas sobre el
+  // propio asistente) solo quedan los atajos de sección si el usuario nombró
+  // un tema del colegio.
+  if (!terms.length) return sectionShortcuts(normalizedQuery).slice(0, MAX_LINKS);
+
   const specificGalleryTerms = terms.filter(
     (term) => !["galeria", "galerias", "fotos", "imagen", "imagenes"].includes(term)
   );
