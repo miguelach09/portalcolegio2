@@ -11,6 +11,7 @@ import {
   reorderHeroSlides,
 } from "@/lib/hero.functions";
 import { heroSlideFormSchema } from "@/lib/hero.schemas";
+import { IMAGE_ACCEPT, IMAGE_EXTENSIONS, validateFileExtension } from "@/lib/upload-rules";
 import { ACCENT_OPTIONS, type HeroSlide } from "@/lib/hero.types";
 
 export const Route = createFileRoute("/_authenticated/admin/carrusel/")({
@@ -228,10 +229,25 @@ function AdminCarrusel() {
             <input
               ref={imageRef}
               type="file"
-              accept="image/*"
+              accept={IMAGE_ACCEPT}
               className="hidden"
-              onChange={(e) => setImage(e.target.files?.[0] ?? null)}
+              onChange={(e) => {
+                const selected = e.target.files?.[0];
+                if (!selected) return setImage(null);
+                const invalid = validateFileExtension(selected, IMAGE_EXTENSIONS);
+                if (invalid) {
+                  setImage(null);
+                  e.target.value = "";
+                  setErrors((prev) => ({ ...prev, image: invalid }));
+                  return;
+                }
+                setErrors((prev) => ({ ...prev, image: "" }));
+                setImage(selected);
+              }}
             />
+            {errors.image && (
+              <p className="mt-1 text-sm text-destructive">{errors.image}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
