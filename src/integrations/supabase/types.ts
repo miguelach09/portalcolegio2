@@ -277,6 +277,7 @@ export type Database = {
           sort_order: number
           title: string
           updated_at: string
+          year: number | null
         }
         Insert: {
           category?: Database["public"]["Enums"]["gallery_category"]
@@ -288,6 +289,7 @@ export type Database = {
           sort_order?: number
           title: string
           updated_at?: string
+          year?: number | null
         }
         Update: {
           category?: Database["public"]["Enums"]["gallery_category"]
@@ -299,6 +301,7 @@ export type Database = {
           sort_order?: number
           title?: string
           updated_at?: string
+          year?: number | null
         }
         Relationships: []
       }

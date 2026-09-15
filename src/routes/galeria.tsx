@@ -9,7 +9,7 @@ import { Lightbox } from "@/components/site/Lightbox";
 
 const galleryQueryOptions = queryOptions({
   queryKey: ["gallery"],
-  queryFn: () => getGalleryImages({ data: { limit: 200 } }),
+  queryFn: () => getGalleryImages({ data: { limit: 500 } }),
 });
 
 export const Route = createFileRoute("/galeria")({
@@ -53,13 +53,50 @@ export const Route = createFileRoute("/galeria")({
 });
 
 function Galeria() {
-  const { data: images = [] } = useSuspenseQuery(galleryQueryOptions);
+  const { data: allImages = [] } = useSuspenseQuery(galleryQueryOptions);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const years = Array.from(
+    new Set(allImages.map((i) => i.year).filter((y): y is number => typeof y === "number"))
+  ).sort((a, b) => b - a);
+  const [year, setYear] = useState<number | "todos">(() => years[0] ?? "todos");
+
+  const images =
+    year === "todos" ? allImages : allImages.filter((i) => i.year === year);
 
   return (
     <PageShell>
       <PageHero eyebrow="Galería" title="Vida en Cafam." subtitle="Un vistazo a nuestros espacios, momentos y celebraciones." />
       <section className="container-page py-16 md:py-24">
+        {years.length > 0 && (
+          <div className="mb-8">
+            <p className="mb-3 text-sm font-semibold text-muted-foreground">¿Qué año quieres ver?</p>
+            <div className="flex flex-wrap gap-2">
+              {([...years, "todos"] as const).map((y) => (
+                <button
+                  key={y}
+                  type="button"
+                  onClick={() => {
+                    setYear(y as number | "todos");
+                    setLightboxIndex(null);
+                  }}
+                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                    year === y
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  {y === "todos" ? "Todos los años" : y}
+                </button>
+              ))}
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {images.length} {images.length === 1 ? "foto" : "fotos"}
+              {year !== "todos" ? ` de ${year}` : ""}
+            </p>
+          </div>
+        )}
+
         {images.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
             <ImageIcon className="mx-auto h-10 w-10 text-muted-foreground" />

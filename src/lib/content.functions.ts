@@ -78,8 +78,9 @@ export const getDocuments = createServerFn({ method: "GET" })
       .from("documents")
       .select("*")
       .eq("is_active", true)
+      .order("published_at", { ascending: false })
       .order("sort_order", { ascending: true })
-      .order("published_at", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (data.category) {
       query = query.eq("category", data.category);
@@ -151,6 +152,7 @@ export const getGalleryImages = createServerFn({ method: "GET" })
       .from("gallery_images")
       .select("*")
       .eq("is_active", true)
+      .order("year", { ascending: false, nullsFirst: false })
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });
 
@@ -413,6 +415,7 @@ export const createGalleryImage = createServerFn({ method: "POST" })
       .insert({
         title: parsed.title,
         category: parsed.category,
+        year: parsed.year,
         is_active: parsed.is_active,
         sort_order: parsed.sort_order,
         // Private bucket: public object URLs are never stored. Reads use
@@ -441,6 +444,7 @@ export const updateGalleryImage = createServerFn({ method: "POST" })
       .update({
         title: rest.title,
         category: rest.category,
+        year: rest.year,
         is_active: rest.is_active,
         sort_order: rest.sort_order,
       })

@@ -126,6 +126,7 @@ export const newsUpdateSchema = newsFormSchema.extend({
 export const galleryImageFormSchema = z.object({
   title: z.string().min(1, "El título es obligatorio"),
   category: galleryCategorySchema,
+  year: z.number().int().min(1990).max(2100).nullable().default(null),
   is_active: z.boolean().default(true),
   sort_order: z.number().int().min(0).default(0),
 });
