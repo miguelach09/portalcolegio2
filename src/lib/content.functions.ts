@@ -204,7 +204,14 @@ export const getNewsById = createServerFn({ method: "GET" })
       .maybeSingle();
 
     if (error) throw error;
-    return row as NewsItem | null;
+    if (!row) return null;
+
+    return {
+      ...(row as unknown as NewsItem),
+      image_url: (row as any).image_path
+        ? await getSignedUrl((row as any).image_path)
+        : (row as any).image_url || null,
+    } as NewsItem;
   });
 
 export const getGalleryImageById = createServerFn({ method: "GET" })

@@ -25,6 +25,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdmisionesRouteImport } from './routes/admisiones'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NoticiasIdRouteImport } from './routes/noticias.$id'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminSuscriptoresIndexRouteImport } from './routes/_authenticated/admin/suscriptores/index'
 import { Route as AuthenticatedAdminPreinscripcionesIndexRouteImport } from './routes/_authenticated/admin/preinscripciones/index'
@@ -119,6 +120,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasIdRoute = NoticiasIdRouteImport.update({
+  id: '/noticias/$id',
+  path: '/noticias/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
@@ -233,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/noticias/$id': typeof NoticiasIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
@@ -266,6 +273,7 @@ export interface FileRoutesByTo {
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/noticias/$id': typeof NoticiasIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
@@ -301,6 +309,7 @@ export interface FileRoutesById {
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/noticias/$id': typeof NoticiasIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/_authenticated/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
@@ -336,6 +345,7 @@ export interface FileRouteTypes {
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
+    | '/noticias/$id'
     | '/admin/'
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
@@ -369,6 +379,7 @@ export interface FileRouteTypes {
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
+    | '/noticias/$id'
     | '/admin'
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
@@ -403,6 +414,7 @@ export interface FileRouteTypes {
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
+    | '/noticias/$id'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/documentos/nuevo'
     | '/_authenticated/admin/galeria/nueva'
@@ -438,6 +450,7 @@ export interface RootRouteChildren {
   GuiasRoute: typeof GuiasRoute
   HerramientasRoute: typeof HerramientasRoute
   MiColegioRoute: typeof MiColegioRoute
+  NoticiasIdRoute: typeof NoticiasIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -552,6 +565,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias/$id': {
+      id: '/noticias/$id'
+      path: '/noticias/$id'
+      fullPath: '/noticias/$id'
+      preLoaderRoute: typeof NoticiasIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
@@ -732,6 +752,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuiasRoute: GuiasRoute,
   HerramientasRoute: HerramientasRoute,
   MiColegioRoute: MiColegioRoute,
+  NoticiasIdRoute: NoticiasIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
