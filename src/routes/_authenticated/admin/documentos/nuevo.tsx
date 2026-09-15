@@ -200,7 +200,7 @@ function NewDocumentPage() {
           {values.category === "circulares" && (
             <div>
               <label className="mb-2 block text-sm font-medium">
-                Grados a los que aplica <span className="text-muted-foreground">(opcional, puedes marcar varios)</span>
+                Grados a los que aplica <span className="text-muted-foreground">(opcional, puedes marcar varios; si no marcas ninguno, la verá toda la comunidad)</span>
               </label>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {GRADE_ORDER.map((g) => {
