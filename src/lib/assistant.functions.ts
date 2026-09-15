@@ -50,14 +50,22 @@ function sanitizeTerm(input: string): string {
 
 const STOPWORDS = new Set([
   "hola","que","qué","cual","cuál","cuales","cuáles","como","cómo","donde","dónde","para","por","los","las","del","con","una","uno","unos","unas","the","and","sobre","tiene","tienen","hay","dame","dime","puedo","puedes","quiero","necesito","favor","gracias","buscar","busca","muestrame","muéstrame","enviame","envíame","acceso","link","enlace","informacion","información","colegio","cafam","este","esta","esto","son","ser","mas","más","año","ano","todo","todos","toda","todas","pdf","archivo","archivos","documento","documentos",
+  // Palabras conversacionales que antes provocaban botones sin relación.
+  "cualquier","lugar","creas","cosa","cosas","algo","alguien","interesado","sorprender","sorprenderá","sorprendera","mandame","mándame","llevame","llévame","recomienda","recomiendas","recomiendame","ayuda","ayudame","ayúdame","gustaria","gustaría","tema","temas","detalle","detalles","detallado","hacer","saber","conocer","tengo","estoy","sirve","sirves","eres","haces","hablar","cuenta","cuentame","cuéntame","mucho","muchas","poco","bien","gracias","porfavor","entonces","tambien","también","aqui","aquí","ahora","luego","persona","personas","nombre","manera","forma","amplio","amplia","eficiente","amigable","objetivo","contenido","pagina","página","web","sitio","seccion","sección","secciones","platform","plataforma","plataformas",
 ]);
 
+function normalize(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
 function keywords(text: string): string[] {
-  return sanitizeTerm(text)
-    .toLowerCase()
+  const words = normalize(sanitizeTerm(text))
     .split(" ")
-    .filter((w) => w.length >= 4 && !STOPWORDS.has(w))
-    .slice(0, 5);
+    .filter((w) => w.length >= 5 && !STOPWORDS.has(w));
+  return Array.from(new Set(words)).slice(0, 5);
 }
 
 const routeForDocument = (category: string | null) => {
@@ -75,26 +83,29 @@ const routeForDocument = (category: string | null) => {
   }
 };
 
+const MAX_LINKS = 4;
+
 async function findResources(query: string): Promise<AssistantLink[]> {
-  const words = keywords(query);
-  const q = sanitizeTerm(query);
-  const terms = words.length ? words : q.length >= 3 ? [q] : [];
+  const terms = keywords(query);
+  // Sin palabras con contenido (saludos, charla general, preguntas sobre el
+  // propio asistente) no se muestra ningún botón.
   if (!terms.length) return [];
 
   const supabase = createPublicClient();
-  const links: AssistantLink[] = [];
+  type Candidate = { link: AssistantLink; haystack: string; boost: number };
+  const candidates: Candidate[] = [];
   const seen = new Set<string>();
 
-  const push = (l: AssistantLink) => {
-    const key = `${l.kind}:${l.label}`;
+  const add = (link: AssistantLink, haystack: string, boost = 0) => {
+    const key = `${link.kind}:${link.label}`;
     if (seen.has(key)) return;
     seen.add(key);
-    links.push(l);
+    candidates.push({ link, haystack: normalize(haystack), boost });
   };
 
   for (const term of terms) {
     const like = `%${term}%`;
-    const [docs, books, news, events, faqs, gallery] = await Promise.all([
+    const [docs, books, news, events, faqs, gallery, knowledge] = await Promise.all([
       supabase
         .from("documents")
         .select("id,title,category,grade,period,area,file_path")
@@ -111,8 +122,8 @@ async function findResources(query: string): Promise<AssistantLink[]> {
         .from("news")
         .select("id,title,summary")
         .eq("is_active", true)
-        .or(`title.ilike.${like},summary.ilike.${like},content.ilike.${like}`)
-        .limit(4),
+        .or(`title.ilike.${like},summary.ilike.${like}`)
+        .limit(3),
       supabase
         .from("events")
         .select("id,title,description,start_date")
@@ -123,13 +134,19 @@ async function findResources(query: string): Promise<AssistantLink[]> {
         .from("faqs")
         .select("id,question")
         .eq("is_active", true)
-        .or(`question.ilike.${like},answer.ilike.${like}`)
+        .ilike("question", like)
         .limit(3),
       supabase
         .from("gallery_images")
         .select("id,title,category")
         .eq("is_active", true)
         .ilike("title", like)
+        .limit(3),
+      supabase
+        .from("assistant_knowledge")
+        .select("id,title,tags,file_path")
+        .eq("is_active", true)
+        .or(`title.ilike.${like},tags.ilike.${like}`)
         .limit(3),
     ]);
 
@@ -138,113 +155,114 @@ async function findResources(query: string): Promise<AssistantLink[]> {
       const bits = [d.category as string, d.grade, d.period ? `Periodo ${d.period}` : null, d.area]
         .filter(Boolean)
         .join(" · ");
-      push({
-        label: d.title,
-        sublabel: bits || null,
-        href: signed ?? routeForDocument(d.category as string),
-        kind: "documento",
-        external: Boolean(signed),
-      });
+      add(
+        {
+          label: d.title,
+          sublabel: bits || null,
+          href: signed ?? routeForDocument(d.category as string),
+          kind: "documento",
+          external: Boolean(signed),
+        },
+        d.title
+      );
     }
     for (const b of books.data ?? []) {
-      push({
-        label: b.title,
-        sublabel: [b.author, b.publisher, b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala", b.grade]
-          .filter(Boolean)
-          .join(" · "),
-        href: "/cre",
-        kind: "libro",
-        external: false,
-      });
+      add(
+        {
+          label: b.title,
+          sublabel: [b.author, b.publisher, b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala", b.grade]
+            .filter(Boolean)
+            .join(" · "),
+          href: "/cre",
+          kind: "libro",
+          external: false,
+        },
+        [b.title, b.author, b.publisher].filter(Boolean).join(" ")
+      );
     }
     for (const n of news.data ?? []) {
-      push({ label: n.title, sublabel: n.summary, href: `/noticias/${n.id}`, kind: "noticia", external: false });
+      add(
+        { label: n.title, sublabel: n.summary, href: `/noticias/${n.id}`, kind: "noticia", external: false },
+        [n.title, n.summary].filter(Boolean).join(" ")
+      );
     }
     for (const e of events.data ?? []) {
-      push({ label: e.title, sublabel: e.description, href: "/calendario", kind: "evento", external: false });
+      add(
+        { label: e.title, sublabel: e.description, href: "/calendario", kind: "evento", external: false },
+        [e.title, e.description].filter(Boolean).join(" ")
+      );
     }
     for (const f of faqs.data ?? []) {
-      push({ label: f.question, sublabel: null, href: "/faq", kind: "faq", external: false });
+      add({ label: f.question, sublabel: null, href: "/faq", kind: "faq", external: false }, f.question);
     }
     for (const g of gallery.data ?? []) {
-      push({ label: g.title, sublabel: g.category as string, href: "/galeria", kind: "galeria", external: false });
+      add(
+        { label: g.title, sublabel: g.category as string, href: "/galeria", kind: "galeria", external: false },
+        [g.title, g.category].filter(Boolean).join(" ")
+      );
     }
-  }
-
-  // Conocimiento cargado por el colegio desde el panel: si hay documento
-  // adjunto, se ofrece como botón de acceso.
-  for (const term of terms) {
-    const like = `%${term}%`;
-    const { data: entries } = await supabase
-      .from("assistant_knowledge")
-      .select("id,title,tags,file_path")
-      .eq("is_active", true)
-      .or(`title.ilike.${like},content.ilike.${like},tags.ilike.${like}`)
-      .limit(4);
-    for (const k of entries ?? []) {
+    for (const k of knowledge.data ?? []) {
       if (!k.file_path) continue;
       const signed = await getSignedUrl(k.file_path);
       if (!signed) continue;
-      push({
-        label: k.title,
-        sublabel: k.tags || "Documento del colegio",
-        href: signed,
-        kind: "documento",
-        external: true,
-      });
+      add(
+        {
+          label: k.title,
+          sublabel: k.tags || "Documento del colegio",
+          href: signed,
+          kind: "documento",
+          external: true,
+        },
+        [k.title, k.tags].filter(Boolean).join(" "),
+        1
+      );
     }
   }
 
-  // Intención por tema: si la pregunta habla de una sección completa
+  // Puntaje: cuántas palabras de la pregunta aparecen realmente en el
+  // resultado. Se descarta todo lo que no coincida de verdad.
+  const scored = candidates
+    .map((c) => ({
+      link: c.link,
+      score: terms.filter((t) => c.haystack.includes(t)).length + c.boost,
+    }))
+    .filter((c) => c.score > 0)
+    .sort((a, b) => b.score - a.score);
 
-  // ("libros del plan lector", "guías", "circulares"...), añade sus elementos.
-  const raw = query.toLowerCase();
+  const best = scored[0]?.score ?? 0;
+  // Si hay coincidencias fuertes (varias palabras), se ocultan las débiles.
+  const links = scored
+    .filter((c) => c.score >= Math.min(best, 2))
+    .slice(0, MAX_LINKS)
+    .map((c) => c.link);
+
+  // Atajos de sección: solo cuando la pregunta los nombra explícitamente y
+  // como complemento, nunca reemplazando resultados concretos.
+  const raw = normalize(query);
   const wants = (...needles: string[]) => needles.some((n) => raw.includes(n));
+  const shortcuts: AssistantLink[] = [];
+  const shortcut = (l: AssistantLink) => {
+    if (!links.some((x) => x.label === l.label)) shortcuts.push(l);
+  };
 
-  if (wants("plan lector", "consulta en sala", "biblioteca", "cre", "libro")) {
-    const kind = wants("plan lector") ? "plan_lector" : wants("consulta") ? "consulta" : null;
-    let bq = supabase
-      .from("library_books")
-      .select("id,title,author,publisher,kind,grade")
-      .eq("is_active", true)
-      .order("sort_order")
-      .limit(6);
-    if (kind) bq = bq.eq("kind", kind);
-    const { data } = await bq;
-    for (const b of data ?? []) {
-      push({
-        label: b.title,
-        sublabel: [b.author, b.publisher, b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala", b.grade]
-          .filter(Boolean)
-          .join(" · "),
-        href: "/cre",
-        kind: "libro",
-        external: false,
-      });
-    }
-  }
+  if (wants("plan lector", "consulta en sala", "biblioteca", "libros del cre"))
+    shortcut({ label: "CRE — Biblioteca", sublabel: "Consulta en sala y Plan Lector", href: "/cre", kind: "pagina", external: false });
+  if (wants("guia", "guias"))
+    shortcut({ label: "Guías de Aprendizaje", sublabel: "Escoge tu grado y descarga", href: "/guias", kind: "pagina", external: false });
+  if (wants("circular"))
+    shortcut({ label: "Circulares", sublabel: "Comunicados institucionales", href: "/circulares", kind: "pagina", external: false });
+  if (wants("noticia"))
+    shortcut({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
+  if (wants("evento", "calendario"))
+    shortcut({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
+  if (wants("docente", "profesor", "profesora", "coordinador", "coordinacion", "rector", "directivo"))
+    shortcut({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
+  if (wants("admision", "inscrib", "matricul"))
+    shortcut({ label: "Admisiones 2027", sublabel: "Proceso y preinscripción", href: "/admisiones", kind: "pagina", external: false });
 
-  if (wants("guia", "guía", "guias", "guías")) {
-    push({ label: "Guías de Aprendizaje", sublabel: "Escoge tu grado y descarga", href: "/guias", kind: "pagina", external: false });
-  }
-  if (wants("circular")) {
-    push({ label: "Circulares", sublabel: "Comunicados institucionales", href: "/circulares", kind: "pagina", external: false });
-  }
-  if (wants("noticia")) {
-    push({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
-  }
-  if (wants("evento", "calendario", "fecha")) {
-    push({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
-  }
-  if (wants("docente", "profesor", "profesora", "maestro", "coordinador", "coordinacion", "coordinación", "rector", "directivo", "director", "titular", "staff")) {
-    push({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
-  }
-  if (wants("admision", "admisión", "inscrib", "matricul")) {
-    push({ label: "Admisiones 2027", sublabel: "Proceso y preinscripción", href: "/admisiones", kind: "pagina", external: false });
-  }
-
-  return links.slice(0, 8);
+  return [...links, ...shortcuts].slice(0, MAX_LINKS);
 }
+
 
 async function buildContext() {
   const supabase = createPublicClient();
@@ -312,7 +330,9 @@ export const askAssistant = createServerFn({ method: "POST" })
           .join("\n")}`
       : "";
 
-    const staffBlock = "";
+    const staffBlock = links.length
+      ? ""
+      : "\n\nNO HAY RESULTADOS PARA ESTA PREGUNTA: no menciones botones ni digas que abajo aparecen enlaces; responde solo con texto.";
 
     const systemPrompt = `Eres el asistente virtual del Colegio Cafam. Ayudas a acudientes y estudiantes con información sobre el colegio: admisiones, circulares, guías de aprendizaje, libros del CRE, docentes, eventos, plataformas, bienestar y vida escolar.
 
