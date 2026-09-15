@@ -160,6 +160,7 @@ export interface GalleryImage {
   category: GalleryCategory;
   image_url: string;
   image_path: string | null;
+  year: number | null;
   sort_order: number;
   is_active: boolean;
   created_at: string;
