@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { STAFF_DIRECTORY_TEXT, STAFF_DIRECTORY_SOURCE, PHONE_LINES_SOURCE } from "@/lib/staff-directory";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -98,7 +99,7 @@ async function findResources(query: string): Promise<AssistantLink[]> {
         .from("documents")
         .select("id,title,category,grade,period,area,file_path")
         .eq("is_active", true)
-        .or(`title.ilike.${like},description.ilike.${like}`)
+        .ilike("title", like)
         .limit(4),
       supabase
         .from("library_books")
@@ -185,8 +186,59 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     }
   }
 
+  // Intención por tema: si la pregunta habla de una sección completa
+  // ("libros del plan lector", "guías", "circulares"...), añade sus elementos.
+  const raw = query.toLowerCase();
+  const wants = (...needles: string[]) => needles.some((n) => raw.includes(n));
+
+  if (wants("plan lector", "consulta en sala", "biblioteca", "cre", "libro")) {
+    const kind = wants("plan lector") ? "plan_lector" : wants("consulta") ? "consulta" : null;
+    let bq = supabase
+      .from("library_books")
+      .select("id,title,author,publisher,kind,grade")
+      .eq("is_active", true)
+      .order("sort_order")
+      .limit(6);
+    if (kind) bq = bq.eq("kind", kind);
+    const { data } = await bq;
+    for (const b of data ?? []) {
+      push({
+        label: b.title,
+        sublabel: [b.author, b.publisher, b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala", b.grade]
+          .filter(Boolean)
+          .join(" · "),
+        href: "/cre",
+        kind: "libro",
+        external: false,
+      });
+    }
+  }
+
+  if (wants("guia", "guía", "guias", "guías")) {
+    push({ label: "Guías de Aprendizaje", sublabel: "Escoge tu grado y descarga", href: "/guias", kind: "pagina", external: false });
+  }
+  if (wants("circular")) {
+    push({ label: "Circulares", sublabel: "Comunicados institucionales", href: "/circulares", kind: "pagina", external: false });
+  }
+  if (wants("noticia")) {
+    push({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
+  }
+  if (wants("evento", "calendario", "fecha")) {
+    push({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
+  }
+  if (wants("docente", "profesor", "profesora", "maestro", "coordinador", "coordinacion", "coordinación", "rector", "directivo", "director", "titular", "staff")) {
+    push({ label: "Directorio docente", sublabel: "Docentes y coordinaciones", href: "/docentes", kind: "pagina", external: false });
+    push({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
+  }
+  if (wants("admision", "admisión", "inscrib", "matricul")) {
+    push({ label: "Admisiones 2027", sublabel: "Proceso y preinscripción", href: "/admisiones", kind: "pagina", external: false });
+  }
+
   return links.slice(0, 8);
 }
+
+const STAFF_INTENT =
+  /(docent|profesor|profesora|maestr|coordinad|coordinaci|rector|direct|titular|staff|bienestar|enfermer|secretar|psicolog|extension|extensión|telefon|teléfon|contact|correo de|quien es|quién es|area de|área de)/i;
 
 async function buildContext() {
   const supabase = createPublicClient();
@@ -245,6 +297,15 @@ export const askAssistant = createServerFn({ method: "POST" })
           .join("\n")}`
       : "";
 
+    // Directorio oficial de funcionarios: se inyecta solo cuando la pregunta
+    // trata de docentes, coordinaciones, directivos o líneas de atención.
+    const staffBlock = STAFF_INTENT.test(lastUser)
+      ? `\n\nDIRECTORIO OFICIAL DE FUNCIONARIOS Y LÍNEAS DE ATENCIÓN
+Fuentes: "${STAFF_DIRECTORY_SOURCE}" y "${PHONE_LINES_SOURCE}".
+Formato de filas de docentes: CURSO | DOCENTE | CORREO | ÁREA | DÍA DE ATENCIÓN (1=lunes, 2=martes, 3=miércoles, 4=jueves, 5=viernes) | UNIDAD | SALÓN.
+${STAFF_DIRECTORY_TEXT}`
+      : "";
+
     const systemPrompt = `Eres el asistente virtual del Colegio Cafam. Ayudas a acudientes y estudiantes con información sobre el colegio: admisiones, circulares, guías de aprendizaje, libros del CRE, docentes, eventos, plataformas, bienestar y vida escolar.
 
 Reglas:
@@ -254,8 +315,11 @@ Reglas:
 - No escribas URLs ni enlaces en markdown: los botones se muestran automáticamente.
 - Si no tienes la información, dilo con honestidad y sugiere contactar al colegio (601) 307 8060 o escribir a info@portalcolegio.com.
 - No inventes fechas, cifras ni datos que no estén en el contexto.
+- Preguntas sobre docentes, coordinaciones, directivos, bienestar, enfermería, secretarías o teléfonos: responde ÚNICAMENTE con el DIRECTORIO OFICIAL de abajo. Presenta los datos ordenados (nombre, cargo o curso, área, correo, día de atención o extensión) usando listas o tablas simples, e indica la fuente ("Directorio funcionarios" o "Líneas telefónicas atención a padres").
+- El "día de atención" es un número: 1 lunes, 2 martes, 3 miércoles, 4 jueves, 5 viernes. Traduce el número al nombre del día.
+- Si un docente o cargo no aparece en el directorio, dilo amablemente y ofrece derivar la consulta: PBX (601) 437 8999, correo colegio@cafam.com.co o la página de Contáctenos.
 
-${context}${matchesBlock}`;
+${context}${matchesBlock}${staffBlock}`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
