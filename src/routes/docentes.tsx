@@ -139,14 +139,12 @@ function Docentes() {
                   </div>
                 </div>
                 {t.bio && <p className="mt-4 text-sm text-muted-foreground">{t.bio}</p>}
-                {t.email && (
-                  <a
-                    href={`mailto:${t.email}`}
-                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-                  >
-                    <Mail className="h-4 w-4" /> {t.email}
-                  </a>
-                )}
+                <a
+                  href="/contacto"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                >
+                  <Mail className="h-4 w-4" /> Contactar por la secretaría
+                </a>
               </article>
             ))}
           </div>
