@@ -242,11 +242,12 @@ const STAFF_INTENT =
 
 async function buildContext() {
   const supabase = createPublicClient();
-  const [{ data: docs }, { data: news }, { data: gallery }, { data: books }] = await Promise.all([
+  const [{ data: docs }, { data: news }, { data: gallery }, { data: books }, { data: knowledge }] = await Promise.all([
     supabase.from("documents").select("title, category, grade, period, area, published_at").eq("is_active", true).order("published_at", { ascending: false }).limit(80),
     supabase.from("news").select("title, summary, content, category, published_at").eq("is_active", true).order("published_at", { ascending: false }).limit(20),
     supabase.from("gallery_images").select("title, category").eq("is_active", true).limit(30),
     supabase.from("library_books").select("title, author, publisher, kind, grade, price_cop").eq("is_active", true).limit(60),
+    supabase.from("assistant_knowledge").select("title, content, tags").eq("is_active", true).order("sort_order", { ascending: true }).limit(80),
   ]);
 
   const docLines = (docs || [])
@@ -257,6 +258,10 @@ async function buildContext() {
   const bookLines = (books || [])
     .map((b) => `- [${b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala"}] ${b.title}${b.author ? ` — ${b.author}` : ""}${b.publisher ? ` (${b.publisher})` : ""}${b.grade ? ` · ${b.grade}` : ""}${b.price_cop ? ` · $${b.price_cop}` : ""}`)
     .join("\n");
+  const knowledgeLines = (knowledge || [])
+    .map((k) => `### ${k.title}${k.tags ? ` (${k.tags})` : ""}\n${String(k.content).slice(0, 2500)}`)
+    .join("\n\n");
+
 
   return `INFORMACIÓN DEL COLEGIO CAFAM (contenido publicado en la web):
 
