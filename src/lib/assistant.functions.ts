@@ -98,7 +98,7 @@ async function findResources(query: string): Promise<AssistantLink[]> {
         .from("documents")
         .select("id,title,category,grade,period,area,file_path")
         .eq("is_active", true)
-        .or(`title.ilike.${like},description.ilike.${like}`)
+        .ilike("title", like)
         .limit(4),
       supabase
         .from("library_books")
@@ -185,8 +185,59 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     }
   }
 
+  // Intención por tema: si la pregunta habla de una sección completa
+  // ("libros del plan lector", "guías", "circulares"...), añade sus elementos.
+  const raw = query.toLowerCase();
+  const wants = (...needles: string[]) => needles.some((n) => raw.includes(n));
+
+  if (wants("plan lector", "consulta en sala", "biblioteca", "cre", "libro")) {
+    const kind = wants("plan lector") ? "plan_lector" : wants("consulta") ? "consulta" : null;
+    let bq = supabase
+      .from("library_books")
+      .select("id,title,author,publisher,kind,grade")
+      .eq("is_active", true)
+      .order("sort_order")
+      .limit(6);
+    if (kind) bq = bq.eq("kind", kind);
+    const { data } = await bq;
+    for (const b of data ?? []) {
+      push({
+        label: b.title,
+        sublabel: [b.author, b.publisher, b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala", b.grade]
+          .filter(Boolean)
+          .join(" · "),
+        href: "/cre",
+        kind: "libro",
+        external: false,
+      });
+    }
+  }
+
+  if (wants("guia", "guía", "guias", "guías")) {
+    push({ label: "Guías de Aprendizaje", sublabel: "Escoge tu grado y descarga", href: "/guias", kind: "pagina", external: false });
+  }
+  if (wants("circular")) {
+    push({ label: "Circulares", sublabel: "Comunicados institucionales", href: "/circulares", kind: "pagina", external: false });
+  }
+  if (wants("noticia")) {
+    push({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
+  }
+  if (wants("evento", "calendario", "fecha")) {
+    push({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
+  }
+  if (wants("docente", "profesor", "profesora", "maestro", "coordinador", "coordinacion", "coordinación", "rector", "directivo", "director", "titular", "staff")) {
+    push({ label: "Directorio docente", sublabel: "Docentes y coordinaciones", href: "/docentes", kind: "pagina", external: false });
+    push({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
+  }
+  if (wants("admision", "admisión", "inscrib", "matricul")) {
+    push({ label: "Admisiones 2027", sublabel: "Proceso y preinscripción", href: "/admisiones", kind: "pagina", external: false });
+  }
+
   return links.slice(0, 8);
 }
+
+const STAFF_INTENT =
+  /(docent|profesor|profesora|maestr|coordinad|coordinaci|rector|direct|titular|staff|bienestar|enfermer|secretar|psicolog|extension|extensión|telefon|teléfon|contact|correo de|quien es|quién es|area de|área de)/i;
 
 async function buildContext() {
   const supabase = createPublicClient();
