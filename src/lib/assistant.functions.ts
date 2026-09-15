@@ -315,8 +315,11 @@ Reglas:
 - No escribas URLs ni enlaces en markdown: los botones se muestran automáticamente.
 - Si no tienes la información, dilo con honestidad y sugiere contactar al colegio (601) 307 8060 o escribir a info@portalcolegio.com.
 - No inventes fechas, cifras ni datos que no estén en el contexto.
+- Preguntas sobre docentes, coordinaciones, directivos, bienestar, enfermería, secretarías o teléfonos: responde ÚNICAMENTE con el DIRECTORIO OFICIAL de abajo. Presenta los datos ordenados (nombre, cargo o curso, área, correo, día de atención o extensión) usando listas o tablas simples, e indica la fuente ("Directorio funcionarios" o "Líneas telefónicas atención a padres").
+- El "día de atención" es un número: 1 lunes, 2 martes, 3 miércoles, 4 jueves, 5 viernes. Traduce el número al nombre del día.
+- Si un docente o cargo no aparece en el directorio, dilo amablemente y ofrece derivar la consulta: PBX (601) 437 8999, correo colegio@cafam.com.co o la página de Contáctenos.
 
-${context}${matchesBlock}`;
+${context}${matchesBlock}${staffBlock}`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
