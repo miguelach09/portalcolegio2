@@ -1,8 +1,55 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
-import { askAssistant } from "@/lib/assistant.functions";
+import { MessageCircle, X, Send, Loader2, ArrowRight, FileText, BookOpen, Newspaper, CalendarDays, HelpCircle, Image as ImageIcon, User } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { askAssistant, type AssistantLink } from "@/lib/assistant.functions";
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; links?: AssistantLink[] };
+
+const KIND_ICON: Record<AssistantLink["kind"], typeof FileText> = {
+  documento: FileText,
+  libro: BookOpen,
+  noticia: Newspaper,
+  evento: CalendarDays,
+  faq: HelpCircle,
+  galeria: ImageIcon,
+  docente: User,
+  pagina: ArrowRight,
+};
+
+function LinkButtons({ links }: { links: AssistantLink[] }) {
+  return (
+    <div className="mt-2 flex max-w-[92%] flex-col gap-1.5">
+      {links.map((l, i) => {
+        const Icon = KIND_ICON[l.kind] ?? ArrowRight;
+        const inner = (
+          <>
+            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Icon className="h-4 w-4" />
+            </span>
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-semibold text-foreground">{l.label}</span>
+              {l.sublabel && (
+                <span className="block truncate text-[11px] text-muted-foreground">{l.sublabel}</span>
+              )}
+            </span>
+            <ArrowRight className="ml-auto mt-1.5 h-4 w-4 shrink-0 text-muted-foreground" />
+          </>
+        );
+        const cls =
+          "flex items-start gap-2 rounded-xl border border-border bg-card px-2.5 py-2 text-left transition-colors hover:border-primary/50 hover:bg-muted";
+        return l.external ? (
+          <a key={i} href={l.href} target="_blank" rel="noopener noreferrer" className={cls}>
+            {inner}
+          </a>
+        ) : (
+          <Link key={i} to={l.href} className={cls}>
+            {inner}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
 
 const WELCOME: Msg = {
   role: "assistant",
@@ -30,8 +77,9 @@ export function AIAssistant() {
     setInput("");
     setLoading(true);
     try {
-      const { reply } = await askAssistant({ data: { messages: next } });
-      setMessages([...next, { role: "assistant", content: reply }]);
+      const payload = next.map(({ role, content }) => ({ role, content }));
+      const { reply, links } = await askAssistant({ data: { messages: payload } });
+      setMessages([...next, { role: "assistant", content: reply, links }]);
     } catch (err) {
       console.error(err);
       setMessages([
@@ -73,7 +121,7 @@ export function AIAssistant() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
               >
                 <div
                   className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
@@ -84,6 +132,9 @@ export function AIAssistant() {
                 >
                   {m.content}
                 </div>
+                {m.role === "assistant" && m.links && m.links.length > 0 && (
+                  <LinkButtons links={m.links} />
+                )}
               </div>
             ))}
             {loading && (
