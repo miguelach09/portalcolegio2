@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Calendar, ArrowUpRight, FileText } from "lucide-react";
 import type { NewsItem, Document } from "@/lib/content.types";
 import { formatDateES } from "@/lib/utils";
@@ -62,9 +63,13 @@ export function News({ news, interestDocs }: NewsProps) {
                   <p className={`mt-2 max-w-2xl text-sm ${featured.image_url ? "text-white/85" : "text-muted-foreground"}`}>
                     {featured.summary || featured.content || ""}
                   </p>
-                  <a href="#" className={`mt-4 inline-flex items-center gap-1.5 text-sm font-semibold ${featured.image_url ? "text-white hover:text-white/80" : "text-primary"}`}>
+                  <Link
+                    to="/noticias/$id"
+                    params={{ id: featured.id }}
+                    className={`mt-4 inline-flex items-center gap-1.5 text-sm font-semibold ${featured.image_url ? "text-white hover:text-white/80" : "text-primary"}`}
+                  >
                     Leer más <ArrowUpRight className="h-4 w-4" />
-                  </a>
+                  </Link>
                 </div>
               </article>
 
@@ -95,9 +100,13 @@ export function News({ news, interestDocs }: NewsProps) {
                       <h3 className="mt-2 font-display text-lg font-semibold leading-snug text-foreground group-hover:text-primary">
                         {n.title}
                       </h3>
-                      <a href="#" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                      <Link
+                        to="/noticias/$id"
+                        params={{ id: n.id }}
+                        className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
+                      >
                         Leer más <ArrowUpRight className="h-4 w-4" />
-                      </a>
+                      </Link>
                     </div>
                   </article>
                 ))}
