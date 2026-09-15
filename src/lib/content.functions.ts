@@ -78,8 +78,9 @@ export const getDocuments = createServerFn({ method: "GET" })
       .from("documents")
       .select("*")
       .eq("is_active", true)
+      .order("published_at", { ascending: false })
       .order("sort_order", { ascending: true })
-      .order("published_at", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (data.category) {
       query = query.eq("category", data.category);
@@ -151,6 +152,7 @@ export const getGalleryImages = createServerFn({ method: "GET" })
       .from("gallery_images")
       .select("*")
       .eq("is_active", true)
+      .order("year", { ascending: false, nullsFirst: false })
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });
 
