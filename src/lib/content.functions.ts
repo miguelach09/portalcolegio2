@@ -49,14 +49,21 @@ async function checkAdmin(context: {
   }
 }
 
+const SIGN_TTL_SECONDS = 60 * 60 * 24 * 7;
+// Cache de URLs firmadas: evita una llamada de red por archivo en cada visita.
+const signedUrlCache = new Map<string, { url: string; expiresAt: number }>();
+const CACHE_MS = 1000 * 60 * 60 * 6;
+
 async function getSignedUrl(filePath: string, options?: { download?: boolean }) {
+  if (!options?.download) {
+    const map = await signManyUrls([filePath]);
+    return map.get(filePath) ?? null;
+  }
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const filename = filePath.split("/").pop();
   const { data, error } = await supabaseAdmin.storage
     .from(BUCKET_NAME)
-    .createSignedUrl(filePath, 60 * 60 * 24 * 365, {
-      download: options?.download ? (filename || true) : false,
-    });
+    .createSignedUrl(filePath, SIGN_TTL_SECONDS, { download: filename || true });
 
   if (error || !data?.signedUrl) {
     console.error("Error creating signed URL:", error);
@@ -64,6 +71,50 @@ async function getSignedUrl(filePath: string, options?: { download?: boolean }) 
   }
   return data.signedUrl;
 }
+
+/**
+ * Firma muchas rutas en una sola llamada al storage y guarda el resultado en
+ * memoria. Antes se hacía una petición HTTP por archivo (167 fotos = 167
+ * peticiones en serie), que es lo que hacía lentas Galería y Mi Colegio.
+ */
+async function signManyUrls(paths: string[]): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  const now = Date.now();
+  const missing: string[] = [];
+
+  for (const p of new Set(paths.filter(Boolean))) {
+    const hit = signedUrlCache.get(p);
+    if (hit && hit.expiresAt > now) result.set(p, hit.url);
+    else missing.push(p);
+  }
+
+  if (missing.length === 0) return result;
+
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const CHUNK = 100;
+  for (let i = 0; i < missing.length; i += CHUNK) {
+    const chunk = missing.slice(i, i + CHUNK);
+    const { data, error } = await supabaseAdmin.storage
+      .from(BUCKET_NAME)
+      .createSignedUrls(chunk, SIGN_TTL_SECONDS);
+    if (error) {
+      console.error("Error creating signed URLs:", error);
+      continue;
+    }
+    for (const item of data || []) {
+      if (item.signedUrl && item.path) {
+        signedUrlCache.set(item.path, {
+          url: item.signedUrl,
+          expiresAt: now + CACHE_MS,
+        });
+        result.set(item.path, item.signedUrl);
+      }
+    }
+  }
+
+  return result;
+}
+
 
 
 
