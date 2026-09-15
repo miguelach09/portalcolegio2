@@ -37,7 +37,7 @@ export const getTeachers = createServerFn({ method: "GET" }).handler(async () =>
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("teachers")
-    .select("id, full_name, role_title, area, email, photo_url, bio, sort_order")
+    .select("id, full_name, role_title, area, photo_url, bio, sort_order")
     .eq("is_active", true)
     .order("sort_order", { ascending: true })
     .order("full_name", { ascending: true });
