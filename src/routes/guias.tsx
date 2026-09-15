@@ -93,6 +93,17 @@ function GuiasPage() {
     return map;
   }, [allDocs]);
 
+  const areaCounts = useMemo(() => {
+    const map = new Map<string, number>();
+    if (!selectedGrade) return map;
+    for (const d of allDocs) {
+      if (d.grade === selectedGrade && d.area) {
+        map.set(d.area, (map.get(d.area) || 0) + 1);
+      }
+    }
+    return map;
+  }, [allDocs, selectedGrade]);
+
   const filteredDocs = useMemo(() => {
     let docs = allDocs.filter((d) => !!d.grade);
     if (selectedGrade) docs = docs.filter((d) => d.grade === selectedGrade);
@@ -196,22 +207,25 @@ function GuiasPage() {
                       : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
                   }`}
                 >
-                  Todas
+                  Todas ({counts.get(selectedGrade) || 0})
                 </button>
-                {areasForGrade(selectedGrade).map((a) => (
-                  <button
-                    key={a}
-                    type="button"
-                    onClick={() => setArea(a)}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
-                      a === area
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
-                    }`}
-                  >
-                    {AREA_LABELS[a]}
-                  </button>
-                ))}
+                {areasForGrade(selectedGrade).map((a) => {
+                  const n = areaCounts.get(a) || 0;
+                  return (
+                    <button
+                      key={a}
+                      type="button"
+                      onClick={() => setArea(a)}
+                      className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                        a === area
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-card text-foreground hover:border-primary hover:text-primary"
+                      } ${n === 0 ? "opacity-50" : ""}`}
+                    >
+                      {AREA_LABELS[a]} ({n})
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
