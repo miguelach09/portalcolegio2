@@ -24,6 +24,8 @@ const guiasSearchSchema = z.object({
 const allGuiasQueryOptions = queryOptions({
   queryKey: ["documents", "guias"],
   queryFn: () => getDocuments({ data: { category: "guias", limit: 500 } }),
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
 });
 
 export const Route = createFileRoute("/guias")({
