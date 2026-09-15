@@ -9,8 +9,8 @@ export function Footer() {
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2.5">
-            <span className="flex items-center justify-center rounded-xl bg-white px-3 py-2">
-              <img src={logoCafam} alt="Colegio Cafam" className="h-9 w-auto" />
+            <span className="flex items-center justify-center rounded-xl bg-primary px-3 py-2">
+              <img src={logoCafam} alt="Colegio Cafam" className="h-7 w-auto" />
             </span>
           </div>
           <p className="mt-4 max-w-md text-sm text-white/70">
