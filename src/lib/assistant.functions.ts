@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { STAFF_DIRECTORY_TEXT, STAFF_DIRECTORY_SOURCE, PHONE_LINES_SOURCE } from "@/lib/staff-directory";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
