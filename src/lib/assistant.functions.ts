@@ -381,7 +381,7 @@ async function findResources(query: string, conversationContext = ""): Promise<A
     ? []
     : sectionShortcuts(rawCurrent, []).slice(0, 2);
 
-  return [...links, ...shortcuts].slice(0, MAX_LINKS);
+  return [...links, ...shortcuts].filter(isPublicLink).slice(0, MAX_LINKS);
 }
 
 
