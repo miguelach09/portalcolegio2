@@ -150,16 +150,15 @@ export const getDocuments = createServerFn({ method: "GET" })
     const { data: rows, error } = await query;
     if (error) throw error;
 
-    const docs: Document[] = await Promise.all(
-      (rows || []).map(async (row) => {
-        // Sin forzar descarga: los enlaces se abren/visibilizan en el navegador (visor incrustado).
-        const signedUrl = row.file_path ? await getSignedUrl(row.file_path) : null;
-        return {
-          ...(row as unknown as Document),
-          file_url: signedUrl,
-        };
-      })
+    // Sin forzar descarga: los enlaces se abren en el visor incrustado.
+    const signed = await signManyUrls(
+      (rows || []).map((r) => r.file_path).filter((p): p is string => !!p)
     );
+    const docs: Document[] = (rows || []).map((row) => ({
+      ...(row as unknown as Document),
+      file_url: (row.file_path ? signed.get(row.file_path) : null) ?? null,
+    }));
+
 
     return docs;
   });
