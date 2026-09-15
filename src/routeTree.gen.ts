@@ -14,7 +14,6 @@ import { Route as HerramientasRouteImport } from './routes/herramientas'
 import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as FaqRouteImport } from './routes/faq'
-import { Route as DocentesRouteImport } from './routes/docentes'
 import { Route as CreRouteImport } from './routes/cre'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CircularesRouteImport } from './routes/circulares'
@@ -36,7 +35,6 @@ import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminFaqsIndexRouteImport } from './routes/_authenticated/admin/faqs/index'
 import { Route as AuthenticatedAdminEventosIndexRouteImport } from './routes/_authenticated/admin/eventos/index'
 import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/_authenticated/admin/documentos/index'
-import { Route as AuthenticatedAdminDocentesIndexRouteImport } from './routes/_authenticated/admin/docentes/index'
 import { Route as AuthenticatedAdminCarruselIndexRouteImport } from './routes/_authenticated/admin/carrusel/index'
 import { Route as AuthenticatedAdminAvisosIndexRouteImport } from './routes/_authenticated/admin/avisos/index'
 import { Route as AuthenticatedAdminAsistenteIndexRouteImport } from './routes/_authenticated/admin/asistente/index'
@@ -67,11 +65,6 @@ const GaleriaRoute = GaleriaRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocentesRoute = DocentesRouteImport.update({
-  id: '/docentes',
-  path: '/docentes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreRoute = CreRouteImport.update({
@@ -187,12 +180,6 @@ const AuthenticatedAdminDocumentosIndexRoute =
     path: '/admin/documentos/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminDocentesIndexRoute =
-  AuthenticatedAdminDocentesIndexRouteImport.update({
-    id: '/admin/docentes/',
-    path: '/admin/docentes/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedAdminCarruselIndexRoute =
   AuthenticatedAdminCarruselIndexRouteImport.update({
     id: '/admin/carrusel/',
@@ -240,7 +227,6 @@ export interface FileRoutesByFullPath {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/cre': typeof CreRoute
-  '/docentes': typeof DocentesRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
@@ -254,7 +240,6 @@ export interface FileRoutesByFullPath {
   '/admin/asistente/': typeof AuthenticatedAdminAsistenteIndexRoute
   '/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/carrusel/': typeof AuthenticatedAdminCarruselIndexRoute
-  '/admin/docentes/': typeof AuthenticatedAdminDocentesIndexRoute
   '/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
   '/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
   '/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
@@ -275,7 +260,6 @@ export interface FileRoutesByTo {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/cre': typeof CreRoute
-  '/docentes': typeof DocentesRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
@@ -289,7 +273,6 @@ export interface FileRoutesByTo {
   '/admin/asistente': typeof AuthenticatedAdminAsistenteIndexRoute
   '/admin/avisos': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/carrusel': typeof AuthenticatedAdminCarruselIndexRoute
-  '/admin/docentes': typeof AuthenticatedAdminDocentesIndexRoute
   '/admin/documentos': typeof AuthenticatedAdminDocumentosIndexRoute
   '/admin/eventos': typeof AuthenticatedAdminEventosIndexRoute
   '/admin/faqs': typeof AuthenticatedAdminFaqsIndexRoute
@@ -312,7 +295,6 @@ export interface FileRoutesById {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/cre': typeof CreRoute
-  '/docentes': typeof DocentesRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
@@ -326,7 +308,6 @@ export interface FileRoutesById {
   '/_authenticated/admin/asistente/': typeof AuthenticatedAdminAsistenteIndexRoute
   '/_authenticated/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/_authenticated/admin/carrusel/': typeof AuthenticatedAdminCarruselIndexRoute
-  '/_authenticated/admin/docentes/': typeof AuthenticatedAdminDocentesIndexRoute
   '/_authenticated/admin/documentos/': typeof AuthenticatedAdminDocumentosIndexRoute
   '/_authenticated/admin/eventos/': typeof AuthenticatedAdminEventosIndexRoute
   '/_authenticated/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
@@ -349,7 +330,6 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/cre'
-    | '/docentes'
     | '/faq'
     | '/galeria'
     | '/guias'
@@ -363,7 +343,6 @@ export interface FileRouteTypes {
     | '/admin/asistente/'
     | '/admin/avisos/'
     | '/admin/carrusel/'
-    | '/admin/docentes/'
     | '/admin/documentos/'
     | '/admin/eventos/'
     | '/admin/faqs/'
@@ -384,7 +363,6 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/cre'
-    | '/docentes'
     | '/faq'
     | '/galeria'
     | '/guias'
@@ -398,7 +376,6 @@ export interface FileRouteTypes {
     | '/admin/asistente'
     | '/admin/avisos'
     | '/admin/carrusel'
-    | '/admin/docentes'
     | '/admin/documentos'
     | '/admin/eventos'
     | '/admin/faqs'
@@ -420,7 +397,6 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/cre'
-    | '/docentes'
     | '/faq'
     | '/galeria'
     | '/guias'
@@ -434,7 +410,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/asistente/'
     | '/_authenticated/admin/avisos/'
     | '/_authenticated/admin/carrusel/'
-    | '/_authenticated/admin/docentes/'
     | '/_authenticated/admin/documentos/'
     | '/_authenticated/admin/eventos/'
     | '/_authenticated/admin/faqs/'
@@ -457,7 +432,6 @@ export interface RootRouteChildren {
   CircularesRoute: typeof CircularesRoute
   ContactoRoute: typeof ContactoRoute
   CreRoute: typeof CreRoute
-  DocentesRoute: typeof DocentesRoute
   FaqRoute: typeof FaqRoute
   GaleriaRoute: typeof GaleriaRoute
   GuiasRoute: typeof GuiasRoute
@@ -501,13 +475,6 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/docentes': {
-      id: '/docentes'
-      path: '/docentes'
-      fullPath: '/docentes'
-      preLoaderRoute: typeof DocentesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cre': {
@@ -657,13 +624,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDocumentosIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/docentes/': {
-      id: '/_authenticated/admin/docentes/'
-      path: '/admin/docentes'
-      fullPath: '/admin/docentes/'
-      preLoaderRoute: typeof AuthenticatedAdminDocentesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/admin/carrusel/': {
       id: '/_authenticated/admin/carrusel/'
       path: '/admin/carrusel'
@@ -717,7 +677,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminAsistenteIndexRoute: typeof AuthenticatedAdminAsistenteIndexRoute
   AuthenticatedAdminAvisosIndexRoute: typeof AuthenticatedAdminAvisosIndexRoute
   AuthenticatedAdminCarruselIndexRoute: typeof AuthenticatedAdminCarruselIndexRoute
-  AuthenticatedAdminDocentesIndexRoute: typeof AuthenticatedAdminDocentesIndexRoute
   AuthenticatedAdminDocumentosIndexRoute: typeof AuthenticatedAdminDocumentosIndexRoute
   AuthenticatedAdminEventosIndexRoute: typeof AuthenticatedAdminEventosIndexRoute
   AuthenticatedAdminFaqsIndexRoute: typeof AuthenticatedAdminFaqsIndexRoute
@@ -738,7 +697,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminAsistenteIndexRoute: AuthenticatedAdminAsistenteIndexRoute,
   AuthenticatedAdminAvisosIndexRoute: AuthenticatedAdminAvisosIndexRoute,
   AuthenticatedAdminCarruselIndexRoute: AuthenticatedAdminCarruselIndexRoute,
-  AuthenticatedAdminDocentesIndexRoute: AuthenticatedAdminDocentesIndexRoute,
   AuthenticatedAdminDocumentosIndexRoute:
     AuthenticatedAdminDocumentosIndexRoute,
   AuthenticatedAdminEventosIndexRoute: AuthenticatedAdminEventosIndexRoute,
@@ -768,7 +726,6 @@ const rootRouteChildren: RootRouteChildren = {
   CircularesRoute: CircularesRoute,
   ContactoRoute: ContactoRoute,
   CreRoute: CreRoute,
-  DocentesRoute: DocentesRoute,
   FaqRoute: FaqRoute,
   GaleriaRoute: GaleriaRoute,
   GuiasRoute: GuiasRoute,

@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { STAFF_DIRECTORY_TEXT, STAFF_DIRECTORY_SOURCE, PHONE_LINES_SOURCE } from "@/lib/staff-directory";
+
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -94,7 +94,7 @@ async function findResources(query: string): Promise<AssistantLink[]> {
 
   for (const term of terms) {
     const like = `%${term}%`;
-    const [docs, books, news, events, faqs, gallery, teachers] = await Promise.all([
+    const [docs, books, news, events, faqs, gallery] = await Promise.all([
       supabase
         .from("documents")
         .select("id,title,category,grade,period,area,file_path")
@@ -130,12 +130,6 @@ async function findResources(query: string): Promise<AssistantLink[]> {
         .select("id,title,category")
         .eq("is_active", true)
         .ilike("title", like)
-        .limit(3),
-      supabase
-        .from("teachers")
-        .select("id,full_name,role_title,area")
-        .eq("is_active", true)
-        .or(`full_name.ilike.${like},role_title.ilike.${like},area.ilike.${like}`)
         .limit(3),
     ]);
 
@@ -174,15 +168,6 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     }
     for (const g of gallery.data ?? []) {
       push({ label: g.title, sublabel: g.category as string, href: "/galeria", kind: "galeria", external: false });
-    }
-    for (const t of teachers.data ?? []) {
-      push({
-        label: t.full_name,
-        sublabel: [t.role_title, t.area].filter(Boolean).join(" · ") || null,
-        href: "/docentes",
-        kind: "docente",
-        external: false,
-      });
     }
   }
 
