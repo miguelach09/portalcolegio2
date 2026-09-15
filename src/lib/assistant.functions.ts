@@ -237,7 +237,6 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     push({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
   }
   if (wants("docente", "profesor", "profesora", "maestro", "coordinador", "coordinacion", "coordinación", "rector", "directivo", "director", "titular", "staff")) {
-    push({ label: "Directorio docente", sublabel: "Docentes y coordinaciones", href: "/docentes", kind: "pagina", external: false });
     push({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
   }
   if (wants("admision", "admisión", "inscrib", "matricul")) {
