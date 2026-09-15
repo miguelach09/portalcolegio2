@@ -85,11 +85,41 @@ const routeForDocument = (category: string | null) => {
 
 const MAX_LINKS = 4;
 
-async function findResources(query: string): Promise<AssistantLink[]> {
-  const terms = keywords(query);
+async function findResources(query: string, conversationContext = ""): Promise<AssistantLink[]> {
+  const rawCurrent = normalize(query);
+  const isFollowUp = [
+    "boton",
+    "botón",
+    "enlace",
+    "link",
+    "ir alla",
+    "ir allá",
+    "llevarme",
+    "muestralo",
+    "muéstralo",
+  ].some((phrase) => rawCurrent.includes(normalize(phrase)));
+  const effectiveQuery = isFollowUp ? `${conversationContext} ${query}` : query;
+  const terms = keywords(effectiveQuery);
   // Sin palabras con contenido (saludos, charla general, preguntas sobre el
   // propio asistente) no se muestra ningún botón.
   if (!terms.length) return [];
+
+  const normalizedQuery = normalize(effectiveQuery);
+  const specificGalleryTerms = terms.filter(
+    (term) => !["galeria", "galerias", "fotos", "imagen", "imagenes"].includes(term)
+  );
+  if (
+    ["galeria", "galería", "fotos", "imagenes", "imágenes"].some((word) => normalizedQuery.includes(normalize(word))) &&
+    specificGalleryTerms.length === 0
+  ) {
+    return [{
+      label: "Galería",
+      sublabel: "Fotos y momentos de la vida escolar",
+      href: "/galeria",
+      kind: "galeria",
+      external: false,
+    }];
+  }
 
   const supabase = createPublicClient();
   type Candidate = { link: AssistantLink; haystack: string; boost: number };
@@ -238,7 +268,7 @@ async function findResources(query: string): Promise<AssistantLink[]> {
 
   // Atajos de sección: solo cuando la pregunta los nombra explícitamente y
   // como complemento, nunca reemplazando resultados concretos.
-  const raw = normalize(query);
+  const raw = normalize(effectiveQuery);
   const wants = (...needles: string[]) => needles.some((n) => raw.includes(n));
   const shortcuts: AssistantLink[] = [];
   const shortcut = (l: AssistantLink) => {
@@ -255,6 +285,14 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     shortcut({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
   if (wants("evento", "calendario"))
     shortcut({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
+  if (wants("galeria", "galería", "foto", "fotos", "imagen", "imagenes", "imágenes"))
+    shortcut({ label: "Galería", sublabel: "Fotos y momentos de la vida escolar", href: "/galeria", kind: "galeria", external: false });
+  if (wants("mi colegio", "pei", "manual de convivencia", "recorrido virtual"))
+    shortcut({ label: "Mi Colegio", sublabel: "PEI, manuales y recorrido virtual", href: "/mi-colegio", kind: "pagina", external: false });
+  if (wants("bienestar", "enfermeria", "enfermería", "orientacion", "orientación"))
+    shortcut({ label: "Bienestar", sublabel: "Servicios de apoyo para estudiantes", href: "/bienestar", kind: "pagina", external: false });
+  if (wants("herramienta", "q10", "office 365", "correo institucional", "plataforma"))
+    shortcut({ label: "Herramientas", sublabel: "Accesos y plataformas institucionales", href: "/herramientas", kind: "pagina", external: false });
   if (wants("docente", "profesor", "profesora", "coordinador", "coordinacion", "rector", "directivo"))
     shortcut({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
   if (wants("admision", "inscrib", "matricul"))
@@ -321,8 +359,13 @@ export const askAssistant = createServerFn({ method: "POST" })
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
 
-    const lastUser = [...data.messages].reverse().find((m) => m.role === "user")?.content ?? "";
-    const [context, links] = await Promise.all([buildContext(), findResources(lastUser)]);
+    const lastUserIndex = data.messages.map((m) => m.role).lastIndexOf("user");
+    const lastUser = lastUserIndex >= 0 ? data.messages[lastUserIndex]?.content ?? "" : "";
+    const conversationContext = data.messages
+      .slice(Math.max(0, lastUserIndex - 2), lastUserIndex)
+      .map((m) => m.content)
+      .join(" ");
+    const [context, links] = await Promise.all([buildContext(), findResources(lastUser, conversationContext)]);
 
     const matchesBlock = links.length
       ? `\n\nRESULTADOS ENCONTRADOS PARA LA ÚLTIMA PREGUNTA (el usuario verá botones de acceso debajo de tu respuesta, no escribas enlaces):\n${links
