@@ -381,8 +381,12 @@ export const askAssistant = createServerFn({ method: "POST" })
 
     const lastUserIndex = data.messages.map((m) => m.role).lastIndexOf("user");
     const lastUser = lastUserIndex >= 0 ? data.messages[lastUserIndex]?.content ?? "" : "";
+    // Solo el texto del propio usuario: el saludo del asistente enumera todas
+    // las secciones y contaminaba la búsqueda con botones sin relación.
     const conversationContext = data.messages
-      .slice(Math.max(0, lastUserIndex - 2), lastUserIndex)
+      .slice(0, lastUserIndex)
+      .filter((m) => m.role === "user")
+      .slice(-2)
       .map((m) => m.content)
       .join(" ");
     const [context, links] = await Promise.all([buildContext(), findResources(lastUser, conversationContext)]);
