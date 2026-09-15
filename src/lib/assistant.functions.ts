@@ -313,10 +313,9 @@ async function findResources(query: string, conversationContext = ""): Promise<A
 
   // Atajos de sección: solo cuando la pregunta los nombra explícitamente y
   // como complemento, nunca reemplazando resultados concretos.
-  const shortcuts = sectionShortcuts(
-    normalize(effectiveQuery),
-    links.map((l) => l.label)
-  );
+  const shortcuts = links.length
+    ? []
+    : sectionShortcuts(rawCurrent, []).slice(0, 2);
 
   return [...links, ...shortcuts].slice(0, MAX_LINKS);
 }
