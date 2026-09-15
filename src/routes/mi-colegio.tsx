@@ -1,10 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { getDocuments } from "@/lib/content.functions";
 import { useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import { Award, Target, Eye, Heart, FileText, ExternalLink, PlayCircle } from "lucide-react";
 
 export const Route = createFileRoute("/mi-colegio")({
+  loader: async () => ({
+    institucionales: await getDocuments({ data: { category: "institucionales" } }),
+  }),
+  errorComponent: () => (
+    <PageShell>
+      <div className="container-page py-24 text-center text-muted-foreground">
+        No pudimos cargar los documentos institucionales. Intenta de nuevo más tarde.
+      </div>
+    </PageShell>
+  ),
+  notFoundComponent: () => (
+    <PageShell>
+      <div className="container-page py-24 text-center">Página no encontrada.</div>
+    </PageShell>
+  ),
   head: () => ({
     meta: [
       { title: "Mi Colegio — PEI, Manual de Convivencia y documentos | Cafam" },
@@ -27,23 +43,8 @@ const pillars = [
   { icon: Award, title: "PEI", text: "Nuestro Proyecto Educativo Institucional articula lo académico, lo humano y lo trascendente." },
 ];
 
-const DOCS_BASE = "https://portalcolegio.com/Administrador/micolegio/documentos/";
-const docUrl = (name: string) => DOCS_BASE + encodeURIComponent(name);
-
-const PEI_FILE = "PEI COLEGIO CAFAM -  SINTESIS.pdf";
-const MANUAL_FILE = "Manual de convivencia - Colegio Cafam 2026.pdf";
-
-const adminDocs = [
-  { label: "Protocolo de acompañamiento, ingreso y salida de estudiantes", file: "PROTOCOLO ACOMPANAMIENTO INGRESO Y SALIDA ESTUDIANTES COLEGIO CAFAM (V1).pdf" },
-  { label: "Seguro de accidentes escolares 2026", file: "Presentacion Comercial Colegio Cafam Accidentes Escolares 2026.pdf" },
-  { label: "Lineamientos administrativos", file: "LINEAMIENTOS ADMINISTRATIVOS V4.pdf" },
-  { label: "Resolución rectoral 2026", file: "Resolucion Rectoral 2026.pdf" },
-  { label: "Política de calidad Cafam 2026", file: "Política de Calidad Cafam 2026.pdf" },
-  { label: "Lista de útiles escolares 2026", file: "Utiles Escolares 2026.pdf" },
-  { label: "Derechos y deberes de los afiliados, clientes y usuarios de Cafam", file: "Derechos y deberes de los afiliados, clientes y usuarios de Cafam.pdf" },
-  { label: "Guía de transporte y contrato de servicio de transporte 2026", file: "Guia de Transporte y Contrato de Servicio de Transporte 2026.pdf" },
-  { label: "Tarifas año 2027", file: "Tarifas 2027.pdf" },
-];
+const PEI_TITLE = "PEI Colegio Cafam — Síntesis";
+const MANUAL_TITLE = "Manual de Convivencia — Colegio Cafam 2026";
 
 const videos = [
   { id: "1zG4D1f2mYw", title: "Este es mi Colegio Cafam" },
@@ -59,8 +60,14 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "recorrido", label: "Recorrido virtual" },
 ];
 
-function PdfViewer({ file, title }: { file: string; title: string }) {
-  const url = docUrl(file);
+function PdfViewer({ url, title }: { url: string | null; title: string }) {
+  if (!url) {
+    return (
+      <div className="rounded-2xl border border-border bg-card p-8 text-muted-foreground shadow-[var(--shadow-card)]">
+        Este documento aún no está publicado. Súbelo desde el panel de administración.
+      </div>
+    );
+  }
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
@@ -83,7 +90,14 @@ function PdfViewer({ file, title }: { file: string; title: string }) {
 }
 
 function MiColegio() {
+  const { institucionales } = Route.useLoaderData();
   const [tab, setTab] = useState<TabKey>("pei");
+
+  const urlOf = (title: string) =>
+    institucionales.find((d) => d.title === title)?.file_url ?? null;
+  const adminDocs = institucionales.filter(
+    (d) => d.title !== PEI_TITLE && d.title !== MANUAL_TITLE
+  );
 
   return (
     <PageShell>
@@ -133,15 +147,15 @@ function MiColegio() {
           </div>
 
           <div className="mt-8">
-            {tab === "pei" && <PdfViewer file={PEI_FILE} title="PEI Colegio Cafam — Síntesis" />}
-            {tab === "manual" && <PdfViewer file={MANUAL_FILE} title="Manual de Convivencia — Colegio Cafam 2026" />}
+            {tab === "pei" && <PdfViewer url={urlOf(PEI_TITLE)} title={PEI_TITLE} />}
+            {tab === "manual" && <PdfViewer url={urlOf(MANUAL_TITLE)} title={MANUAL_TITLE} />}
 
             {tab === "documentos" && (
               <ul className="grid gap-4 md:grid-cols-2">
                 {adminDocs.map((doc) => (
-                  <li key={doc.file}>
+                  <li key={doc.id}>
                     <a
-                      href={docUrl(doc.file)}
+                      href={doc.file_url ?? "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex h-full items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition hover:border-primary hover:shadow-lg"
@@ -150,7 +164,7 @@ function MiColegio() {
                         <FileText className="h-5 w-5" aria-hidden="true" />
                       </span>
                       <span>
-                        <span className="block font-semibold">{doc.label}</span>
+                        <span className="block font-semibold">{doc.title}</span>
                         <span className="mt-1 block text-sm text-muted-foreground">PDF — clic para ver</span>
                       </span>
                     </a>

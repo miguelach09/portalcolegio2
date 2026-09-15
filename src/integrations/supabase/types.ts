@@ -138,6 +138,7 @@ export type Database = {
           file_type: string | null
           file_url: string | null
           grade: string | null
+          grades: string[]
           id: string
           is_active: boolean
           period: number | null
@@ -155,6 +156,7 @@ export type Database = {
           file_type?: string | null
           file_url?: string | null
           grade?: string | null
+          grades?: string[]
           id?: string
           is_active?: boolean
           period?: number | null
@@ -172,6 +174,7 @@ export type Database = {
           file_type?: string | null
           file_url?: string | null
           grade?: string | null
+          grades?: string[]
           id?: string
           is_active?: boolean
           period?: number | null
@@ -491,51 +494,6 @@ export type Database = {
         }
         Relationships: []
       }
-      teachers: {
-        Row: {
-          area: string
-          bio: string | null
-          created_at: string
-          email: string | null
-          full_name: string
-          id: string
-          is_active: boolean
-          photo_path: string | null
-          photo_url: string | null
-          role_title: string
-          sort_order: number
-          updated_at: string
-        }
-        Insert: {
-          area?: string
-          bio?: string | null
-          created_at?: string
-          email?: string | null
-          full_name: string
-          id?: string
-          is_active?: boolean
-          photo_path?: string | null
-          photo_url?: string | null
-          role_title?: string
-          sort_order?: number
-          updated_at?: string
-        }
-        Update: {
-          area?: string
-          bio?: string | null
-          created_at?: string
-          email?: string | null
-          full_name?: string
-          id?: string
-          is_active?: boolean
-          photo_path?: string | null
-          photo_url?: string | null
-          role_title?: string
-          sort_order?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
       user_roles: {
         Row: {
           created_at: string
@@ -589,6 +547,7 @@ export type Database = {
         | "herramientas"
         | "general"
         | "guias"
+        | "institucionales"
       gallery_category:
         | "aulas"
         | "deporte"
@@ -750,6 +709,7 @@ export const Constants = {
         "herramientas",
         "general",
         "guias",
+        "institucionales",
       ],
       gallery_category: [
         "aulas",

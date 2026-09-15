@@ -25,6 +25,7 @@ const categories: { value: DocumentCategory; label: string }[] = [
   { value: "revisas", label: "Revisas" },
   { value: "admisiones", label: "Admisiones" },
   { value: "herramientas", label: "Herramientas" },
+  { value: "institucionales", label: "Institucionales (Mi Colegio)" },
   { value: "general", label: "General" },
 ];
 
@@ -36,6 +37,7 @@ function NewDocumentPage() {
     title: "",
     category: "circulares" as DocumentCategory,
     grade: null as Grade | null,
+    grades: [] as Grade[],
     period: null as Period | null,
     area: null as DocumentArea | null,
     published_at: new Date().toISOString().split("T")[0],
@@ -169,6 +171,7 @@ function NewDocumentPage() {
                     ...v,
                     category: cat,
                     grade: cat === "guias" ? v.grade : null,
+                    grades: cat === "circulares" ? v.grades : [],
                     period: cat === "guias" ? v.period : null,
                     area: cat === "guias" ? v.area : null,
                   }));
@@ -193,6 +196,36 @@ function NewDocumentPage() {
               {errors.published_at && <p className="mt-1 text-sm text-destructive">{errors.published_at}</p>}
             </div>
           </div>
+
+          {values.category === "circulares" && (
+            <div>
+              <label className="mb-2 block text-sm font-medium">
+                Grados a los que aplica <span className="text-muted-foreground">(opcional, puedes marcar varios)</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {GRADE_ORDER.map((g) => {
+                  const checked = values.grades.includes(g);
+                  return (
+                    <label key={g} className="flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(e) =>
+                          setValues((v) => ({
+                            ...v,
+                            grades: e.target.checked
+                              ? [...v.grades, g]
+                              : v.grades.filter((x) => x !== g),
+                          }))
+                        }
+                      />
+                      {GRADE_LABELS[g]}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {showGrade && (
             <div className="grid gap-4 md:grid-cols-2">

@@ -13,7 +13,6 @@ import {
   Users,
   MessageSquare,
   Megaphone,
-  GraduationCap,
   ClipboardList,
   BookOpen,
   Images,
@@ -100,7 +99,6 @@ function AdminDashboard() {
           <ManageCard title="Mensajes" desc="Buzón de contacto" href="/admin/mensajes" icon={<MessageSquare className="h-5 w-5" />} />
           <ManageCard title="Suscriptores" desc="Lista de correos" href="/admin/suscriptores" icon={<Users className="h-5 w-5" />} />
           <ManageCard title="Avisos" desc="Banner de aviso urgente" href="/admin/avisos" icon={<Megaphone className="h-5 w-5" />} />
-          <ManageCard title="Docentes" desc="Directorio docente y directivo" href="/admin/docentes" icon={<GraduationCap className="h-5 w-5" />} />
           <ManageCard title="Preinscripciones" desc="Solicitudes de admisión 2027" href="/admin/preinscripciones" icon={<ClipboardList className="h-5 w-5" />} />
           <ManageCard title="Libros CRE" desc="Catálogo del Centro de Recursos Educativos" href="/admin/libros" icon={<BookOpen className="h-5 w-5" />} />
           <ManageCard title="Carrusel de inicio" desc="Imágenes, textos, botones y orden del slideshow" href="/admin/carrusel" icon={<Images className="h-5 w-5" />} />

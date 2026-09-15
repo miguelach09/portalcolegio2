@@ -6,6 +6,7 @@ export const documentCategorySchema = z.enum([
   "admisiones",
   "herramientas",
   "guias",
+  "institucionales",
   "general",
 ]);
 
@@ -67,6 +68,7 @@ export const documentFormSchema = z
     title: z.string().min(1, "El título es obligatorio"),
     category: documentCategorySchema,
     grade: gradeSchema.nullable().optional(),
+    grades: z.array(gradeSchema).default([]),
     period: periodSchema.nullable().optional(),
     area: documentAreaSchema.nullable().optional(),
     published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
@@ -99,6 +101,7 @@ export const documentUpdateSchema = z.object({
   title: z.string().min(1),
   category: documentCategorySchema,
   grade: gradeSchema.nullable().optional(),
+  grades: z.array(gradeSchema).default([]),
   period: periodSchema.nullable().optional(),
   area: documentAreaSchema.nullable().optional(),
   published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

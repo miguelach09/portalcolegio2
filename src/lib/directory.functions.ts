@@ -2,16 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
-import type { Teacher, AdmissionApplication } from "./directory.types";
-import { teacherFormSchema, admissionFormSchema } from "./directory.schemas";
+import { admissionFormSchema, applicationStatusSchema } from "./directory.schemas";
+import type { AdmissionApplication } from "./directory.types";
 
 function createPublicClient() {
   return createClient<Database>(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_PUBLISHABLE_KEY!,
-    {
-      auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-    }
+    { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } }
   );
 }
 
@@ -19,110 +17,45 @@ async function checkStaff(context: {
   supabase: ReturnType<typeof createClient<Database>>;
   userId: string;
 }) {
-  const { data: roles, error } = await context.supabase
+  const { data, error } = await context.supabase
     .from("user_roles")
     .select("role")
-    .eq("user_id", context.userId);
-  if (error || !roles || roles.length === 0) {
-    throw new Error("Forbidden: staff role required");
-  }
-  if (!roles.some((r) => r.role === "admin" || r.role === "editor")) {
+    .eq("user_id", context.userId)
+    .in("role", ["admin", "editor"]);
+
+  if (error || !data || data.length === 0) {
     throw new Error("Forbidden: staff role required");
   }
 }
 
-// ===================== PUBLIC =====================
-
-export const getTeachers = createServerFn({ method: "GET" }).handler(async () => {
-  const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from("teachers")
-    .select("id, full_name, role_title, area, photo_url, bio, sort_order")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true })
-    .order("full_name", { ascending: true });
-  if (error) throw error;
-  return (data || []) as unknown as Teacher[];
-});
-
+// Public: enviar preinscripción desde la página de admisiones
 export const submitAdmissionApplication = createServerFn({ method: "POST" })
-  .inputValidator((input: { values: Record<string, unknown> }) => input)
+  .inputValidator((input: { values: unknown }) => ({
+    values: admissionFormSchema.parse(input.values),
+  }))
   .handler(async ({ data }) => {
-    const parsed = admissionFormSchema.parse(data.values);
     const supabase = createPublicClient();
+    const v = data.values;
     const { error } = await supabase.from("admission_applications").insert({
-      student_name: parsed.student_name,
-      birth_date: parsed.birth_date ? parsed.birth_date : null,
-      grade: parsed.grade,
-      guardian_name: parsed.guardian_name,
-      guardian_email: parsed.guardian_email,
-      guardian_phone: parsed.guardian_phone,
-      previous_school: parsed.previous_school || null,
-      comments: parsed.comments || null,
+      student_name: v.student_name,
+      birth_date: v.birth_date ? v.birth_date : null,
+      grade: v.grade,
+      guardian_name: v.guardian_name,
+      guardian_email: v.guardian_email,
+      guardian_phone: v.guardian_phone,
+      previous_school: v.previous_school || null,
+      comments: v.comments || null,
+      status: "nuevo",
     });
-    if (error) throw error;
-    return { ok: true };
-  });
 
-// ===================== PROTECTED: TEACHERS =====================
-
-export const getAllTeachers = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    await checkStaff(context);
-    const { data, error } = await context.supabase
-      .from("teachers")
-      .select("*")
-      .order("sort_order", { ascending: true })
-      .order("full_name", { ascending: true });
-    if (error) throw error;
-    return (data || []) as unknown as Teacher[];
-  });
-
-export const saveTeacher = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: { values: Record<string, unknown> }) => input)
-  .handler(async ({ data, context }) => {
-    await checkStaff(context);
-    const parsed = teacherFormSchema.parse(data.values);
-    const { id, ...rest } = parsed;
-    const payload = {
-      ...rest,
-      email: rest.email || null,
-      photo_url: rest.photo_url || null,
-      bio: rest.bio || null,
-    };
-    if (id) {
-      const { data: row, error } = await context.supabase
-        .from("teachers")
-        .update(payload)
-        .eq("id", id)
-        .select()
-        .single();
-      if (error) throw error;
-      return row as unknown as Teacher;
+    if (error) {
+      console.error("Error saving admission application:", error);
+      throw new Error("No pudimos guardar la preinscripción");
     }
-    const { data: row, error } = await context.supabase
-      .from("teachers")
-      .insert(payload)
-      .select()
-      .single();
-    if (error) throw error;
-    return row as unknown as Teacher;
-  });
-
-export const deleteTeacher = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data, context }) => {
-    await checkStaff(context);
-    const { error } = await context.supabase.from("teachers").delete().eq("id", data.id);
-    if (error) throw error;
     return { ok: true };
   });
 
-// ===================== PROTECTED: APPLICATIONS =====================
-
+// Staff: gestionar preinscripciones
 export const getAdmissionApplications = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -131,20 +64,31 @@ export const getAdmissionApplications = createServerFn({ method: "GET" })
       .from("admission_applications")
       .select("*")
       .order("created_at", { ascending: false });
-    if (error) throw error;
-    return (data || []) as unknown as AdmissionApplication[];
+
+    if (error) {
+      console.error("Error loading admission applications:", error);
+      throw new Error("No pudimos cargar las preinscripciones");
+    }
+    return (data ?? []) as AdmissionApplication[];
   });
 
 export const updateApplicationStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string; status: string }) => input)
+  .inputValidator((input: { id: string; status: string }) => ({
+    id: input.id,
+    status: applicationStatusSchema.parse(input.status),
+  }))
   .handler(async ({ data, context }) => {
     await checkStaff(context);
     const { error } = await context.supabase
       .from("admission_applications")
       .update({ status: data.status })
       .eq("id", data.id);
-    if (error) throw error;
+
+    if (error) {
+      console.error("Error updating application status:", error);
+      throw new Error("No pudimos actualizar el estado");
+    }
     return { ok: true };
   });
 
@@ -157,6 +101,10 @@ export const deleteApplication = createServerFn({ method: "POST" })
       .from("admission_applications")
       .delete()
       .eq("id", data.id);
-    if (error) throw error;
+
+    if (error) {
+      console.error("Error deleting application:", error);
+      throw new Error("No pudimos eliminar la preinscripción");
+    }
     return { ok: true };
   });
