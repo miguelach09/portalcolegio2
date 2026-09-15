@@ -25,6 +25,7 @@ const categories: { value: DocumentCategory; label: string }[] = [
   { value: "revisas", label: "Revisas" },
   { value: "admisiones", label: "Admisiones" },
   { value: "herramientas", label: "Herramientas" },
+  { value: "institucionales", label: "Institucionales (Mi Colegio)" },
   { value: "general", label: "General" },
 ];
 
