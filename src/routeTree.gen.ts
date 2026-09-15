@@ -39,6 +39,7 @@ import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/
 import { Route as AuthenticatedAdminDocentesIndexRouteImport } from './routes/_authenticated/admin/docentes/index'
 import { Route as AuthenticatedAdminCarruselIndexRouteImport } from './routes/_authenticated/admin/carrusel/index'
 import { Route as AuthenticatedAdminAvisosIndexRouteImport } from './routes/_authenticated/admin/avisos/index'
+import { Route as AuthenticatedAdminAsistenteIndexRouteImport } from './routes/_authenticated/admin/asistente/index'
 import { Route as AuthenticatedAdminNoticiasNuevaRouteImport } from './routes/_authenticated/admin/noticias/nueva'
 import { Route as AuthenticatedAdminGaleriaNuevaRouteImport } from './routes/_authenticated/admin/galeria/nueva'
 import { Route as AuthenticatedAdminDocumentosNuevoRouteImport } from './routes/_authenticated/admin/documentos/nuevo'
@@ -204,6 +205,12 @@ const AuthenticatedAdminAvisosIndexRoute =
     path: '/admin/avisos/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminAsistenteIndexRoute =
+  AuthenticatedAdminAsistenteIndexRouteImport.update({
+    id: '/admin/asistente/',
+    path: '/admin/asistente/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminNoticiasNuevaRoute =
   AuthenticatedAdminNoticiasNuevaRouteImport.update({
     id: '/admin/noticias/nueva',
@@ -244,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/admin/asistente/': typeof AuthenticatedAdminAsistenteIndexRoute
   '/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/carrusel/': typeof AuthenticatedAdminCarruselIndexRoute
   '/admin/docentes/': typeof AuthenticatedAdminDocentesIndexRoute
@@ -278,6 +286,7 @@ export interface FileRoutesByTo {
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/admin/asistente': typeof AuthenticatedAdminAsistenteIndexRoute
   '/admin/avisos': typeof AuthenticatedAdminAvisosIndexRoute
   '/admin/carrusel': typeof AuthenticatedAdminCarruselIndexRoute
   '/admin/docentes': typeof AuthenticatedAdminDocentesIndexRoute
@@ -314,6 +323,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
   '/_authenticated/admin/galeria/nueva': typeof AuthenticatedAdminGaleriaNuevaRoute
   '/_authenticated/admin/noticias/nueva': typeof AuthenticatedAdminNoticiasNuevaRoute
+  '/_authenticated/admin/asistente/': typeof AuthenticatedAdminAsistenteIndexRoute
   '/_authenticated/admin/avisos/': typeof AuthenticatedAdminAvisosIndexRoute
   '/_authenticated/admin/carrusel/': typeof AuthenticatedAdminCarruselIndexRoute
   '/_authenticated/admin/docentes/': typeof AuthenticatedAdminDocentesIndexRoute
@@ -350,6 +360,7 @@ export interface FileRouteTypes {
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
     | '/admin/noticias/nueva'
+    | '/admin/asistente/'
     | '/admin/avisos/'
     | '/admin/carrusel/'
     | '/admin/docentes/'
@@ -384,6 +395,7 @@ export interface FileRouteTypes {
     | '/admin/documentos/nuevo'
     | '/admin/galeria/nueva'
     | '/admin/noticias/nueva'
+    | '/admin/asistente'
     | '/admin/avisos'
     | '/admin/carrusel'
     | '/admin/docentes'
@@ -419,6 +431,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/documentos/nuevo'
     | '/_authenticated/admin/galeria/nueva'
     | '/_authenticated/admin/noticias/nueva'
+    | '/_authenticated/admin/asistente/'
     | '/_authenticated/admin/avisos/'
     | '/_authenticated/admin/carrusel/'
     | '/_authenticated/admin/docentes/'
@@ -665,6 +678,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAvisosIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/asistente/': {
+      id: '/_authenticated/admin/asistente/'
+      path: '/admin/asistente'
+      fullPath: '/admin/asistente/'
+      preLoaderRoute: typeof AuthenticatedAdminAsistenteIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/noticias/nueva': {
       id: '/_authenticated/admin/noticias/nueva'
       path: '/admin/noticias/nueva'
@@ -694,6 +714,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminDocumentosNuevoRoute: typeof AuthenticatedAdminDocumentosNuevoRoute
   AuthenticatedAdminGaleriaNuevaRoute: typeof AuthenticatedAdminGaleriaNuevaRoute
   AuthenticatedAdminNoticiasNuevaRoute: typeof AuthenticatedAdminNoticiasNuevaRoute
+  AuthenticatedAdminAsistenteIndexRoute: typeof AuthenticatedAdminAsistenteIndexRoute
   AuthenticatedAdminAvisosIndexRoute: typeof AuthenticatedAdminAvisosIndexRoute
   AuthenticatedAdminCarruselIndexRoute: typeof AuthenticatedAdminCarruselIndexRoute
   AuthenticatedAdminDocentesIndexRoute: typeof AuthenticatedAdminDocentesIndexRoute
@@ -714,6 +735,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedAdminDocumentosNuevoRoute,
   AuthenticatedAdminGaleriaNuevaRoute: AuthenticatedAdminGaleriaNuevaRoute,
   AuthenticatedAdminNoticiasNuevaRoute: AuthenticatedAdminNoticiasNuevaRoute,
+  AuthenticatedAdminAsistenteIndexRoute: AuthenticatedAdminAsistenteIndexRoute,
   AuthenticatedAdminAvisosIndexRoute: AuthenticatedAdminAvisosIndexRoute,
   AuthenticatedAdminCarruselIndexRoute: AuthenticatedAdminCarruselIndexRoute,
   AuthenticatedAdminDocentesIndexRoute: AuthenticatedAdminDocentesIndexRoute,

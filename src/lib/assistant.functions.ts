@@ -186,7 +186,32 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     }
   }
 
+  // Conocimiento cargado por el colegio desde el panel: si hay documento
+  // adjunto, se ofrece como botón de acceso.
+  for (const term of terms) {
+    const like = `%${term}%`;
+    const { data: entries } = await supabase
+      .from("assistant_knowledge")
+      .select("id,title,tags,file_path")
+      .eq("is_active", true)
+      .or(`title.ilike.${like},content.ilike.${like},tags.ilike.${like}`)
+      .limit(4);
+    for (const k of entries ?? []) {
+      if (!k.file_path) continue;
+      const signed = await getSignedUrl(k.file_path);
+      if (!signed) continue;
+      push({
+        label: k.title,
+        sublabel: k.tags || "Documento del colegio",
+        href: signed,
+        kind: "documento",
+        external: true,
+      });
+    }
+  }
+
   // Intención por tema: si la pregunta habla de una sección completa
+
   // ("libros del plan lector", "guías", "circulares"...), añade sus elementos.
   const raw = query.toLowerCase();
   const wants = (...needles: string[]) => needles.some((n) => raw.includes(n));
@@ -242,11 +267,12 @@ const STAFF_INTENT =
 
 async function buildContext() {
   const supabase = createPublicClient();
-  const [{ data: docs }, { data: news }, { data: gallery }, { data: books }] = await Promise.all([
+  const [{ data: docs }, { data: news }, { data: gallery }, { data: books }, { data: knowledge }] = await Promise.all([
     supabase.from("documents").select("title, category, grade, period, area, published_at").eq("is_active", true).order("published_at", { ascending: false }).limit(80),
     supabase.from("news").select("title, summary, content, category, published_at").eq("is_active", true).order("published_at", { ascending: false }).limit(20),
     supabase.from("gallery_images").select("title, category").eq("is_active", true).limit(30),
     supabase.from("library_books").select("title, author, publisher, kind, grade, price_cop").eq("is_active", true).limit(60),
+    supabase.from("assistant_knowledge").select("title, content, tags").eq("is_active", true).order("sort_order", { ascending: true }).limit(80),
   ]);
 
   const docLines = (docs || [])
@@ -257,11 +283,19 @@ async function buildContext() {
   const bookLines = (books || [])
     .map((b) => `- [${b.kind === "plan_lector" ? "Plan Lector" : "Consulta en sala"}] ${b.title}${b.author ? ` — ${b.author}` : ""}${b.publisher ? ` (${b.publisher})` : ""}${b.grade ? ` · ${b.grade}` : ""}${b.price_cop ? ` · $${b.price_cop}` : ""}`)
     .join("\n");
+  const knowledgeLines = (knowledge || [])
+    .map((k) => `### ${k.title}${k.tags ? ` (${k.tags})` : ""}\n${String(k.content).slice(0, 2500)}`)
+    .join("\n\n");
+
 
   return `INFORMACIÓN DEL COLEGIO CAFAM (contenido publicado en la web):
 
+CONOCIMIENTO ADICIONAL CARGADO POR EL COLEGIO (información oficial y prioritaria; si responde la pregunta, úsala antes que cualquier otra fuente):
+${knowledgeLines || "(sin entradas)"}
+
 DOCUMENTOS, CIRCULARES Y GUÍAS DISPONIBLES:
 ${docLines || "(sin documentos)"}
+
 
 LIBROS DEL CRE (Centro de Recursos Educativos):
 ${bookLines || "(sin libros)"}
