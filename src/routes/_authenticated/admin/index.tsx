@@ -16,6 +16,7 @@ import {
   GraduationCap,
   ClipboardList,
   BookOpen,
+  Images,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouter } from "@tanstack/react-router";
@@ -101,6 +102,7 @@ function AdminDashboard() {
           <ManageCard title="Docentes" desc="Directorio docente y directivo" href="/admin/docentes" icon={<GraduationCap className="h-5 w-5" />} />
           <ManageCard title="Preinscripciones" desc="Solicitudes de admisión 2027" href="/admin/preinscripciones" icon={<ClipboardList className="h-5 w-5" />} />
           <ManageCard title="Libros CRE" desc="Catálogo del Centro de Recursos Educativos" href="/admin/libros" icon={<BookOpen className="h-5 w-5" />} />
+          <ManageCard title="Carrusel de inicio" desc="Imágenes, textos, botones y orden del slideshow" href="/admin/carrusel" icon={<Images className="h-5 w-5" />} />
         </div>
 
         <h2 className="mt-10 text-lg font-semibold text-foreground">Acciones rápidas</h2>
