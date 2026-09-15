@@ -7,6 +7,7 @@ import heroStudents from "@/assets/real/admisiones.jpg";
 import heroPool from "@/assets/real/pool.jpg";
 import heroSports from "@/assets/real/canchas.jpg";
 import heroClass from "@/assets/real/admisiones.jpg";
+import type { HeroSlide } from "@/lib/hero.types";
 
 type Slide = {
   image: string;
@@ -17,7 +18,7 @@ type Slide = {
   accent: string;
 };
 
-const slides: Slide[] = [
+const defaultSlides: Slide[] = [
   {
     image: heroStudents,
     eyebrow: "Admisiones 2027",
@@ -52,7 +53,19 @@ const slides: Slide[] = [
   },
 ];
 
-export function HeroCarousel() {
+export function HeroCarousel({ slides: dbSlides = [] }: { slides?: HeroSlide[] }) {
+  const slides: Slide[] =
+    dbSlides.length > 0
+      ? dbSlides.map((s) => ({
+          image: s.image_url || heroStudents,
+          eyebrow: s.eyebrow,
+          title: s.title,
+          subtitle: s.subtitle,
+          cta: { label: s.cta_label, to: s.cta_href },
+          accent: s.accent || "bg-primary",
+        }))
+      : defaultSlides;
+
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selected, setSelected] = useState(0);
 
