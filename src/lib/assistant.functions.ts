@@ -186,7 +186,32 @@ async function findResources(query: string): Promise<AssistantLink[]> {
     }
   }
 
+  // Conocimiento cargado por el colegio desde el panel: si hay documento
+  // adjunto, se ofrece como botón de acceso.
+  for (const term of terms) {
+    const like = `%${term}%`;
+    const { data: entries } = await supabase
+      .from("assistant_knowledge")
+      .select("id,title,tags,file_path")
+      .eq("is_active", true)
+      .or(`title.ilike.${like},content.ilike.${like},tags.ilike.${like}`)
+      .limit(4);
+    for (const k of entries ?? []) {
+      if (!k.file_path) continue;
+      const signed = await getSignedUrl(k.file_path);
+      if (!signed) continue;
+      push({
+        label: k.title,
+        sublabel: k.tags || "Documento del colegio",
+        href: signed,
+        kind: "documento",
+        external: true,
+      });
+    }
+  }
+
   // Intención por tema: si la pregunta habla de una sección completa
+
   // ("libros del plan lector", "guías", "circulares"...), añade sus elementos.
   const raw = query.toLowerCase();
   const wants = (...needles: string[]) => needles.some((n) => raw.includes(n));
