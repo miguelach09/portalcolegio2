@@ -4,6 +4,7 @@ import { Upload, ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { createGalleryImage } from "@/lib/content.functions";
 import { galleryImageFormSchema } from "@/lib/content.schemas";
+import { IMAGE_ACCEPT, IMAGE_EXTENSIONS, validateFileExtension } from "@/lib/upload-rules";
 import type { GalleryCategory } from "@/lib/content.types";
 
 export const Route = createFileRoute("/_authenticated/admin/galeria/nueva")({
@@ -37,12 +38,20 @@ function NewGalleryImagePage() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = e.target.files?.[0];
-    if (selected) {
-      setFile(selected);
-      setPreview(URL.createObjectURL(selected));
-      if (!values.title) {
-        setValues((v) => ({ ...v, title: selected.name.replace(/\.[^.]+$/, "") }));
-      }
+    if (!selected) return;
+    const invalid = validateFileExtension(selected, IMAGE_EXTENSIONS);
+    if (invalid) {
+      setFile(null);
+      setPreview(null);
+      e.target.value = "";
+      setErrors((prev) => ({ ...prev, file: invalid }));
+      return;
+    }
+    setErrors((prev) => ({ ...prev, file: "" }));
+    setFile(selected);
+    setPreview(URL.createObjectURL(selected));
+    if (!values.title) {
+      setValues((v) => ({ ...v, title: selected.name.replace(/\.[^.]+$/, "") }));
     }
   }
 
@@ -117,7 +126,7 @@ function NewGalleryImagePage() {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept={IMAGE_ACCEPT}
               onChange={handleFileChange}
               className="hidden"
             />

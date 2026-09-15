@@ -10,6 +10,7 @@ import {
   deleteKnowledge,
   type KnowledgeEntry,
 } from "@/lib/knowledge.functions";
+import { KNOWLEDGE_ACCEPT, KNOWLEDGE_EXTENSIONS, validateFileExtension } from "@/lib/upload-rules";
 
 export const Route = createFileRoute("/_authenticated/admin/asistente/")({
   component: AdminAsistente,
@@ -195,8 +196,20 @@ function AdminAsistente() {
               <span className="font-medium">Documento adjunto (opcional)</span>
               <input
                 type="file"
-                accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,image/*"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                accept={KNOWLEDGE_ACCEPT}
+                onChange={(e) => {
+                  const selected = e.target.files?.[0];
+                  if (!selected) return setFile(null);
+                  const invalid = validateFileExtension(selected, KNOWLEDGE_EXTENSIONS);
+                  if (invalid) {
+                    setFile(null);
+                    e.target.value = "";
+                    setError(invalid);
+                    return;
+                  }
+                  setError(null);
+                  setFile(selected);
+                }}
                 className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
               />
               {file && (

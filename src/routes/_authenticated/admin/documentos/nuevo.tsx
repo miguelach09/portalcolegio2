@@ -4,6 +4,7 @@ import { Upload, FileText, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { createDocument } from "@/lib/content.functions";
 import { documentFormSchema } from "@/lib/content.schemas";
+import { DOCUMENT_ACCEPT, DOCUMENT_EXTENSIONS, validateFileExtension } from "@/lib/upload-rules";
 import type { DocumentArea, DocumentCategory, Grade, Period } from "@/lib/content.types";
 import {
   GRADE_LABELS,
@@ -46,11 +47,18 @@ function NewDocumentPage() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = e.target.files?.[0];
-    if (selected) {
-      setFile(selected);
-      if (!values.title) {
-        setValues((v) => ({ ...v, title: selected.name.replace(/\.pdf$/i, "") }));
-      }
+    if (!selected) return;
+    const invalid = validateFileExtension(selected, DOCUMENT_EXTENSIONS);
+    if (invalid) {
+      setFile(null);
+      e.target.value = "";
+      setErrors((prev) => ({ ...prev, file: invalid }));
+      return;
+    }
+    setErrors((prev) => ({ ...prev, file: "" }));
+    setFile(selected);
+    if (!values.title) {
+      setValues((v) => ({ ...v, title: selected.name.replace(/\.[^.]+$/, "") }));
     }
   }
 
@@ -59,7 +67,7 @@ function NewDocumentPage() {
     setErrors({});
 
     if (!file) {
-      setErrors({ file: "Selecciona un archivo PDF" });
+      setErrors({ file: "Selecciona un archivo PDF o Excel (.xls, .xlsx)" });
       return;
     }
 
@@ -132,7 +140,7 @@ function NewDocumentPage() {
             <input
               ref={fileInputRef}
               type="file"
-              accept="application/pdf"
+              accept={DOCUMENT_ACCEPT}
               onChange={handleFileChange}
               className="hidden"
             />
