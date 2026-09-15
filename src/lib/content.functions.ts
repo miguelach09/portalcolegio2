@@ -415,6 +415,7 @@ export const createGalleryImage = createServerFn({ method: "POST" })
       .insert({
         title: parsed.title,
         category: parsed.category,
+        year: parsed.year,
         is_active: parsed.is_active,
         sort_order: parsed.sort_order,
         // Private bucket: public object URLs are never stored. Reads use
@@ -443,6 +444,7 @@ export const updateGalleryImage = createServerFn({ method: "POST" })
       .update({
         title: rest.title,
         category: rest.category,
+        year: rest.year,
         is_active: rest.is_active,
         sort_order: rest.sort_order,
       })
