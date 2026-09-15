@@ -263,6 +263,54 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_slides: {
+        Row: {
+          accent: string
+          created_at: string
+          cta_href: string
+          cta_label: string
+          eyebrow: string
+          id: string
+          image_path: string | null
+          image_url: string | null
+          is_active: boolean
+          sort_order: number
+          subtitle: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          accent?: string
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          eyebrow?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          is_active?: boolean
+          sort_order?: number
+          subtitle?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          accent?: string
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          eyebrow?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          is_active?: boolean
+          sort_order?: number
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       library_books: {
         Row: {
           author: string
