@@ -9,6 +9,8 @@ export const Route = createFileRoute("/mi-colegio")({
   loader: async () => ({
     institucionales: await getDocuments({ data: { category: "institucionales" } }),
   }),
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
   errorComponent: () => (
     <PageShell>
       <div className="container-page py-24 text-center text-muted-foreground">
@@ -84,7 +86,7 @@ function PdfViewer({ url, title }: { url: string | null; title: string }) {
           Abrir en pestaña nueva <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
       </div>
-      <iframe src={url} title={title} className="h-[70vh] min-h-[480px] w-full bg-muted" />
+      <iframe src={url} title={title} loading="lazy" className="h-[70vh] min-h-[480px] w-full bg-muted" />
     </div>
   );
 }
