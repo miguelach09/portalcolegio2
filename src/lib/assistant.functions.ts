@@ -395,7 +395,7 @@ export const askAssistant = createServerFn({ method: "POST" })
 
     const staffBlock = links.length
       ? ""
-      : "\n\nNO HAY RESULTADOS PARA ESTA PREGUNTA: no menciones botones ni digas que abajo aparecen enlaces; responde solo con texto.";
+      : "\n\nNO HAY RESULTADOS PARA ESTA PREGUNTA. PROHIBIDO ABSOLUTAMENTE: escribir \"botón\", \"botones\", \"enlace\", \"link\", \"abajo encontrarás\", \"a continuación\" o cualquier promesa de acceso. Responde solo con texto e indica en qué sección del sitio puede buscarlo (por ejemplo Mi Colegio, Circulares, Guías, CRE, Galería).";
 
     const systemPrompt = `Eres el asistente virtual del Colegio Cafam. Ayudas a acudientes y estudiantes con información sobre el colegio: admisiones, circulares, guías de aprendizaje, libros del CRE, docentes, eventos, plataformas, bienestar y vida escolar.
 
