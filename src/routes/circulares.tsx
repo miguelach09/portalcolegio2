@@ -11,6 +11,8 @@ import { useState } from "react";
 const circularesQueryOptions = queryOptions({
   queryKey: ["documents", "circulares"],
   queryFn: () => getDocuments({ data: { category: "circulares", limit: 100 } }),
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
 });
 
 export const Route = createFileRoute("/circulares")({

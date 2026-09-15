@@ -10,6 +10,8 @@ import { Lightbox } from "@/components/site/Lightbox";
 const galleryQueryOptions = queryOptions({
   queryKey: ["gallery"],
   queryFn: () => getGalleryImages({ data: { limit: 500 } }),
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
 });
 
 export const Route = createFileRoute("/galeria")({
