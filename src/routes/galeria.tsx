@@ -62,9 +62,11 @@ function Galeria() {
     new Set(allImages.map((i) => i.year).filter((y): y is number => typeof y === "number"))
   ).sort((a, b) => b - a);
   const [year, setYear] = useState<number | "todos">(() => years[0] ?? "todos");
+  const [visible, setVisible] = useState(36);
 
   const images =
     year === "todos" ? allImages : allImages.filter((i) => i.year === year);
+  const shown = images.slice(0, visible);
 
   return (
     <PageShell>
@@ -80,6 +82,7 @@ function Galeria() {
                   type="button"
                   onClick={() => {
                     setYear(y as number | "todos");
+                    setVisible(36);
                     setLightboxIndex(null);
                   }}
                   className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
@@ -106,7 +109,7 @@ function Galeria() {
           </div>
         ) : (
           <div className="columns-2 gap-4 md:columns-3 lg:columns-4">
-            {images.map((it, i) => (
+            {shown.map((it, i) => (
               <button
                 key={it.id}
                 onClick={() => setLightboxIndex(i)}
@@ -115,7 +118,8 @@ function Galeria() {
                 <img
                   src={it.image_url}
                   alt={it.title}
-                  loading="lazy"
+                  loading={i < 8 ? "eager" : "lazy"}
+                  decoding="async"
                   className="w-full transition-transform duration-500 hover:scale-105"
                 />
                 <span className="block py-2 text-center text-xs text-muted-foreground">{it.title}</span>
@@ -123,10 +127,22 @@ function Galeria() {
             ))}
           </div>
         )}
+
+        {shown.length < images.length && (
+          <div className="mt-10 text-center">
+            <button
+              type="button"
+              onClick={() => setVisible((v) => v + 36)}
+              className="rounded-full border border-primary px-6 py-3 text-sm font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
+            >
+              Ver más fotos ({images.length - shown.length} restantes)
+            </button>
+          </div>
+        )}
       </section>
 
       <Lightbox
-        images={images.map((img) => ({ id: img.id, image_url: img.image_url, title: img.title }))}
+        images={shown.map((img) => ({ id: img.id, image_url: img.image_url, title: img.title }))}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNavigate={setLightboxIndex}
