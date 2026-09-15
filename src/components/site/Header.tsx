@@ -26,14 +26,16 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-lg">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <img
-            src={logoCafam}
-            alt="Colegio Cafam"
-            className="h-10 w-auto shrink-0 object-contain"
-            width={228}
-            height={64}
-          />
+        <Link to="/" className="flex shrink-0 items-center gap-2.5" onClick={() => setOpen(false)}>
+          <span className="flex h-11 shrink-0 items-center rounded-xl bg-primary px-3 shadow-sm">
+            <img
+              src={logoCafam}
+              alt="Colegio Cafam"
+              className="h-6 w-auto object-contain"
+              width={228}
+              height={64}
+            />
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
