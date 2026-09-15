@@ -93,6 +93,42 @@ const routeForDocument = (category: string | null) => {
 
 const MAX_LINKS = 4;
 
+// Atajos de sección: se ofrecen cuando la pregunta nombra un tema del colegio,
+// como complemento (o respaldo) de los resultados concretos.
+function sectionShortcuts(raw: string, exclude: string[] = []): AssistantLink[] {
+  const wants = (...needles: string[]) => needles.some((n) => raw.includes(normalize(n)));
+  const out: AssistantLink[] = [];
+  const shortcut = (l: AssistantLink) => {
+    if (!exclude.includes(l.label) && !out.some((x) => x.label === l.label)) out.push(l);
+  };
+
+  if (wants("plan lector", "consulta en sala", "biblioteca", "libros del cre", "cre"))
+    shortcut({ label: "CRE — Biblioteca", sublabel: "Consulta en sala y Plan Lector", href: "/cre", kind: "pagina", external: false });
+  if (wants("guia", "guias"))
+    shortcut({ label: "Guías de Aprendizaje", sublabel: "Escoge tu grado y descarga", href: "/guias", kind: "pagina", external: false });
+  if (wants("circular"))
+    shortcut({ label: "Circulares", sublabel: "Comunicados institucionales", href: "/circulares", kind: "pagina", external: false });
+  if (wants("noticia"))
+    shortcut({ label: "Noticias", sublabel: "Vida escolar y comunidad", href: "/#noticias", kind: "pagina", external: false });
+  if (wants("evento", "calendario"))
+    shortcut({ label: "Calendario escolar", sublabel: "Eventos y fechas clave", href: "/calendario", kind: "pagina", external: false });
+  if (wants("galeria", "foto", "fotos", "imagen", "imagenes"))
+    shortcut({ label: "Galería", sublabel: "Fotos y momentos de la vida escolar", href: "/galeria", kind: "galeria", external: false });
+  if (wants("mi colegio", "pei", "manual de convivencia", "convivencia", "recorrido virtual", "mision", "vision", "historia"))
+    shortcut({ label: "Mi Colegio", sublabel: "PEI, manuales y recorrido virtual", href: "/mi-colegio", kind: "pagina", external: false });
+  if (wants("bienestar", "enfermeria", "orientacion"))
+    shortcut({ label: "Bienestar", sublabel: "Servicios de apoyo para estudiantes", href: "/bienestar", kind: "pagina", external: false });
+  if (wants("herramienta", "q10", "office 365", "correo institucional", "plataforma"))
+    shortcut({ label: "Herramientas", sublabel: "Accesos y plataformas institucionales", href: "/herramientas", kind: "pagina", external: false });
+  if (wants("docente", "profesor", "profesora", "coordinador", "coordinacion", "rector", "directivo", "telefono", "contacto"))
+    shortcut({ label: "Contáctenos", sublabel: "Líneas de atención y correos", href: "/contacto", kind: "pagina", external: false });
+  if (wants("admision", "inscrib", "matricul"))
+    shortcut({ label: "Admisiones 2027", sublabel: "Proceso y preinscripción", href: "/admisiones", kind: "pagina", external: false });
+
+  return out;
+}
+
+
 async function findResources(query: string, conversationContext = ""): Promise<AssistantLink[]> {
   const rawCurrent = normalize(query);
   const isFollowUp = [
