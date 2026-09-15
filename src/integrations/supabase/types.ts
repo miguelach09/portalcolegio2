@@ -59,6 +59,42 @@ export type Database = {
         }
         Relationships: []
       }
+      assistant_knowledge: {
+        Row: {
+          content: string
+          created_at: string
+          file_path: string | null
+          id: string
+          is_active: boolean
+          sort_order: number
+          tags: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          tags?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          tags?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
