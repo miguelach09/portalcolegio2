@@ -148,7 +148,7 @@ async function findResources(query: string, conversationContext = ""): Promise<A
   // Sin palabras con contenido (saludos, charla general, preguntas sobre el
   // propio asistente) solo quedan los atajos de sección si el usuario nombró
   // un tema del colegio.
-  if (!terms.length) return sectionShortcuts(normalizedQuery).slice(0, MAX_LINKS);
+  if (!terms.length) return sectionShortcuts(rawCurrent).slice(0, 2);
 
   const specificGalleryTerms = terms.filter(
     (term) => !["galeria", "galerias", "fotos", "imagen", "imagenes"].includes(term)
