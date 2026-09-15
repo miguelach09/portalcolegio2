@@ -13,18 +13,20 @@ import { AdmissionsBanner } from "@/components/site/AdmissionsBanner";
 import { Reveal } from "@/components/site/Reveal";
 import { getDocuments, getGalleryImages, getNews } from "@/lib/content.functions";
 import { getLibraryBooks } from "@/lib/library.functions";
+import { getHeroSlides } from "@/lib/hero.functions";
 import { formatCOP, type LibraryBook } from "@/lib/library.types";
 
 const homeQueryOptions = queryOptions({
   queryKey: ["home"],
   queryFn: async () => {
-    const [news, interestDocs, gallery, books] = await Promise.all([
+    const [news, interestDocs, gallery, books, heroSlides] = await Promise.all([
       getNews({ data: { limit: 3 } }),
       getDocuments({ data: { category: "general", limit: 5 } }),
       getGalleryImages({ data: { limit: 6 } }),
       getLibraryBooks({ data: {} }),
+      getHeroSlides(),
     ]);
-    return { news, interestDocs, gallery, books };
+    return { news, interestDocs, gallery, books, heroSlides };
   },
 });
 
@@ -65,7 +67,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const data = Route.useLoaderData();
-  const { news = [], interestDocs = [], gallery = [], books = [] } = data || {};
+  const { news = [], interestDocs = [], gallery = [], books = [], heroSlides = [] } = data || {};
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,7 +75,7 @@ function Index() {
       <Header />
       <main>
         <h1 className="sr-only">Colegio Cafam — educación de calidad en Bogotá desde 1971</h1>
-        <HeroCarousel />
+        <HeroCarousel slides={heroSlides} />
         <Reveal>
           <QuickAccess />
         </Reveal>
