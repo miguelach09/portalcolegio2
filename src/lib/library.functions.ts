@@ -17,23 +17,47 @@ function createPublicClient() {
   );
 }
 
-async function getSignedUrl(filePath: string) {
+const SIGN_TTL_SECONDS = 60 * 60 * 24 * 7;
+const coverCache = new Map<string, { url: string; expiresAt: number }>();
+const CACHE_MS = 1000 * 60 * 60 * 6;
+
+// Firma todas las portadas en una sola llamada (antes: una petición por libro).
+async function signCovers(paths: string[]): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  const now = Date.now();
+  const missing: string[] = [];
+  for (const p of new Set(paths.filter(Boolean))) {
+    const hit = coverCache.get(p);
+    if (hit && hit.expiresAt > now) out.set(p, hit.url);
+    else missing.push(p);
+  }
+  if (missing.length === 0) return out;
+
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin.storage
     .from(BUCKET_NAME)
-    .createSignedUrl(filePath, 60 * 60 * 24 * 365);
-  if (error || !data?.signedUrl) return null;
-  return data.signedUrl;
+    .createSignedUrls(missing, SIGN_TTL_SECONDS);
+  if (error) return out;
+  for (const item of data || []) {
+    if (item.signedUrl && item.path) {
+      coverCache.set(item.path, { url: item.signedUrl, expiresAt: now + CACHE_MS });
+      out.set(item.path, item.signedUrl);
+    }
+  }
+  return out;
 }
 
 async function withCovers(rows: unknown[]): Promise<LibraryBook[]> {
-  return Promise.all(
-    (rows as LibraryBook[]).map(async (row) => ({
-      ...row,
-      cover_url: row.cover_path ? await getSignedUrl(row.cover_path) : row.cover_url,
-    }))
+  const list = rows as LibraryBook[];
+  const signed = await signCovers(
+    list.map((r) => r.cover_path).filter((p): p is string => !!p)
   );
+  return list.map((row) => ({
+    ...row,
+    cover_url: (row.cover_path ? signed.get(row.cover_path) : null) ?? row.cover_url,
+  }));
 }
+
 
 async function checkStaff(context: {
   supabase: ReturnType<typeof createClient<Database>>;
