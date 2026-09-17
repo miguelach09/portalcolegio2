@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { Upload, FileText, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { createDocument } from "@/lib/content.functions";
+import { indexSource } from "@/lib/indexing.functions";
 import { documentFormSchema } from "@/lib/content.schemas";
 import { DOCUMENT_ACCEPT, DOCUMENT_EXTENSIONS, validateFileExtension } from "@/lib/upload-rules";
 import type { DocumentArea, DocumentCategory, Grade, Period } from "@/lib/content.types";
@@ -94,7 +95,14 @@ function NewDocumentPage() {
 
       if (uploadError) throw uploadError;
 
-      await createDocument({ data: { values: parse.data, filePath: path } });
+      const created = await createDocument({ data: { values: parse.data, filePath: path } });
+      // Lectura del contenido del archivo para que el asistente pueda
+      // responder con lo que dice adentro, no solo con el título.
+      try {
+        await indexSource({ data: { source: "documents", id: created.id } });
+      } catch (indexErr) {
+        console.error("[indexado]", indexErr);
+      }
       router.navigate({ to: "/admin/documentos" });
     } catch (err: any) {
       setErrors({ submit: err.message || "Error al guardar" });

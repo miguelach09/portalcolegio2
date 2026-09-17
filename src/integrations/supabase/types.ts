@@ -128,6 +128,45 @@ export type Database = {
         }
         Relationships: []
       }
+      document_chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          page: number | null
+          source: string
+          source_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          chunk_index?: number
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          page?: number | null
+          source: string
+          source_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          page?: number | null
+          source?: string
+          source_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           area: Database["public"]["Enums"]["document_area"] | null
