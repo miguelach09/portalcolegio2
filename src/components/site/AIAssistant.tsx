@@ -15,6 +15,9 @@ import {
   Maximize2,
   Minimize2,
   GripVertical,
+  Eraser,
+  Copy,
+  Check,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { askAssistant, type AssistantLink } from "@/lib/assistant.functions";
@@ -82,8 +85,18 @@ function LinkButtons({ links }: { links: AssistantLink[] }) {
 const WELCOME: Msg = {
   role: "assistant",
   content:
-    "¡Hola! Soy el asistente virtual del Colegio Cafam. Puedo ayudarte con admisiones, circulares, plataformas, horarios y más. ¿En qué te ayudo?",
+    "¡Hola! Soy el asistente virtual del Colegio Cafam. Puedo responder con el contenido de las circulares, guías y documentos del colegio. ¿En qué te ayudo?",
 };
+
+const SUGGESTIONS = [
+  "¿Cómo es el proceso de admisiones 2027?",
+  "¿Cuál es el próximo evento del calendario?",
+  "¿Qué dice el manual de convivencia sobre el uniforme?",
+  "Guías de aprendizaje de séptimo",
+  "Libros del Plan Lector",
+];
+
+const STORAGE_KEY = "cafam-asistente-conversacion";
 
 const MIN_W = 300;
 const MIN_H = 360;
@@ -113,6 +126,52 @@ export function AIAssistant() {
   const [box, setBox] = useState<Box | null>(null);
   const [expanded, setExpanded] = useState(false);
   const prevBox = useRef<Box | null>(null);
+  const [copied, setCopied] = useState<number | null>(null);
+  const restored = useRef(false);
+
+  // La conversación se conserva al recargar la página (solo en este navegador).
+  useEffect(() => {
+    if (restored.current || typeof window === "undefined") return;
+    restored.current = true;
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Msg[];
+        if (Array.isArray(parsed) && parsed.length) setMessages(parsed);
+      }
+    } catch {
+      /* conversación no recuperable: se empieza de nuevo */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!restored.current || typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-30)));
+    } catch {
+      /* almacenamiento lleno o bloqueado */
+    }
+  }, [messages]);
+
+  function clearConversation() {
+    setMessages([WELCOME]);
+    setInput("");
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* nada por hacer */
+    }
+  }
+
+  async function copyMessage(text: string, i: number) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(i);
+      setTimeout(() => setCopied(null), 1500);
+    } catch {
+      /* el navegador bloqueó el portapapeles */
+    }
+  }
 
   // Posición/tamaño inicial: esquina inferior derecha, sobre el botón flotante.
   useEffect(() => {
@@ -275,6 +334,16 @@ export function AIAssistant() {
               <GripVertical className="h-4 w-4 opacity-60" aria-hidden="true" />
               <button
                 type="button"
+                onClick={clearConversation}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="rounded-lg p-1.5 transition-colors hover:bg-white/15"
+                aria-label="Borrar conversación"
+                title="Borrar conversación"
+              >
+                <Eraser className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
                 onClick={toggleExpand}
                 onPointerDown={(e) => e.stopPropagation()}
                 className="rounded-lg p-1.5 transition-colors hover:bg-white/15"
@@ -310,8 +379,33 @@ export function AIAssistant() {
                 {m.role === "assistant" && m.links && m.links.length > 0 && (
                   <LinkButtons links={m.links} />
                 )}
+                {m.role === "assistant" && i > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => copyMessage(m.content, i)}
+                    className="mt-1 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    aria-label="Copiar respuesta"
+                  >
+                    {copied === i ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                    {copied === i ? "Copiado" : "Copiar"}
+                  </button>
+                )}
               </Message>
             ))}
+            {messages.length <= 1 && !loading && (
+              <div className="flex flex-wrap gap-2">
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => handleSend(s)}
+                    className="rounded-full border border-primary/30 bg-card px-3 py-1.5 text-left text-xs font-medium text-foreground transition-colors hover:border-primary hover:bg-muted"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
             {loading && (
               <div className="flex justify-start">
                 <div className="flex items-center gap-2 rounded-2xl bg-muted px-3.5 py-2 text-sm text-muted-foreground">

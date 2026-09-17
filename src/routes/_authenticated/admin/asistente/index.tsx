@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { ArrowLeft, Bot, Trash2, Pencil, Paperclip, X } from "lucide-react";
+import { ArrowLeft, Bot, Trash2, Pencil, Paperclip, X, BookOpenCheck, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   getAllKnowledge,
@@ -10,6 +10,7 @@ import {
   deleteKnowledge,
   type KnowledgeEntry,
 } from "@/lib/knowledge.functions";
+import { getIndexStatus, indexSource, reindexPending, type IndexReport } from "@/lib/indexing.functions";
 import { KNOWLEDGE_ACCEPT, KNOWLEDGE_EXTENSIONS, validateFileExtension } from "@/lib/upload-rules";
 
 export const Route = createFileRoute("/_authenticated/admin/asistente/")({
@@ -32,16 +33,51 @@ function AdminAsistente() {
   const fetchAll = useServerFn(getAllKnowledge);
   const save = useServerFn(saveKnowledge);
   const remove = useServerFn(deleteKnowledge);
+  const index = useServerFn(indexSource);
+  const reindex = useServerFn(reindexPending);
+  const fetchStatus = useServerFn(getIndexStatus);
 
   const { data: entries = [], isLoading } = useQuery({
     queryKey: ["admin-knowledge"],
     queryFn: () => fetchAll(),
+  });
+  const { data: status } = useQuery({
+    queryKey: ["index-status"],
+    queryFn: () => fetchStatus(),
   });
 
   const [form, setForm] = useState(emptyForm());
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [indexing, setIndexing] = useState(false);
+  const [report, setReport] = useState<IndexReport | null>(null);
+
+  async function handleReindex() {
+    setIndexing(true);
+    setReport(null);
+    try {
+      let acc: IndexReport = { total: 0, indexed: 0, failed: 0, remaining: 0, problems: [] };
+      // Se procesa por lotes para no exceder el tiempo de una sola petición.
+      for (let round = 0; round < 12; round += 1) {
+        const r = await reindex({ data: { limit: 6 } });
+        acc = {
+          total: Math.max(acc.total, r.total),
+          indexed: acc.indexed + r.indexed,
+          failed: acc.failed + r.failed,
+          remaining: r.remaining,
+          problems: [...acc.problems, ...r.problems].slice(0, 20),
+        };
+        setReport(acc);
+        if (r.remaining === 0) break;
+      }
+      await queryClient.invalidateQueries({ queryKey: ["index-status"] });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo indexar.");
+    } finally {
+      setIndexing(false);
+    }
+  }
 
   function startEdit(k: KnowledgeEntry) {
     setForm({
@@ -71,7 +107,7 @@ function AdminAsistente() {
           .upload(filePath, file, { contentType: file.type || "application/pdf" });
         if (upErr) throw upErr;
       }
-      await save({
+      const saved = await save({
         data: {
           values: {
             ...(form.id ? { id: form.id } : {}),
@@ -84,9 +120,16 @@ function AdminAsistente() {
           filePath,
         },
       });
+      try {
+        const result = await index({ data: { source: "assistant_knowledge", id: saved.id } });
+        if (!result.ok && result.reason) setError(`Guardado. Aviso: ${result.reason}`);
+      } catch (indexErr) {
+        console.error("[indexado]", indexErr);
+      }
       setForm(emptyForm());
       setFile(null);
       await queryClient.invalidateQueries({ queryKey: ["admin-knowledge"] });
+      await queryClient.invalidateQueries({ queryKey: ["index-status"] });
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "No se pudo guardar la información."
@@ -129,10 +172,58 @@ function AdminAsistente() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
           Agrega información oficial (protocolos, horarios, costos, respuestas
           frecuentes, comunicados) y el asistente la usará para responder de
-          inmediato. Si adjuntas un documento, el asistente ofrecerá un botón
-          para descargarlo; escribe también en el texto lo más importante del
-          documento para que pueda responder con su contenido.
+          inmediato. Si adjuntas un documento en PDF o Excel, el asistente lee
+          su contenido automáticamente y puede responder con lo que dice adentro.
         </p>
+
+        <section className="mt-6 max-w-3xl rounded-xl border border-border bg-card p-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h2 className="inline-flex items-center gap-2 text-lg font-semibold text-foreground">
+                <BookOpenCheck className="h-5 w-5 text-primary" /> Lectura de documentos
+              </h2>
+              <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+                {status
+                  ? `El asistente ya leyó ${status.readable} de ${status.totalFiles} archivos (${status.totalChunks} fragmentos de texto).`
+                  : "Consultando el estado de los archivos…"}
+                {status && status.pending > 0
+                  ? ` Quedan ${status.pending} por leer.`
+                  : status
+                    ? " Todo está al día."
+                    : ""}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleReindex}
+              disabled={indexing}
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+            >
+              {indexing && <Loader2 className="h-4 w-4 animate-spin" />}
+              {indexing ? "Leyendo archivos…" : "Indexar documentos existentes"}
+            </button>
+          </div>
+
+          {report && (
+            <div className="mt-4 rounded-lg bg-muted p-4 text-sm">
+              <p className="font-medium text-foreground">
+                Leídos: {report.indexed} · Sin texto legible: {report.failed}
+                {report.remaining > 0 ? ` · Pendientes: ${report.remaining}` : ""}
+              </p>
+              {report.problems.length > 0 && (
+                <ul className="mt-2 space-y-1 text-muted-foreground">
+                  {report.problems.map((p, i) => (
+                    <li key={i}>
+                      <span className="font-medium text-foreground">{p.title}:</span> {p.reason}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </section>
+
+
 
         <form
           onSubmit={handleSubmit}
