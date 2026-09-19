@@ -113,7 +113,7 @@ export const reindexPending = createServerFn({ method: "POST" })
       jobs.push({ source: "documents", id: d.id, title: d.title, filePath: d.file_path, isActive: d.is_active });
     }
     for (const k of knowledge || []) {
-      if (done.has(`assistant_knowledge:${k.id}`)) continue;
+      if (done.has(`assistant_knowledge:${k.id}`) || skipped.has(`assistant_knowledge:${k.id}`)) continue;
       if (!k.file_path && !(k.content || "").trim()) continue;
       jobs.push({
         source: "assistant_knowledge",
