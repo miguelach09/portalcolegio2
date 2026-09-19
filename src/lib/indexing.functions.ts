@@ -21,6 +21,8 @@ export type IndexReport = {
   failed: number;
   remaining: number;
   problems: { title: string; reason: string }[];
+  /** Claves "fuente:id" que no se pudieron leer; el panel las omite en las siguientes rondas. */
+  failedKeys: string[];
 };
 
 /** Indexa un archivo puntual (se llama al subir o editar). */
