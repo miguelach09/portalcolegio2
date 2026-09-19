@@ -94,6 +94,8 @@ export const reindexPending = createServerFn({ method: "POST" })
     ]);
 
     const done = new Set((chunks || []).map((c) => `${c.source}:${c.source_id}`));
+    // Los archivos que ya fallaron en esta sesión se omiten para no bloquear el lote.
+    const skipped = new Set(data.skip);
 
     type Job = {
       source: "documents" | "assistant_knowledge";
