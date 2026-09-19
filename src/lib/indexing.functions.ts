@@ -69,8 +69,9 @@ export const indexSource = createServerFn({ method: "POST" })
 /** Indexa por lotes los archivos que aún no tienen texto guardado. */
 export const reindexPending = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { limit?: number } = {}) => ({
+  .inputValidator((input: { limit?: number; skip?: string[] } = {}) => ({
     limit: Math.min(Math.max(input.limit ?? 8, 1), 15),
+    skip: Array.isArray(input.skip) ? input.skip.slice(0, 2000) : [],
   }))
   .handler(async ({ data, context }): Promise<IndexReport> => {
     await checkStaff(context);
