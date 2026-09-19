@@ -129,6 +129,7 @@ export const reindexPending = createServerFn({ method: "POST" })
     let indexed = 0;
     let failed = 0;
     const problems: { title: string; reason: string }[] = [];
+    const failedKeys: string[] = [];
 
     for (const job of batch) {
       const result = await indexFile({
@@ -142,6 +143,7 @@ export const reindexPending = createServerFn({ method: "POST" })
       if (result.ok) indexed += 1;
       else {
         failed += 1;
+        failedKeys.push(`${job.source}:${job.id}`);
         problems.push({ title: job.title, reason: result.reason ?? "No se pudo leer." });
       }
     }
@@ -152,6 +154,7 @@ export const reindexPending = createServerFn({ method: "POST" })
       failed,
       remaining: Math.max(jobs.length - batch.length, 0),
       problems,
+      failedKeys,
     };
   });
 
