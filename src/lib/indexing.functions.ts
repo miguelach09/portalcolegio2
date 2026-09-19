@@ -21,6 +21,8 @@ export type IndexReport = {
   failed: number;
   remaining: number;
   problems: { title: string; reason: string }[];
+  /** Claves "fuente:id" que no se pudieron leer; el panel las omite en las siguientes rondas. */
+  failedKeys: string[];
 };
 
 /** Indexa un archivo puntual (se llama al subir o editar). */
@@ -67,8 +69,9 @@ export const indexSource = createServerFn({ method: "POST" })
 /** Indexa por lotes los archivos que aún no tienen texto guardado. */
 export const reindexPending = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { limit?: number } = {}) => ({
+  .inputValidator((input: { limit?: number; skip?: string[] } = {}) => ({
     limit: Math.min(Math.max(input.limit ?? 8, 1), 15),
+    skip: Array.isArray(input.skip) ? input.skip.slice(0, 2000) : [],
   }))
   .handler(async ({ data, context }): Promise<IndexReport> => {
     await checkStaff(context);
@@ -91,6 +94,8 @@ export const reindexPending = createServerFn({ method: "POST" })
     ]);
 
     const done = new Set((chunks || []).map((c) => `${c.source}:${c.source_id}`));
+    // Los archivos que ya fallaron en esta sesión se omiten para no bloquear el lote.
+    const skipped = new Set(data.skip);
 
     type Job = {
       source: "documents" | "assistant_knowledge";
@@ -104,11 +109,11 @@ export const reindexPending = createServerFn({ method: "POST" })
     const jobs: Job[] = [];
     for (const d of docs || []) {
       if (!d.file_path) continue;
-      if (done.has(`documents:${d.id}`)) continue;
+      if (done.has(`documents:${d.id}`) || skipped.has(`documents:${d.id}`)) continue;
       jobs.push({ source: "documents", id: d.id, title: d.title, filePath: d.file_path, isActive: d.is_active });
     }
     for (const k of knowledge || []) {
-      if (done.has(`assistant_knowledge:${k.id}`)) continue;
+      if (done.has(`assistant_knowledge:${k.id}`) || skipped.has(`assistant_knowledge:${k.id}`)) continue;
       if (!k.file_path && !(k.content || "").trim()) continue;
       jobs.push({
         source: "assistant_knowledge",
@@ -124,6 +129,7 @@ export const reindexPending = createServerFn({ method: "POST" })
     let indexed = 0;
     let failed = 0;
     const problems: { title: string; reason: string }[] = [];
+    const failedKeys: string[] = [];
 
     for (const job of batch) {
       const result = await indexFile({
@@ -137,6 +143,7 @@ export const reindexPending = createServerFn({ method: "POST" })
       if (result.ok) indexed += 1;
       else {
         failed += 1;
+        failedKeys.push(`${job.source}:${job.id}`);
         problems.push({ title: job.title, reason: result.reason ?? "No se pudo leer." });
       }
     }
@@ -147,6 +154,7 @@ export const reindexPending = createServerFn({ method: "POST" })
       failed,
       remaining: Math.max(jobs.length - batch.length, 0),
       problems,
+      failedKeys,
     };
   });
 
