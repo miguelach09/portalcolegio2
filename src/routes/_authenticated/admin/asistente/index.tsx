@@ -57,19 +57,23 @@ function AdminAsistente() {
     setIndexing(true);
     setReport(null);
     try {
-      let acc: IndexReport = { total: 0, indexed: 0, failed: 0, remaining: 0, problems: [] };
+      let acc: IndexReport = { total: 0, indexed: 0, failed: 0, remaining: 0, problems: [], failedKeys: [] };
       // Se procesa por lotes para no exceder el tiempo de una sola petición.
+      // Los archivos ilegibles se omiten en las rondas siguientes para no bloquear el resto.
+      const skip: string[] = [];
       for (let round = 0; round < 12; round += 1) {
-        const r = await reindex({ data: { limit: 6 } });
+        const r = await reindex({ data: { limit: 6, skip } });
+        skip.push(...r.failedKeys);
         acc = {
-          total: Math.max(acc.total, r.total),
+          total: Math.max(acc.total, r.total + skip.length - r.failedKeys.length),
           indexed: acc.indexed + r.indexed,
           failed: acc.failed + r.failed,
           remaining: r.remaining,
           problems: [...acc.problems, ...r.problems].slice(0, 20),
+          failedKeys: skip,
         };
         setReport(acc);
-        if (r.remaining === 0) break;
+        if (r.remaining === 0 || r.total === 0) break;
       }
       await queryClient.invalidateQueries({ queryKey: ["index-status"] });
     } catch (err) {
