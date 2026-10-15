@@ -617,6 +617,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      search_document_chunks: {
+        Args: { max_rows?: number; q: string }
+        Returns: {
+          content: string
+          page: number
+          title: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "editor" | "familia"
