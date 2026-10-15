@@ -396,12 +396,9 @@ async function findPassages(query: string): Promise<AssistantPassage[]> {
 
   const supabase = createPublicClient();
   const search = terms.join(" or ");
-  const { data, error } = await supabase
-    .from("document_chunks")
-    .select("title, page, content")
-    .eq("is_active", true)
-    .textSearch("content", search, { type: "websearch", config: "spanish" })
-    .limit(24);
+  // Ordenado por relevancia en la base de datos: sin esto, términos comunes
+  // ("circular", "jornada") llenan el cupo y el documento correcto queda fuera.
+  const { data, error } = await supabase.rpc("search_document_chunks", { q: search, max_rows: 24 });
 
   if (error) {
     console.error("[assistant] passage search failed:", error.message);
