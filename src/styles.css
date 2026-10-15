@@ -5,9 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Cafam Colegio design system.
- * Institutional Cafam blue with fresh accents. All colors in oklch.
- */
+ * Portal Colegio Cafam design system.
+ * Exact palette from portalcolegio.com: blue #0369BB, green #60b001,
+ * orange #FF9900, gold #FEAC00, gray text #555555. All colors in oklch.
+  */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
