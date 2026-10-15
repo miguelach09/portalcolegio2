@@ -9,98 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MiColegioRouteImport } from './routes/mi-colegio'
-import { Route as HerramientasRouteImport } from './routes/herramientas'
-import { Route as GuiasRouteImport } from './routes/guias'
-import { Route as GaleriaRouteImport } from './routes/galeria'
-import { Route as FaqRouteImport } from './routes/faq'
-import { Route as CreRouteImport } from './routes/cre'
-import { Route as ContactoRouteImport } from './routes/contacto'
-import { Route as CircularesRouteImport } from './routes/circulares'
-import { Route as CalendarioRouteImport } from './routes/calendario'
-import { Route as BienestarRouteImport } from './routes/bienestar'
-import { Route as BibliotecaRouteImport } from './routes/biblioteca'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AdmisionesRouteImport } from './routes/admisiones'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AdmisionesRouteImport } from './routes/admisiones'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as BienestarRouteImport } from './routes/bienestar'
+import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as CircularesRouteImport } from './routes/circulares'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CreRouteImport } from './routes/cre'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as GuiasRouteImport } from './routes/guias'
+import { Route as HerramientasRouteImport } from './routes/herramientas'
+import { Route as MiColegioRouteImport } from './routes/mi-colegio'
 import { Route as NoticiasIdRouteImport } from './routes/noticias.$id'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
-import { Route as AuthenticatedAdminSuscriptoresIndexRouteImport } from './routes/_authenticated/admin/suscriptores/index'
-import { Route as AuthenticatedAdminPreinscripcionesIndexRouteImport } from './routes/_authenticated/admin/preinscripciones/index'
-import { Route as AuthenticatedAdminNoticiasIndexRouteImport } from './routes/_authenticated/admin/noticias/index'
-import { Route as AuthenticatedAdminMensajesIndexRouteImport } from './routes/_authenticated/admin/mensajes/index'
-import { Route as AuthenticatedAdminLibrosIndexRouteImport } from './routes/_authenticated/admin/libros/index'
-import { Route as AuthenticatedAdminHistorialIndexRouteImport } from './routes/_authenticated/admin/historial/index'
-import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_authenticated/admin/galeria/index'
-import { Route as AuthenticatedAdminFaqsIndexRouteImport } from './routes/_authenticated/admin/faqs/index'
-import { Route as AuthenticatedAdminEventosIndexRouteImport } from './routes/_authenticated/admin/eventos/index'
-import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/_authenticated/admin/documentos/index'
-import { Route as AuthenticatedAdminCarruselIndexRouteImport } from './routes/_authenticated/admin/carrusel/index'
-import { Route as AuthenticatedAdminAvisosIndexRouteImport } from './routes/_authenticated/admin/avisos/index'
 import { Route as AuthenticatedAdminAsistenteIndexRouteImport } from './routes/_authenticated/admin/asistente/index'
-import { Route as AuthenticatedAdminNoticiasNuevaRouteImport } from './routes/_authenticated/admin/noticias/nueva'
-import { Route as AuthenticatedAdminGaleriaNuevaRouteImport } from './routes/_authenticated/admin/galeria/nueva'
+import { Route as AuthenticatedAdminAvisosIndexRouteImport } from './routes/_authenticated/admin/avisos/index'
+import { Route as AuthenticatedAdminCarruselIndexRouteImport } from './routes/_authenticated/admin/carrusel/index'
+import { Route as AuthenticatedAdminDocumentosIndexRouteImport } from './routes/_authenticated/admin/documentos/index'
 import { Route as AuthenticatedAdminDocumentosNuevoRouteImport } from './routes/_authenticated/admin/documentos/nuevo'
+import { Route as AuthenticatedAdminEventosIndexRouteImport } from './routes/_authenticated/admin/eventos/index'
+import { Route as AuthenticatedAdminFaqsIndexRouteImport } from './routes/_authenticated/admin/faqs/index'
+import { Route as AuthenticatedAdminGaleriaIndexRouteImport } from './routes/_authenticated/admin/galeria/index'
+import { Route as AuthenticatedAdminGaleriaNuevaRouteImport } from './routes/_authenticated/admin/galeria/nueva'
+import { Route as AuthenticatedAdminHistorialIndexRouteImport } from './routes/_authenticated/admin/historial/index'
+import { Route as AuthenticatedAdminLibrosIndexRouteImport } from './routes/_authenticated/admin/libros/index'
+import { Route as AuthenticatedAdminMensajesIndexRouteImport } from './routes/_authenticated/admin/mensajes/index'
+import { Route as AuthenticatedAdminNoticiasIndexRouteImport } from './routes/_authenticated/admin/noticias/index'
+import { Route as AuthenticatedAdminNoticiasNuevaRouteImport } from './routes/_authenticated/admin/noticias/nueva'
+import { Route as AuthenticatedAdminPreinscripcionesIndexRouteImport } from './routes/_authenticated/admin/preinscripciones/index'
+import { Route as AuthenticatedAdminSuscriptoresIndexRouteImport } from './routes/_authenticated/admin/suscriptores/index'
 
-const MiColegioRoute = MiColegioRouteImport.update({
-  id: '/mi-colegio',
-  path: '/mi-colegio',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HerramientasRoute = HerramientasRouteImport.update({
-  id: '/herramientas',
-  path: '/herramientas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GuiasRoute = GuiasRouteImport.update({
-  id: '/guias',
-  path: '/guias',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GaleriaRoute = GaleriaRouteImport.update({
-  id: '/galeria',
-  path: '/galeria',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CreRoute = CreRouteImport.update({
-  id: '/cre',
-  path: '/cre',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactoRoute = ContactoRouteImport.update({
-  id: '/contacto',
-  path: '/contacto',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CircularesRoute = CircularesRouteImport.update({
-  id: '/circulares',
-  path: '/circulares',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CalendarioRoute = CalendarioRouteImport.update({
-  id: '/calendario',
-  path: '/calendario',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BienestarRoute = BienestarRouteImport.update({
-  id: '/bienestar',
-  path: '/bienestar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BibliotecaRoute = BibliotecaRouteImport.update({
-  id: '/biblioteca',
-  path: '/biblioteca',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdmisionesRoute = AdmisionesRouteImport.update({
@@ -108,13 +57,64 @@ const AdmisionesRoute = AdmisionesRouteImport.update({
   path: '/admisiones',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BienestarRoute = BienestarRouteImport.update({
+  id: '/bienestar',
+  path: '/bienestar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarioRoute = CalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CircularesRoute = CircularesRouteImport.update({
+  id: '/circulares',
+  path: '/circulares',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreRoute = CreRouteImport.update({
+  id: '/cre',
+  path: '/cre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaleriaRoute = GaleriaRouteImport.update({
+  id: '/galeria',
+  path: '/galeria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuiasRoute = GuiasRouteImport.update({
+  id: '/guias',
+  path: '/guias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HerramientasRoute = HerramientasRouteImport.update({
+  id: '/herramientas',
+  path: '/herramientas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MiColegioRoute = MiColegioRouteImport.update({
+  id: '/mi-colegio',
+  path: '/mi-colegio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NoticiasIdRoute = NoticiasIdRouteImport.update({
@@ -127,70 +127,10 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedAdminSuscriptoresIndexRoute =
-  AuthenticatedAdminSuscriptoresIndexRouteImport.update({
-    id: '/admin/suscriptores/',
-    path: '/admin/suscriptores/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminPreinscripcionesIndexRoute =
-  AuthenticatedAdminPreinscripcionesIndexRouteImport.update({
-    id: '/admin/preinscripciones/',
-    path: '/admin/preinscripciones/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminNoticiasIndexRoute =
-  AuthenticatedAdminNoticiasIndexRouteImport.update({
-    id: '/admin/noticias/',
-    path: '/admin/noticias/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminMensajesIndexRoute =
-  AuthenticatedAdminMensajesIndexRouteImport.update({
-    id: '/admin/mensajes/',
-    path: '/admin/mensajes/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminLibrosIndexRoute =
-  AuthenticatedAdminLibrosIndexRouteImport.update({
-    id: '/admin/libros/',
-    path: '/admin/libros/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminHistorialIndexRoute =
-  AuthenticatedAdminHistorialIndexRouteImport.update({
-    id: '/admin/historial/',
-    path: '/admin/historial/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminGaleriaIndexRoute =
-  AuthenticatedAdminGaleriaIndexRouteImport.update({
-    id: '/admin/galeria/',
-    path: '/admin/galeria/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminFaqsIndexRoute =
-  AuthenticatedAdminFaqsIndexRouteImport.update({
-    id: '/admin/faqs/',
-    path: '/admin/faqs/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminEventosIndexRoute =
-  AuthenticatedAdminEventosIndexRouteImport.update({
-    id: '/admin/eventos/',
-    path: '/admin/eventos/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminDocumentosIndexRoute =
-  AuthenticatedAdminDocumentosIndexRouteImport.update({
-    id: '/admin/documentos/',
-    path: '/admin/documentos/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminCarruselIndexRoute =
-  AuthenticatedAdminCarruselIndexRouteImport.update({
-    id: '/admin/carrusel/',
-    path: '/admin/carrusel/',
+const AuthenticatedAdminAsistenteIndexRoute =
+  AuthenticatedAdminAsistenteIndexRouteImport.update({
+    id: '/admin/asistente/',
+    path: '/admin/asistente/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminAvisosIndexRoute =
@@ -199,16 +139,40 @@ const AuthenticatedAdminAvisosIndexRoute =
     path: '/admin/avisos/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminAsistenteIndexRoute =
-  AuthenticatedAdminAsistenteIndexRouteImport.update({
-    id: '/admin/asistente/',
-    path: '/admin/asistente/',
+const AuthenticatedAdminCarruselIndexRoute =
+  AuthenticatedAdminCarruselIndexRouteImport.update({
+    id: '/admin/carrusel/',
+    path: '/admin/carrusel/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminNoticiasNuevaRoute =
-  AuthenticatedAdminNoticiasNuevaRouteImport.update({
-    id: '/admin/noticias/nueva',
-    path: '/admin/noticias/nueva',
+const AuthenticatedAdminDocumentosIndexRoute =
+  AuthenticatedAdminDocumentosIndexRouteImport.update({
+    id: '/admin/documentos/',
+    path: '/admin/documentos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminDocumentosNuevoRoute =
+  AuthenticatedAdminDocumentosNuevoRouteImport.update({
+    id: '/admin/documentos/nuevo',
+    path: '/admin/documentos/nuevo',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminEventosIndexRoute =
+  AuthenticatedAdminEventosIndexRouteImport.update({
+    id: '/admin/eventos/',
+    path: '/admin/eventos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminFaqsIndexRoute =
+  AuthenticatedAdminFaqsIndexRouteImport.update({
+    id: '/admin/faqs/',
+    path: '/admin/faqs/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminGaleriaIndexRoute =
+  AuthenticatedAdminGaleriaIndexRouteImport.update({
+    id: '/admin/galeria/',
+    path: '/admin/galeria/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminGaleriaNuevaRoute =
@@ -217,10 +181,46 @@ const AuthenticatedAdminGaleriaNuevaRoute =
     path: '/admin/galeria/nueva',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminDocumentosNuevoRoute =
-  AuthenticatedAdminDocumentosNuevoRouteImport.update({
-    id: '/admin/documentos/nuevo',
-    path: '/admin/documentos/nuevo',
+const AuthenticatedAdminHistorialIndexRoute =
+  AuthenticatedAdminHistorialIndexRouteImport.update({
+    id: '/admin/historial/',
+    path: '/admin/historial/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminLibrosIndexRoute =
+  AuthenticatedAdminLibrosIndexRouteImport.update({
+    id: '/admin/libros/',
+    path: '/admin/libros/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminMensajesIndexRoute =
+  AuthenticatedAdminMensajesIndexRouteImport.update({
+    id: '/admin/mensajes/',
+    path: '/admin/mensajes/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminNoticiasIndexRoute =
+  AuthenticatedAdminNoticiasIndexRouteImport.update({
+    id: '/admin/noticias/',
+    path: '/admin/noticias/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminNoticiasNuevaRoute =
+  AuthenticatedAdminNoticiasNuevaRouteImport.update({
+    id: '/admin/noticias/nueva',
+    path: '/admin/noticias/nueva',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminPreinscripcionesIndexRoute =
+  AuthenticatedAdminPreinscripcionesIndexRouteImport.update({
+    id: '/admin/preinscripciones/',
+    path: '/admin/preinscripciones/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSuscriptoresIndexRoute =
+  AuthenticatedAdminSuscriptoresIndexRouteImport.update({
+    id: '/admin/suscriptores/',
+    path: '/admin/suscriptores/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -455,95 +455,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/mi-colegio': {
-      id: '/mi-colegio'
-      path: '/mi-colegio'
-      fullPath: '/mi-colegio'
-      preLoaderRoute: typeof MiColegioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/herramientas': {
-      id: '/herramientas'
-      path: '/herramientas'
-      fullPath: '/herramientas'
-      preLoaderRoute: typeof HerramientasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/guias': {
-      id: '/guias'
-      path: '/guias'
-      fullPath: '/guias'
-      preLoaderRoute: typeof GuiasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/galeria': {
-      id: '/galeria'
-      path: '/galeria'
-      fullPath: '/galeria'
-      preLoaderRoute: typeof GaleriaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cre': {
-      id: '/cre'
-      path: '/cre'
-      fullPath: '/cre'
-      preLoaderRoute: typeof CreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contacto': {
-      id: '/contacto'
-      path: '/contacto'
-      fullPath: '/contacto'
-      preLoaderRoute: typeof ContactoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/circulares': {
-      id: '/circulares'
-      path: '/circulares'
-      fullPath: '/circulares'
-      preLoaderRoute: typeof CircularesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calendario': {
-      id: '/calendario'
-      path: '/calendario'
-      fullPath: '/calendario'
-      preLoaderRoute: typeof CalendarioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bienestar': {
-      id: '/bienestar'
-      path: '/bienestar'
-      fullPath: '/bienestar'
-      preLoaderRoute: typeof BienestarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/biblioteca': {
-      id: '/biblioteca'
-      path: '/biblioteca'
-      fullPath: '/biblioteca'
-      preLoaderRoute: typeof BibliotecaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admisiones': {
-      id: '/admisiones'
-      path: '/admisiones'
-      fullPath: '/admisiones'
-      preLoaderRoute: typeof AdmisionesRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -553,11 +469,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/admisiones': {
+      id: '/admisiones'
+      path: '/admisiones'
+      fullPath: '/admisiones'
+      preLoaderRoute: typeof AdmisionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bienestar': {
+      id: '/bienestar'
+      path: '/bienestar'
+      fullPath: '/bienestar'
+      preLoaderRoute: typeof BienestarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendario': {
+      id: '/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof CalendarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/circulares': {
+      id: '/circulares'
+      path: '/circulares'
+      fullPath: '/circulares'
+      preLoaderRoute: typeof CircularesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cre': {
+      id: '/cre'
+      path: '/cre'
+      fullPath: '/cre'
+      preLoaderRoute: typeof CreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galeria': {
+      id: '/galeria'
+      path: '/galeria'
+      fullPath: '/galeria'
+      preLoaderRoute: typeof GaleriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guias': {
+      id: '/guias'
+      path: '/guias'
+      fullPath: '/guias'
+      preLoaderRoute: typeof GuiasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/herramientas': {
+      id: '/herramientas'
+      path: '/herramientas'
+      fullPath: '/herramientas'
+      preLoaderRoute: typeof HerramientasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mi-colegio': {
+      id: '/mi-colegio'
+      path: '/mi-colegio'
+      fullPath: '/mi-colegio'
+      preLoaderRoute: typeof MiColegioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/noticias/$id': {
@@ -574,81 +574,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/suscriptores/': {
-      id: '/_authenticated/admin/suscriptores/'
-      path: '/admin/suscriptores'
-      fullPath: '/admin/suscriptores/'
-      preLoaderRoute: typeof AuthenticatedAdminSuscriptoresIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/preinscripciones/': {
-      id: '/_authenticated/admin/preinscripciones/'
-      path: '/admin/preinscripciones'
-      fullPath: '/admin/preinscripciones/'
-      preLoaderRoute: typeof AuthenticatedAdminPreinscripcionesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/noticias/': {
-      id: '/_authenticated/admin/noticias/'
-      path: '/admin/noticias'
-      fullPath: '/admin/noticias/'
-      preLoaderRoute: typeof AuthenticatedAdminNoticiasIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/mensajes/': {
-      id: '/_authenticated/admin/mensajes/'
-      path: '/admin/mensajes'
-      fullPath: '/admin/mensajes/'
-      preLoaderRoute: typeof AuthenticatedAdminMensajesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/libros/': {
-      id: '/_authenticated/admin/libros/'
-      path: '/admin/libros'
-      fullPath: '/admin/libros/'
-      preLoaderRoute: typeof AuthenticatedAdminLibrosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/historial/': {
-      id: '/_authenticated/admin/historial/'
-      path: '/admin/historial'
-      fullPath: '/admin/historial/'
-      preLoaderRoute: typeof AuthenticatedAdminHistorialIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/galeria/': {
-      id: '/_authenticated/admin/galeria/'
-      path: '/admin/galeria'
-      fullPath: '/admin/galeria/'
-      preLoaderRoute: typeof AuthenticatedAdminGaleriaIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/faqs/': {
-      id: '/_authenticated/admin/faqs/'
-      path: '/admin/faqs'
-      fullPath: '/admin/faqs/'
-      preLoaderRoute: typeof AuthenticatedAdminFaqsIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/eventos/': {
-      id: '/_authenticated/admin/eventos/'
-      path: '/admin/eventos'
-      fullPath: '/admin/eventos/'
-      preLoaderRoute: typeof AuthenticatedAdminEventosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/documentos/': {
-      id: '/_authenticated/admin/documentos/'
-      path: '/admin/documentos'
-      fullPath: '/admin/documentos/'
-      preLoaderRoute: typeof AuthenticatedAdminDocumentosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/carrusel/': {
-      id: '/_authenticated/admin/carrusel/'
-      path: '/admin/carrusel'
-      fullPath: '/admin/carrusel/'
-      preLoaderRoute: typeof AuthenticatedAdminCarruselIndexRouteImport
+    '/_authenticated/admin/asistente/': {
+      id: '/_authenticated/admin/asistente/'
+      path: '/admin/asistente'
+      fullPath: '/admin/asistente/'
+      preLoaderRoute: typeof AuthenticatedAdminAsistenteIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/avisos/': {
@@ -658,18 +588,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAvisosIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/asistente/': {
-      id: '/_authenticated/admin/asistente/'
-      path: '/admin/asistente'
-      fullPath: '/admin/asistente/'
-      preLoaderRoute: typeof AuthenticatedAdminAsistenteIndexRouteImport
+    '/_authenticated/admin/carrusel/': {
+      id: '/_authenticated/admin/carrusel/'
+      path: '/admin/carrusel'
+      fullPath: '/admin/carrusel/'
+      preLoaderRoute: typeof AuthenticatedAdminCarruselIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/noticias/nueva': {
-      id: '/_authenticated/admin/noticias/nueva'
-      path: '/admin/noticias/nueva'
-      fullPath: '/admin/noticias/nueva'
-      preLoaderRoute: typeof AuthenticatedAdminNoticiasNuevaRouteImport
+    '/_authenticated/admin/documentos/': {
+      id: '/_authenticated/admin/documentos/'
+      path: '/admin/documentos'
+      fullPath: '/admin/documentos/'
+      preLoaderRoute: typeof AuthenticatedAdminDocumentosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/documentos/nuevo': {
+      id: '/_authenticated/admin/documentos/nuevo'
+      path: '/admin/documentos/nuevo'
+      fullPath: '/admin/documentos/nuevo'
+      preLoaderRoute: typeof AuthenticatedAdminDocumentosNuevoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/eventos/': {
+      id: '/_authenticated/admin/eventos/'
+      path: '/admin/eventos'
+      fullPath: '/admin/eventos/'
+      preLoaderRoute: typeof AuthenticatedAdminEventosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/faqs/': {
+      id: '/_authenticated/admin/faqs/'
+      path: '/admin/faqs'
+      fullPath: '/admin/faqs/'
+      preLoaderRoute: typeof AuthenticatedAdminFaqsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/galeria/': {
+      id: '/_authenticated/admin/galeria/'
+      path: '/admin/galeria'
+      fullPath: '/admin/galeria/'
+      preLoaderRoute: typeof AuthenticatedAdminGaleriaIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/galeria/nueva': {
@@ -679,11 +637,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminGaleriaNuevaRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/documentos/nuevo': {
-      id: '/_authenticated/admin/documentos/nuevo'
-      path: '/admin/documentos/nuevo'
-      fullPath: '/admin/documentos/nuevo'
-      preLoaderRoute: typeof AuthenticatedAdminDocumentosNuevoRouteImport
+    '/_authenticated/admin/historial/': {
+      id: '/_authenticated/admin/historial/'
+      path: '/admin/historial'
+      fullPath: '/admin/historial/'
+      preLoaderRoute: typeof AuthenticatedAdminHistorialIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/libros/': {
+      id: '/_authenticated/admin/libros/'
+      path: '/admin/libros'
+      fullPath: '/admin/libros/'
+      preLoaderRoute: typeof AuthenticatedAdminLibrosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/mensajes/': {
+      id: '/_authenticated/admin/mensajes/'
+      path: '/admin/mensajes'
+      fullPath: '/admin/mensajes/'
+      preLoaderRoute: typeof AuthenticatedAdminMensajesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/noticias/': {
+      id: '/_authenticated/admin/noticias/'
+      path: '/admin/noticias'
+      fullPath: '/admin/noticias/'
+      preLoaderRoute: typeof AuthenticatedAdminNoticiasIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/noticias/nueva': {
+      id: '/_authenticated/admin/noticias/nueva'
+      path: '/admin/noticias/nueva'
+      fullPath: '/admin/noticias/nueva'
+      preLoaderRoute: typeof AuthenticatedAdminNoticiasNuevaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/preinscripciones/': {
+      id: '/_authenticated/admin/preinscripciones/'
+      path: '/admin/preinscripciones'
+      fullPath: '/admin/preinscripciones/'
+      preLoaderRoute: typeof AuthenticatedAdminPreinscripcionesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/suscriptores/': {
+      id: '/_authenticated/admin/suscriptores/'
+      path: '/admin/suscriptores'
+      fullPath: '/admin/suscriptores/'
+      preLoaderRoute: typeof AuthenticatedAdminSuscriptoresIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
