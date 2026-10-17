@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
@@ -116,6 +116,9 @@ function Admisiones() {
             <a href="#preinscripcion" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-primary">
               Iniciar preinscripción
             </a>
+            <Link to="/estado-admision" className="mt-3 block text-sm font-semibold text-white/90 underline-offset-4 hover:underline">
+              Ya me preinscribí: consultar estado y agendar entrevista →
+            </Link>
           </div>
         </div>
 

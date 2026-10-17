@@ -36,7 +36,9 @@ export const submitAdmissionApplication = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const supabase = createPublicClient();
     const v = data.values;
+    const trackingCode = crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase();
     const { error } = await supabase.from("admission_applications").insert({
+      tracking_code: trackingCode,
       student_name: v.student_name,
       birth_date: v.birth_date ? v.birth_date : null,
       grade: v.grade,
@@ -52,7 +54,7 @@ export const submitAdmissionApplication = createServerFn({ method: "POST" })
       console.error("Error saving admission application:", error);
       throw new Error("No pudimos guardar la preinscripción");
     }
-    return { ok: true };
+    return { ok: true, trackingCode };
   });
 
 // Staff: gestionar preinscripciones

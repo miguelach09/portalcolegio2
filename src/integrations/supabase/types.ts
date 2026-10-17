@@ -27,6 +27,7 @@ export type Database = {
           previous_school: string | null
           status: string
           student_name: string
+          tracking_code: string
           updated_at: string
         }
         Insert: {
@@ -41,6 +42,7 @@ export type Database = {
           previous_school?: string | null
           status?: string
           student_name: string
+          tracking_code?: string
           updated_at?: string
         }
         Update: {
@@ -55,6 +57,7 @@ export type Database = {
           previous_school?: string | null
           status?: string
           student_name?: string
+          tracking_code?: string
           updated_at?: string
         }
         Relationships: []
@@ -469,6 +472,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      interview_slots: {
+        Row: {
+          application_id: string | null
+          booked_at: string | null
+          created_at: string
+          duration_minutes: number
+          id: string
+          location: string | null
+          starts_at: string
+        }
+        Insert: {
+          application_id?: string | null
+          booked_at?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          location?: string | null
+          starts_at: string
+        }
+        Update: {
+          application_id?: string | null
+          booked_at?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          location?: string | null
+          starts_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_slots_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "admission_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       library_books: {
         Row: {

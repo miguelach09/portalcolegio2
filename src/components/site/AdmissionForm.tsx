@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { CheckCircle2, Send } from "lucide-react";
@@ -21,6 +22,7 @@ export function AdmissionForm() {
   const [values, setValues] = useState(empty);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [trackingCode, setTrackingCode] = useState<string | null>(null);
 
   function set(key: keyof typeof empty, value: string) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -40,7 +42,8 @@ export function AdmissionForm() {
     setErrors({});
     setStatus("sending");
     try {
-      await submit({ data: { values: parsed.data } });
+      const r = await submit({ data: { values: parsed.data } });
+      setTrackingCode(r.trackingCode);
       setStatus("done");
       setValues(empty);
     } catch {
@@ -59,6 +62,18 @@ export function AdmissionForm() {
           Recibimos los datos del aspirante. El equipo de admisiones se pondrá en contacto con el
           correo registrado para agendar la evaluación diagnóstica.
         </p>
+        {trackingCode && (
+          <div className="mx-auto mt-6 max-w-sm rounded-xl border border-primary/30 bg-primary/5 p-4">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Tu código de consulta</p>
+            <p className="mt-1 font-mono text-2xl font-bold tracking-[0.3em] text-primary">{trackingCode}</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Guárdalo. Con este código y tu correo puedes ver el estado y agendar la entrevista.
+            </p>
+            <Link to="/estado-admision" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
+              Consultar mi preinscripción →
+            </Link>
+          </div>
+        )}
         <button
           onClick={() => setStatus("idle")}
           className="mt-6 rounded-full border border-border px-5 py-2 text-sm font-semibold hover:bg-accent"

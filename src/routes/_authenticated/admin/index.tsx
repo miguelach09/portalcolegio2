@@ -19,6 +19,7 @@ import {
   Bot,
   History,
   BarChart3,
+  CalendarClock,
   Trash2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -110,6 +111,7 @@ function AdminDashboard() {
           <ManageCard title="Libros CRE" desc="Catálogo del Centro de Recursos Educativos" href="/admin/libros" icon={<BookOpen className="h-5 w-5" />} />
           <ManageCard title="Carrusel de inicio" desc="Imágenes, textos, botones y orden del slideshow" href="/admin/carrusel" icon={<Images className="h-5 w-5" />} />
           <ManageCard title="Historial de archivos" desc="Quién subió, cambió o eliminó cada archivo" href="/admin/historial" icon={<History className="h-5 w-5" />} />
+          <ManageCard title="Entrevistas" desc="Horarios de entrevista que agendan las familias" href="/admin/entrevistas" icon={<CalendarClock className="h-5 w-5" />} />
           <ManageCard title="Métricas" desc="Preinscripciones por semana, documentos y preguntas al asistente" href="/admin/metricas" icon={<BarChart3 className="h-5 w-5" />} />
           <ManageCard title="Papelera" desc="Restaura lo eliminado durante 30 días" href="/admin/papelera" icon={<Trash2 className="h-5 w-5" />} />
           <ManageCard title="Entrenar asistente" desc="Enseña información y documentos al chatbot" href="/admin/asistente" icon={<Bot className="h-5 w-5" />} />
