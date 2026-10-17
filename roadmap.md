@@ -1,7 +1,8 @@
 # Roadmap
 
-- [x] Restaurar botones de redirección relevantes del chatbot en móvil y escritorio.
-- [x] Reducir el ancho de las tarjetas del inicio del panel de administración.
-- [x] Mostrar la contraseña del historial en una ventana emergente centrada y amplia, adaptable hasta 2560 × 1440.
-- [x] Añadir el control de tema claro/oscuro al panel de administración.
-- [ ] Verificar los cambios en móvil y escritorio.
+- [x] Eliminar circular de prueba.
+- [ ] Asistente: menos botones parecidos, dictado por voz, sugerencias por página, registro de preguntas sin respuesta.
+- [ ] Admin: programar publicaciones, papelera, subida masiva de guías, métricas.
+- [ ] Admisiones: consulta de estado, correo de confirmación, agenda de entrevistas (requiere dominio de correo).
+- [ ] Familias: avisos por correo, boletín, "Agregar a mi calendario" (requiere dominio de correo).
+- [ ] Accesibilidad: tamaño de letra y alto contraste.
