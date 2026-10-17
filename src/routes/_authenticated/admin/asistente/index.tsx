@@ -2,12 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { ArrowLeft, Bot, Trash2, Pencil, Paperclip, X, BookOpenCheck, Loader2 } from "lucide-react";
+import { ArrowLeft, Bot, Trash2, Pencil, Paperclip, X, BookOpenCheck, Loader2, MessageCircleQuestion, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   getAllKnowledge,
   saveKnowledge,
   deleteKnowledge,
+  getUnansweredQuestions,
+  resolveUnansweredQuestion,
   type KnowledgeEntry,
 } from "@/lib/knowledge.functions";
 import { getIndexStatus, indexSource, reindexPending, type IndexReport } from "@/lib/indexing.functions";
@@ -41,6 +43,16 @@ function AdminAsistente() {
     queryKey: ["admin-knowledge"],
     queryFn: () => fetchAll(),
   });
+  const fetchUnanswered = useServerFn(getUnansweredQuestions);
+  const resolveQ = useServerFn(resolveUnansweredQuestion);
+  const { data: unanswered = [] } = useQuery({
+    queryKey: ["assistant-unanswered"],
+    queryFn: () => fetchUnanswered(),
+  });
+  async function markResolved(id: string) {
+    await resolveQ({ data: { id } });
+    queryClient.invalidateQueries({ queryKey: ["assistant-unanswered"] });
+  }
   const { data: status } = useQuery({
     queryKey: ["index-status"],
     queryFn: () => fetchStatus(),
@@ -224,6 +236,39 @@ function AdminAsistente() {
                 </ul>
               )}
             </div>
+          )}
+        </section>
+
+        <section className="mt-6 max-w-3xl rounded-xl border border-border bg-card p-6">
+          <h2 className="inline-flex items-center gap-2 text-lg font-semibold text-foreground">
+            <MessageCircleQuestion className="h-5 w-5 text-primary" /> Preguntas sin respuesta
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Preguntas de visitantes que el asistente no pudo responder con la información cargada. Se guardan sin datos de quién preguntó. Agrega la información que falta y márcalas como resueltas.
+          </p>
+          {unanswered.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">No hay preguntas pendientes.</p>
+          ) : (
+            <ul className="mt-4 divide-y divide-border">
+              {unanswered.map((q) => (
+                <li key={q.id} className="flex items-start justify-between gap-3 py-3">
+                  <div className="min-w-0">
+                    <p className="text-sm text-foreground">{q.question}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {new Date(q.created_at).toLocaleString("es-CO")}
+                      {q.page_path ? ` · desde ${q.page_path}` : ""}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => markResolved(q.id)}
+                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                  >
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Resuelta
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
         </section>
 

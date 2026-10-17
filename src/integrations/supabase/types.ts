@@ -95,6 +95,30 @@ export type Database = {
         }
         Relationships: []
       }
+      assistant_unanswered: {
+        Row: {
+          created_at: string
+          id: string
+          page_path: string | null
+          question: string
+          resolved: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_path?: string | null
+          question: string
+          resolved?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_path?: string | null
+          question?: string
+          resolved?: boolean
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string

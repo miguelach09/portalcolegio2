@@ -129,3 +129,38 @@ export const deleteKnowledge = createServerFn({ method: "POST" })
     if (error) throw error;
     return { ok: true };
   });
+
+export type UnansweredQuestion = {
+  id: string;
+  question: string;
+  page_path: string | null;
+  resolved: boolean;
+  created_at: string;
+};
+
+export const getUnansweredQuestions = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await checkStaff(context);
+    const { data, error } = await context.supabase
+      .from("assistant_unanswered")
+      .select("id, question, page_path, resolved, created_at")
+      .eq("resolved", false)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) throw error;
+    return (data || []) as UnansweredQuestion[];
+  });
+
+export const resolveUnansweredQuestion = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string }) => ({ id: String(input.id) }))
+  .handler(async ({ data, context }) => {
+    await checkStaff(context);
+    const { error } = await context.supabase
+      .from("assistant_unanswered")
+      .update({ resolved: true })
+      .eq("id", data.id);
+    if (error) throw error;
+    return { ok: true };
+  });
