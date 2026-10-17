@@ -27,7 +27,7 @@ function GalleryAdminPage() {
   });
 
   async function handleDelete(img: GalleryImage) {
-    if (!confirm(`¿Eliminar "${img.title}"?`)) return;
+    if (!confirm(`¿Enviar "${img.title}" a la papelera?`)) return;
     if (!img.image_path) return;
     await deleteGalleryImage({ data: { id: img.id, imagePath: img.image_path } });
     queryClient.invalidateQueries({ queryKey: ["admin-gallery"] });

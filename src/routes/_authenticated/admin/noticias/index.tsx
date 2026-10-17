@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Newspaper, Trash2 } from "lucide-react";
 import { getNews, deleteNews } from "@/lib/content.functions";
 import type { NewsItem } from "@/lib/content.types";
+import { useServerFn } from "@tanstack/react-start";
+import { getScheduledNews } from "@/lib/admin-tools.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/noticias/")({
   component: NewsAdminPage,
@@ -23,8 +25,11 @@ function NewsAdminPage() {
     queryFn: () => getNews({ data: { limit: 200 } }),
   });
 
+  const fetchScheduled = useServerFn(getScheduledNews);
+  const { data: scheduled = [] } = useQuery({ queryKey: ["admin-news-scheduled"], queryFn: () => fetchScheduled() });
+
   async function handleDelete(item: NewsItem) {
-    if (!confirm(`¿Eliminar "${item.title}"?`)) return;
+    if (!confirm(`¿Enviar "${item.title}" a la papelera?`)) return;
     await deleteNews({ data: { id: item.id, imagePath: item.image_path || undefined } });
     queryClient.invalidateQueries({ queryKey: ["admin-news"] });
   }
@@ -50,6 +55,19 @@ function NewsAdminPage() {
       </header>
 
       <main className="container-app py-10">
+        {scheduled.length > 0 && (
+          <div className="mb-6 rounded-xl border border-primary/30 bg-primary/5 p-4">
+            <p className="text-sm font-semibold text-foreground">Programadas ({scheduled.length})</p>
+            <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+              {scheduled.map((n) => (
+                <li key={n.id}>
+                  <span className="text-foreground">{n.title}</span> · se publica el{" "}
+                  {new Date(n.scheduled_at).toLocaleString("es-CO", { dateStyle: "medium", timeStyle: "short" })}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {isLoading ? (
           <p className="text-muted-foreground">Cargando noticias...</p>
         ) : news.length === 0 ? (

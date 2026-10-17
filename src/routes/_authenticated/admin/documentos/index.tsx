@@ -25,7 +25,7 @@ function DocumentsAdminPage() {
   });
 
   async function handleDelete(doc: Document) {
-    if (!confirm(`¿Eliminar "${doc.title}"?`)) return;
+    if (!confirm(`¿Enviar "${doc.title}" a la papelera?`)) return;
     await deleteDocument({ data: { id: doc.id, filePath: doc.file_path } });
     queryClient.invalidateQueries({ queryKey: ["admin-documents"] });
   }

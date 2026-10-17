@@ -33,6 +33,7 @@ function NewNewsPage() {
     is_active: true,
     sort_order: 0,
   });
+  const [scheduleAt, setScheduleAt] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [uploading, setUploading] = useState(false);
 
@@ -56,7 +57,10 @@ function NewNewsPage() {
     e.preventDefault();
     setErrors({});
 
-    const parse = newsFormSchema.safeParse(values);
+    const parse = newsFormSchema.safeParse({
+      ...values,
+      scheduled_at: scheduleAt ? new Date(scheduleAt).toISOString() : null,
+    });
     if (!parse.success) {
       const fieldErrors: Record<string, string> = {};
       parse.error.errors.forEach((err) => {
@@ -137,6 +141,19 @@ function NewNewsPage() {
               />
               {errors.published_at && <p className="mt-1 text-sm text-destructive">{errors.published_at}</p>}
             </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Programar publicación (opcional)</label>
+            <input
+              type="datetime-local"
+              value={scheduleAt}
+              onChange={(e) => setScheduleAt(e.target.value)}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary"
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              Si eliges fecha y hora, la noticia aparecerá sola en el sitio en ese momento. Déjalo vacío para publicarla de inmediato.
+            </p>
           </div>
 
           <div>

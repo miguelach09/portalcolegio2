@@ -354,20 +354,15 @@ export const deleteDocument = createServerFn({ method: "POST" })
   .inputValidator((input: { id: string; filePath: string }) => input)
   .handler(async ({ data, context }) => {
     await checkAdmin(context);
-
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    const { error: storageError } = await supabaseAdmin.storage
-      .from(BUCKET_NAME)
-      .remove([data.filePath]);
-
-    if (storageError) {
-      console.error("Error deleting storage object:", storageError);
-    }
-
+    // Papelera: no se borra el archivo; se oculta y se puede restaurar 30 días.
     const supabase = context.supabase;
-    const { error } = await supabase.from("documents").delete().eq("id", data.id);
+    const { error } = await supabase
+      .from("documents")
+      .update({ is_active: false, deleted_at: new Date().toISOString() })
+      .eq("id", data.id);
     if (error) throw error;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await supabaseAdmin.from("document_chunks").update({ is_active: false }).eq("source", "documents").eq("source_id", data.id);
     return { ok: true };
   });
 
@@ -387,6 +382,7 @@ export const createNews = createServerFn({ method: "POST" })
       published_at: parsed.published_at,
       is_active: parsed.is_active,
       sort_order: parsed.sort_order,
+      scheduled_at: parsed.scheduled_at ?? null,
       // Never persist public object URLs: the bucket is private and reads go
       // through short-lived signed URLs generated from image_path.
       image_url: null,
@@ -422,6 +418,7 @@ export const updateNews = createServerFn({ method: "POST" })
         published_at: rest.published_at,
         is_active: rest.is_active,
         sort_order: rest.sort_order,
+        ...(rest.scheduled_at !== undefined ? { scheduled_at: rest.scheduled_at } : {}),
       })
       .eq("id", id)
       .select()
@@ -436,17 +433,12 @@ export const deleteNews = createServerFn({ method: "POST" })
   .inputValidator((input: { id: string; imagePath?: string }) => input)
   .handler(async ({ data, context }) => {
     await checkAdmin(context);
-
-    if (data.imagePath) {
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { error: storageError } = await supabaseAdmin.storage
-        .from(BUCKET_NAME)
-        .remove([data.imagePath]);
-      if (storageError) console.error("Error deleting news image:", storageError);
-    }
-
+    // Papelera: no se borra el archivo; se oculta y se puede restaurar 30 días.
     const supabase = context.supabase;
-    const { error } = await supabase.from("news").delete().eq("id", data.id);
+    const { error } = await supabase
+      .from("news")
+      .update({ is_active: false, deleted_at: new Date().toISOString() })
+      .eq("id", data.id);
     if (error) throw error;
     return { ok: true };
   });
@@ -512,15 +504,12 @@ export const deleteGalleryImage = createServerFn({ method: "POST" })
   .inputValidator((input: { id: string; imagePath: string }) => input)
   .handler(async ({ data, context }) => {
     await checkAdmin(context);
-
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error: storageError } = await supabaseAdmin.storage
-      .from(BUCKET_NAME)
-      .remove([data.imagePath]);
-    if (storageError) console.error("Error deleting gallery image:", storageError);
-
+    // Papelera: no se borra el archivo; se oculta y se puede restaurar 30 días.
     const supabase = context.supabase;
-    const { error } = await supabase.from("gallery_images").delete().eq("id", data.id);
+    const { error } = await supabase
+      .from("gallery_images")
+      .update({ is_active: false, deleted_at: new Date().toISOString() })
+      .eq("id", data.id);
     if (error) throw error;
     return { ok: true };
   });

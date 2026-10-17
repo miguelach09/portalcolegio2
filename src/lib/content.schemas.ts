@@ -117,6 +117,7 @@ export const newsFormSchema = z.object({
   published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
   is_active: z.boolean().default(true),
   sort_order: z.number().int().min(0).default(0),
+  scheduled_at: z.string().datetime({ offset: true }).nullable().optional(),
 });
 
 export const newsUpdateSchema = newsFormSchema.extend({
