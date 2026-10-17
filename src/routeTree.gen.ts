@@ -19,6 +19,7 @@ import { Route as CalendarioRouteImport } from './routes/calendario'
 import { Route as CircularesRouteImport } from './routes/circulares'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CreRouteImport } from './routes/cre'
+import { Route as EstadoAdmisionRouteImport } from './routes/estado-admision'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as GuiasRouteImport } from './routes/guias'
@@ -92,6 +93,11 @@ const ContactoRoute = ContactoRouteImport.update({
 const CreRoute = CreRouteImport.update({
   id: '/cre',
   path: '/cre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstadoAdmisionRoute = EstadoAdmisionRouteImport.update({
+  id: '/estado-admision',
+  path: '/estado-admision',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -248,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/cre': typeof CreRoute
+  '/estado-admision': typeof EstadoAdmisionRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
@@ -284,6 +291,7 @@ export interface FileRoutesByTo {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/cre': typeof CreRoute
+  '/estado-admision': typeof EstadoAdmisionRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
@@ -322,6 +330,7 @@ export interface FileRoutesById {
   '/circulares': typeof CircularesRoute
   '/contacto': typeof ContactoRoute
   '/cre': typeof CreRoute
+  '/estado-admision': typeof EstadoAdmisionRoute
   '/faq': typeof FaqRoute
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
@@ -360,6 +369,7 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/cre'
+    | '/estado-admision'
     | '/faq'
     | '/galeria'
     | '/guias'
@@ -396,6 +406,7 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/cre'
+    | '/estado-admision'
     | '/faq'
     | '/galeria'
     | '/guias'
@@ -433,6 +444,7 @@ export interface FileRouteTypes {
     | '/circulares'
     | '/contacto'
     | '/cre'
+    | '/estado-admision'
     | '/faq'
     | '/galeria'
     | '/guias'
@@ -471,6 +483,7 @@ export interface RootRouteChildren {
   CircularesRoute: typeof CircularesRoute
   ContactoRoute: typeof ContactoRoute
   CreRoute: typeof CreRoute
+  EstadoAdmisionRoute: typeof EstadoAdmisionRoute
   FaqRoute: typeof FaqRoute
   GaleriaRoute: typeof GaleriaRoute
   GuiasRoute: typeof GuiasRoute
@@ -549,6 +562,13 @@ declare module '@tanstack/react-router' {
       path: '/cre'
       fullPath: '/cre'
       preLoaderRoute: typeof CreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estado-admision': {
+      id: '/estado-admision'
+      path: '/estado-admision'
+      fullPath: '/estado-admision'
+      preLoaderRoute: typeof EstadoAdmisionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -792,6 +812,7 @@ const rootRouteChildren: RootRouteChildren = {
   CircularesRoute: CircularesRoute,
   ContactoRoute: ContactoRoute,
   CreRoute: CreRoute,
+  EstadoAdmisionRoute: EstadoAdmisionRoute,
   FaqRoute: FaqRoute,
   GaleriaRoute: GaleriaRoute,
   GuiasRoute: GuiasRoute,

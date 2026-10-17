@@ -104,7 +104,7 @@ function StatusPage() {
       <PageHero
         eyebrow="Admisiones 2027"
         title="Estado de mi preinscripción"
-        description="Consulta cómo va la solicitud y agenda la entrevista con el código que recibiste al preinscribirte."
+        subtitle="Consulta cómo va la solicitud y agenda la entrevista con el código que recibiste al preinscribirte."
       />
       <section className="container-page max-w-3xl py-12">
         <form onSubmit={search} className="grid gap-4 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:grid-cols-[1fr_1.4fr_auto] sm:items-end">
