@@ -18,8 +18,10 @@ import {
   Eraser,
   Copy,
   Check,
+  Mic,
+  MicOff,
 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { askAssistant, type AssistantLink } from "@/lib/assistant.functions";
 import {
   Conversation,
@@ -95,6 +97,38 @@ const SUGGESTIONS = [
   "Guías de aprendizaje de séptimo",
   "Libros del Plan Lector",
 ];
+
+const PAGE_SUGGESTIONS: { prefix: string; items: string[] }[] = [
+  { prefix: "/admisiones", items: ["¿Qué documentos necesito para la preinscripción?", "¿Hasta cuándo hay preinscripciones?", "¿Qué grados tienen cupo?"] },
+  { prefix: "/guias", items: ["Guías de matemáticas de quinto", "Guías del periodo 2 de once", "¿Cómo encuentro la guía de mi hijo?"] },
+  { prefix: "/circulares", items: ["¿Cuál es la circular más reciente?", "Circulares de transición", "Resume la última circular"] },
+  { prefix: "/cre", items: ["Libros del Plan Lector", "¿Qué libros hay para séptimo?", "¿Cuánto cuestan los libros del Plan Lector?"] },
+  { prefix: "/calendario", items: ["¿Cuál es el próximo evento?", "¿Qué hay este mes?"] },
+  { prefix: "/mi-colegio", items: ["¿Qué dice el PEI?", "¿Qué dice el manual de convivencia sobre el uniforme?", "Historia del colegio"] },
+  { prefix: "/galeria", items: ["Fotos de deporte", "Fotos de graduación"] },
+  { prefix: "/contacto", items: ["¿Cuál es el teléfono del colegio?", "¿Dónde queda el colegio?"] },
+];
+
+function suggestionsFor(path: string) {
+  return PAGE_SUGGESTIONS.find((p) => path.startsWith(p.prefix))?.items ?? SUGGESTIONS;
+}
+
+type SpeechRec = {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onend: (() => void) | null;
+  onerror: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+function getSpeechCtor(): (new () => SpeechRec) | null {
+  if (typeof window === "undefined") return null;
+  const w = window as unknown as { SpeechRecognition?: new () => SpeechRec; webkitSpeechRecognition?: new () => SpeechRec };
+  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+}
 
 const STORAGE_KEY = "cafam-asistente-conversacion";
 
@@ -267,6 +301,30 @@ export function AIAssistant() {
     setExpanded(true);
   }
 
+  function toggleVoice() {
+    if (listening) {
+      recRef.current?.stop();
+      return;
+    }
+    const Ctor = getSpeechCtor();
+    if (!Ctor) return;
+    const rec = new Ctor();
+    rec.lang = "es-CO";
+    rec.interimResults = true;
+    rec.continuous = false;
+    const base = input ? input.trim() + " " : "";
+    rec.onresult = (e) => {
+      let text = "";
+      for (let i = 0; i < e.results.length; i++) text += e.results[i]?.[0]?.transcript ?? "";
+      setInput(base + text);
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    recRef.current = rec;
+    setListening(true);
+    rec.start();
+  }
+
   async function handleSend(textOverride?: string) {
     const text = (textOverride ?? input).trim();
     if (!text || loading) return;
@@ -276,7 +334,7 @@ export function AIAssistant() {
     setLoading(true);
     try {
       const payload = next.map(({ role, content }) => ({ role, content }));
-      const { reply, links } = await askAssistant({ data: { messages: payload } });
+      const { reply, links } = await askAssistant({ data: { messages: payload, pagePath: pathname } });
       setMessages([...next, { role: "assistant", content: reply, links }]);
     } catch (err) {
       console.error(err);
@@ -394,7 +452,7 @@ export function AIAssistant() {
             ))}
             {messages.length <= 1 && !loading && (
               <div className="flex flex-wrap gap-2">
-                {SUGGESTIONS.map((s) => (
+                {suggestionsFor(pathname).map((s) => (
                   <button
                     key={s}
                     type="button"
@@ -428,7 +486,21 @@ export function AIAssistant() {
               placeholder="Escribe tu pregunta…"
               className="min-h-11 max-h-32"
             />
-            <PromptInputFooter className="justify-end">
+            <PromptInputFooter className="justify-end gap-2">
+              {voiceSupported && (
+                <button
+                  type="button"
+                  onClick={toggleVoice}
+                  disabled={loading}
+                  className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border transition-colors ${
+                    listening ? "bg-destructive text-destructive-foreground" : "bg-card text-foreground hover:bg-muted"
+                  }`}
+                  aria-label={listening ? "Detener dictado" : "Dictar pregunta"}
+                  title={listening ? "Detener dictado" : "Dictar pregunta"}
+                >
+                  {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                </button>
+              )}
               <PromptInputSubmit
                 status={loading ? "submitted" : "ready"}
                 disabled={loading || !input.trim()}
