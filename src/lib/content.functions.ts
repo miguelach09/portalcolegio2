@@ -362,7 +362,7 @@ export const deleteDocument = createServerFn({ method: "POST" })
       .eq("id", data.id);
     if (error) throw error;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    await supabaseAdmin.from("document_chunks").update({ is_active: false }).eq("source", "document").eq("source_id", data.id);
+    await supabaseAdmin.from("document_chunks").update({ is_active: false }).eq("source", "documents").eq("source_id", data.id);
     return { ok: true };
   });
 
