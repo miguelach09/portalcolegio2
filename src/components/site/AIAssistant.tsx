@@ -156,6 +156,13 @@ export function AIAssistant() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([WELCOME]);
   const [input, setInput] = useState("");
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const [listening, setListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+  const recRef = useRef<SpeechRec | null>(null);
+  useEffect(() => {
+    setVoiceSupported(!!getSpeechCtor());
+  }, []);
   const [loading, setLoading] = useState(false);
   const [box, setBox] = useState<Box | null>(null);
   const [expanded, setExpanded] = useState(false);
