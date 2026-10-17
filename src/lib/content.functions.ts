@@ -382,6 +382,7 @@ export const createNews = createServerFn({ method: "POST" })
       published_at: parsed.published_at,
       is_active: parsed.is_active,
       sort_order: parsed.sort_order,
+      scheduled_at: parsed.scheduled_at ?? null,
       // Never persist public object URLs: the bucket is private and reads go
       // through short-lived signed URLs generated from image_path.
       image_url: null,
@@ -417,6 +418,7 @@ export const updateNews = createServerFn({ method: "POST" })
         published_at: rest.published_at,
         is_active: rest.is_active,
         sort_order: rest.sort_order,
+        ...(rest.scheduled_at !== undefined ? { scheduled_at: rest.scheduled_at } : {}),
       })
       .eq("id", id)
       .select()
