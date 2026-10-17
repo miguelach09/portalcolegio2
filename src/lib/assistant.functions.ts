@@ -91,7 +91,7 @@ const routeForDocument = (category: string | null) => {
   }
 };
 
-const MAX_LINKS = 4;
+const MAX_LINKS = 2;
 
 // Atajos de sección: se ofrecen cuando la pregunta nombra un tema del colegio,
 // como complemento (o respaldo) de los resultados concretos.
@@ -371,7 +371,7 @@ async function findResources(query: string, conversationContext = ""): Promise<A
   const best = scored[0]?.score ?? 0;
   // Si hay coincidencias fuertes (varias palabras), se ocultan las débiles.
   const links = scored
-    .filter((c) => c.score >= Math.min(best, 2))
+    .filter((c, i) => i === 0 || c.score >= best)
     .slice(0, MAX_LINKS)
     .map((c) => c.link);
 
@@ -379,7 +379,7 @@ async function findResources(query: string, conversationContext = ""): Promise<A
   // como complemento, nunca reemplazando resultados concretos.
   const shortcuts = links.length
     ? []
-    : sectionShortcuts(rawCurrent, []).slice(0, 2);
+    : sectionShortcuts(rawCurrent, []).slice(0, 1);
 
   return [...links, ...shortcuts].filter(isPublicLink).slice(0, MAX_LINKS);
 }
@@ -491,7 +491,7 @@ DATOS INSTITUCIONALES:
 }
 
 export const askAssistant = createServerFn({ method: "POST" })
-  .inputValidator((input: { messages: ChatMessage[] }) => input)
+  .inputValidator((input: { messages: ChatMessage[]; pagePath?: string }) => input)
   .handler(async ({ data }) => {
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
@@ -511,6 +511,25 @@ export const askAssistant = createServerFn({ method: "POST" })
       findResources(lastUser, conversationContext),
       findPassages(lastUser),
     ]);
+
+    // Registro anónimo de preguntas sin respuesta para que el colegio sepa
+    // qué información falta cargar. Nunca se guardan preguntas sensibles.
+    if (
+      !links.length &&
+      !passages.length &&
+      lastUser.trim().length >= 8 &&
+      !isSensitiveQuery(normalize(lastUser))
+    ) {
+      try {
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        await supabaseAdmin.from("assistant_unanswered").insert({
+          question: lastUser.trim().slice(0, 300),
+          page_path: typeof data.pagePath === "string" ? data.pagePath.slice(0, 120) : null,
+        });
+      } catch (e) {
+        console.error("[assistant] unanswered log failed", e);
+      }
+    }
 
     const matchesBlock = links.length
       ? `\n\nRESULTADOS ENCONTRADOS PARA LA ÚLTIMA PREGUNTA (el usuario verá botones de acceso debajo de tu respuesta, no escribas enlaces):\n${links
