@@ -34,6 +34,8 @@ function NewDocumentPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [progress, setProgress] = useState<string | null>(null);
   const [values, setValues] = useState({
     title: "",
     category: "circulares" as DocumentCategory,
@@ -49,19 +51,26 @@ function NewDocumentPage() {
   const [uploading, setUploading] = useState(false);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const selected = e.target.files?.[0];
-    if (!selected) return;
-    const invalid = validateFileExtension(selected, DOCUMENT_EXTENSIONS);
-    if (invalid) {
-      setFile(null);
-      e.target.value = "";
-      setErrors((prev) => ({ ...prev, file: invalid }));
-      return;
+    const picked = Array.from(e.target.files ?? []);
+    if (!picked.length) return;
+    for (const f of picked) {
+      const invalid = validateFileExtension(f, DOCUMENT_EXTENSIONS);
+      if (invalid) {
+        setFile(null);
+        setFiles([]);
+        e.target.value = "";
+        setErrors((prev) => ({ ...prev, file: `${f.name}: ${invalid}` }));
+        return;
+      }
     }
     setErrors((prev) => ({ ...prev, file: "" }));
-    setFile(selected);
-    if (!values.title) {
-      setValues((v) => ({ ...v, title: selected.name.replace(/\.[^.]+$/, "") }));
+    setFile(picked[0]!);
+    setFiles(picked);
+    if (picked.length === 1 && !values.title) {
+      setValues((v) => ({ ...v, title: picked[0]!.name.replace(/\.[^.]+$/, "") }));
+    }
+    if (picked.length > 1) {
+      setValues((v) => ({ ...v, title: "Varios archivos" }));
     }
   }
 
@@ -86,28 +95,33 @@ function NewDocumentPage() {
 
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop() || "pdf";
-      const path = `documents/${crypto.randomUUID()}.${ext}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("site-assets")
-        .upload(path, file, { contentType: file.type || "application/pdf" });
-
-      if (uploadError) throw uploadError;
-
-      const created = await createDocument({ data: { values: parse.data, filePath: path } });
-      // Lectura del contenido del archivo para que el asistente pueda
-      // responder con lo que dice adentro, no solo con el título.
-      try {
-        await indexSource({ data: { source: "documents", id: created.id } });
-      } catch (indexErr) {
-        console.error("[indexado]", indexErr);
+      const list = files.length ? files : [file];
+      const multi = list.length > 1;
+      for (let n = 0; n < list.length; n++) {
+        const f = list[n]!;
+        if (multi) setProgress(`Subiendo ${n + 1} de ${list.length}: ${f.name}`);
+        const ext = f.name.split(".").pop() || "pdf";
+        const path = `documents/${crypto.randomUUID()}.${ext}`;
+        const { error: uploadError } = await supabase.storage
+          .from("site-assets")
+          .upload(path, f, { contentType: f.type || "application/pdf" });
+        if (uploadError) throw uploadError;
+        // Con varios archivos, cada documento toma el nombre de su archivo.
+        const docValues = multi ? { ...parse.data, title: f.name.replace(/\.[^.]+$/, "") } : parse.data;
+        const created = await createDocument({ data: { values: docValues, filePath: path } });
+        // Lectura del contenido para que el asistente pueda responder con él.
+        try {
+          await indexSource({ data: { source: "documents", id: created.id } });
+        } catch (indexErr) {
+          console.error("[indexado]", indexErr);
+        }
       }
       router.navigate({ to: "/admin/documentos" });
     } catch (err: any) {
       setErrors({ submit: err.message || "Error al guardar" });
     } finally {
       setUploading(false);
+      setProgress(null);
     }
   }
 
@@ -142,7 +156,7 @@ function NewDocumentPage() {
               ) : (
                 <>
                   <Upload className="h-8 w-8 text-muted-foreground" />
-                  <span className="font-medium text-foreground">Haz clic para seleccionar un PDF</span>
+                  <span className="font-medium text-foreground">Haz clic para seleccionar uno o varios archivos</span>
                   <span className="text-xs text-muted-foreground">Máx. 20 MB</span>
                 </>
               )}
@@ -151,9 +165,16 @@ function NewDocumentPage() {
               ref={fileInputRef}
               type="file"
               accept={DOCUMENT_ACCEPT}
+              multiple
               onChange={handleFileChange}
               className="hidden"
             />
+            {files.length > 1 && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                {files.length} archivos seleccionados. Cada uno se guardará con su propio nombre y con el grado, área y periodo que elijas abajo.
+              </p>
+            )}
+            {progress && <p className="mt-2 text-sm font-medium text-primary">{progress}</p>}
             {errors.file && <p className="mt-2 text-sm text-destructive">{errors.file}</p>}
           </div>
 
