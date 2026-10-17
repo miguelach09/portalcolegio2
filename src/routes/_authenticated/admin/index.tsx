@@ -18,6 +18,8 @@ import {
   Images,
   Bot,
   History,
+  BarChart3,
+  Trash2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouter } from "@tanstack/react-router";
