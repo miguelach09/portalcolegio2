@@ -196,6 +196,7 @@ export type Database = {
           area: Database["public"]["Enums"]["document_area"] | null
           category: Database["public"]["Enums"]["document_category"]
           created_at: string
+          deleted_at: string | null
           file_path: string
           file_size: number | null
           file_type: string | null
@@ -214,6 +215,7 @@ export type Database = {
           area?: Database["public"]["Enums"]["document_area"] | null
           category?: Database["public"]["Enums"]["document_category"]
           created_at?: string
+          deleted_at?: string | null
           file_path: string
           file_size?: number | null
           file_type?: string | null
@@ -232,6 +234,7 @@ export type Database = {
           area?: Database["public"]["Enums"]["document_area"] | null
           category?: Database["public"]["Enums"]["document_category"]
           created_at?: string
+          deleted_at?: string | null
           file_path?: string
           file_size?: number | null
           file_type?: string | null
@@ -381,6 +384,7 @@ export type Database = {
         Row: {
           category: Database["public"]["Enums"]["gallery_category"]
           created_at: string
+          deleted_at: string | null
           id: string
           image_path: string | null
           image_url: string
@@ -393,6 +397,7 @@ export type Database = {
         Insert: {
           category?: Database["public"]["Enums"]["gallery_category"]
           created_at?: string
+          deleted_at?: string | null
           id?: string
           image_path?: string | null
           image_url: string
@@ -405,6 +410,7 @@ export type Database = {
         Update: {
           category?: Database["public"]["Enums"]["gallery_category"]
           created_at?: string
+          deleted_at?: string | null
           id?: string
           image_path?: string | null
           image_url?: string
@@ -523,6 +529,7 @@ export type Database = {
           category: Database["public"]["Enums"]["news_category"]
           content: string | null
           created_at: string
+          deleted_at: string | null
           id: string
           image_path: string | null
           image_url: string | null
@@ -539,6 +546,7 @@ export type Database = {
           category?: Database["public"]["Enums"]["news_category"]
           content?: string | null
           created_at?: string
+          deleted_at?: string | null
           id?: string
           image_path?: string | null
           image_url?: string | null
@@ -555,6 +563,7 @@ export type Database = {
           category?: Database["public"]["Enums"]["news_category"]
           content?: string | null
           created_at?: string
+          deleted_at?: string | null
           id?: string
           image_path?: string | null
           image_url?: string | null
