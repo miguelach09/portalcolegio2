@@ -19,15 +19,28 @@ import { formatCOP, type LibraryBook } from "@/lib/library.types";
 const homeQueryOptions = queryOptions({
   queryKey: ["home"],
   queryFn: async () => {
+    // Cada bloque se carga por separado: si uno falla (por ejemplo, una
+    // conexión cortada), la página se muestra igual con los demás y con el
+    // carrusel por defecto, en vez de quedar en blanco.
+    const safe = async <T,>(p: Promise<T>, fallback: T): Promise<T> => {
+      try {
+        return await p;
+      } catch (err) {
+        console.warn("[inicio] bloque no disponible", err);
+        return fallback;
+      }
+    };
     const [news, interestDocs, gallery, books, heroSlides] = await Promise.all([
-      getNews({ data: { limit: 3 } }),
-      getDocuments({ data: { category: "general", limit: 5 } }),
-      getGalleryImages({ data: { limit: 6 } }),
-      getLibraryBooks({ data: {} }),
-      getHeroSlides(),
+      safe(getNews({ data: { limit: 3 } }), []),
+      safe(getDocuments({ data: { category: "general", limit: 5 } }), []),
+      safe(getGalleryImages({ data: { limit: 6 } }), []),
+      safe(getLibraryBooks({ data: {} }), []),
+      safe(getHeroSlides(), []),
     ]);
     return { news, interestDocs, gallery, books, heroSlides };
   },
+  // Si algo faltó por un corte, se vuelve a pedir en la próxima visita.
+  staleTime: 60_000,
 });
 
 export const Route = createFileRoute("/")({
