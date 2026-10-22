@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getDocuments } from "@/lib/content.functions";
-import { MANUAL_TITLE } from "@/lib/content.types";
+import { MANUAL_TITLE, pickManual } from "@/lib/content.types";
 import { useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
@@ -8,9 +8,13 @@ import { PdfViewer } from "@/components/site/PdfViewer";
 import { Award, Target, Eye, Heart, ExternalLink, PlayCircle, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/mi-colegio")({
-  loader: async () => ({
-    institucionales: await getDocuments({ data: { category: "institucionales" } }),
-  }),
+  loader: async () => {
+    const [institucionales, manualDocs] = await Promise.all([
+      getDocuments({ data: { category: "institucionales" } }),
+      getDocuments({ data: { category: "manual_convivencia" } }),
+    ]);
+    return { institucionales, manual: pickManual(manualDocs, institucionales) };
+  },
   staleTime: 5 * 60 * 1000,
   gcTime: 30 * 60 * 1000,
   errorComponent: () => (

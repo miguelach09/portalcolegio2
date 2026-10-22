@@ -3,16 +3,15 @@ import { ArrowLeft } from "lucide-react";
 import { getDocuments } from "@/lib/content.functions";
 import { PageShell } from "@/components/site/PageShell";
 import { PdfViewer } from "@/components/site/PdfViewer";
-import { MANUAL_TITLE } from "@/lib/content.types";
+import { MANUAL_TITLE, pickManual } from "@/lib/content.types";
 
 export const Route = createFileRoute("/manual-convivencia")({
   loader: async () => {
-    const institucionales = await getDocuments({ data: { category: "institucionales" } });
-    const manual =
-      institucionales.find((d) => d.title === MANUAL_TITLE) ??
-      institucionales.find((d) => d.title.startsWith("Manual de Convivencia")) ??
-      null;
-    return { manual };
+    const [manualDocs, institucionales] = await Promise.all([
+      getDocuments({ data: { category: "manual_convivencia" } }),
+      getDocuments({ data: { category: "institucionales" } }),
+    ]);
+    return { manual: pickManual(manualDocs, institucionales) };
   },
   staleTime: 5 * 60 * 1000,
   gcTime: 30 * 60 * 1000,
