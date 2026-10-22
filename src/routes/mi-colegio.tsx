@@ -5,7 +5,7 @@ import { useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import { PdfViewer } from "@/components/site/PdfViewer";
-import { Award, Target, Eye, Heart, ExternalLink, PlayCircle } from "lucide-react";
+import { Award, Target, Eye, Heart, ExternalLink, PlayCircle, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/mi-colegio")({
   loader: async () => ({
