@@ -5,8 +5,8 @@ import { z } from "zod";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
 import { BookOpen, FileText, Download, ArrowLeft, Search } from "lucide-react";
-import { useMemo, useState } from "react";
-import { getDocuments } from "@/lib/content.functions";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { getDocuments, verifyGuidesPassword } from "@/lib/content.functions";
 import {
   GRADE_LABELS,
   GRADE_ORDER,
@@ -21,16 +21,17 @@ const guiasSearchSchema = z.object({
   grado: fallback(z.string(), "").default(""),
 });
 
-const allGuiasQueryOptions = queryOptions({
-  queryKey: ["documents", "guias"],
-  queryFn: () => getDocuments({ data: { category: "guias", limit: 500 } }),
-  staleTime: 5 * 60 * 1000,
-  gcTime: 30 * 60 * 1000,
-});
+const allGuiasQueryOptions = (password: string) =>
+  queryOptions({
+    queryKey: ["documents", "guias", password],
+    queryFn: () => getDocuments({ data: { category: "guias", limit: 500, guidesPassword: password } }),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
 
 export const Route = createFileRoute("/guias")({
+  ssr: false,
   validateSearch: zodValidator(guiasSearchSchema),
-  loader: ({ context }) => context.queryClient.ensureQueryData(allGuiasQueryOptions),
   head: () => ({
     meta: [
       { title: "Guías de Aprendizaje — Colegio Cafam" },
@@ -79,8 +80,62 @@ const GRADE_ACCENTS: Record<Grade, string> = {
 };
 
 function GuiasPage() {
+  const [password, setPassword] = useState<string | null>(null);
+  const [checked, setChecked] = useState(false);
+  const [input, setInput] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setPassword(sessionStorage.getItem("guias-pwd"));
+    setChecked(true);
+  }, []);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    const { ok } = await verifyGuidesPassword({ data: { password: input } }).catch(() => ({ ok: false }));
+    if (!ok) return setError("Contraseña inválida");
+    sessionStorage.setItem("guias-pwd", input);
+    setError("");
+    setPassword(input);
+  }
+
+  if (password) {
+    return (
+      <Suspense fallback={<PageShell><PageHero eyebrow="Guías de Aprendizaje" title="Cargando guías…" subtitle="" /></PageShell>}>
+        <GuiasContent password={password} />
+      </Suspense>
+    );
+  }
+
+  return (
+    <PageShell>
+      <PageHero eyebrow="Guías de Aprendizaje" title="Guías por grado" subtitle="Ingresa la contraseña para ver las guías." />
+      <section className="container-page py-16">
+        {checked && (
+          <form onSubmit={submit} className="mx-auto max-w-sm space-y-4 rounded-2xl border bg-card p-6 shadow-sm">
+            <label htmlFor="guias-pwd" className="block text-sm font-medium text-foreground">Contraseña</label>
+            <input
+              id="guias-pwd"
+              type="password"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              required
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-primary"
+            />
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <button type="submit" className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground">
+              Ingresar
+            </button>
+          </form>
+        )}
+      </section>
+    </PageShell>
+  );
+}
+
+function GuiasContent({ password }: { password: string }) {
   const { grado } = Route.useSearch();
-  const { data: allDocs = [] } = useSuspenseQuery(allGuiasQueryOptions);
+  const { data: allDocs = [] } = useSuspenseQuery(allGuiasQueryOptions(password));
   const [q, setQ] = useState("");
   const [area, setArea] = useState<DocumentArea | "">("");
 
