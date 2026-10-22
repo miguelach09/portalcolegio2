@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, FileText, Trash2, ExternalLink } from "lucide-react";
-import { getDocuments, deleteDocument } from "@/lib/content.functions";
+import { getDocuments, getAllDocumentsAdmin, deleteDocument } from "@/lib/content.functions";
 import type { Document } from "@/lib/content.types";
 
 export const Route = createFileRoute("/_authenticated/admin/documentos/")({
@@ -22,7 +22,7 @@ function DocumentsAdminPage() {
   const queryClient = useQueryClient();
   const { data: documents = [], isLoading } = useQuery({
     queryKey: ["admin-documents"],
-    queryFn: () => getDocuments({ data: { limit: 200 } }),
+    queryFn: () => getAllDocumentsAdmin({ data: { limit: 200 } }),
   });
 
   async function handleDelete(doc: Document) {
