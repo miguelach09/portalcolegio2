@@ -269,7 +269,7 @@ function GuiasPage() {
                               </span>
                             )}
                             {doc.area && (
-                              <span className="rounded-full bg-accent/15 px-2 py-0.5 font-semibold text-accent">
+                              <span className="rounded-full bg-accent/15 px-2 py-0.5 font-semibold text-green-ink">
                                 {AREA_LABELS[doc.area as DocumentArea]}
                               </span>
                             )}

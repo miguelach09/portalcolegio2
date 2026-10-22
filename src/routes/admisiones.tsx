@@ -74,7 +74,7 @@ function Admisiones() {
             <ul className="mt-5 space-y-3">
               {requirements.map((r) => (
                 <li key={r} className="flex items-start gap-3 text-sm text-foreground/85">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-brand" />
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-ink" />
                   {r}
                 </li>
               ))}

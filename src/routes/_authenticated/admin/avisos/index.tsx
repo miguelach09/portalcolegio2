@@ -97,7 +97,7 @@ function AvisosAdmin() {
           </label>
 
           {saved && (
-            <div className="flex items-center gap-2 text-sm text-green-brand">
+            <div className="flex items-center gap-2 text-sm text-green-ink">
               <Check className="h-4 w-4" /> Guardado correctamente.
             </div>
           )}

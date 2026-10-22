@@ -13,8 +13,8 @@ const docsQueryOptions = queryOptions({
 const tools = [
   { name: "Office 365", desc: "Correo institucional y suite de productividad", href: "https://login.microsoftonline.com/", icon: Mail, color: "bg-sky text-white" },
   { name: "Q10 Académico", desc: "Notas, recibos y gestión académica", href: "https://site.q10.com/login?aplentId=242506df-1822-4f95-b1ac-2842f6896513", icon: CreditCard, color: "bg-primary text-primary-foreground" },
-  { name: "PAC", desc: "Portal de atención al cliente", href: "https://portalcolegio.com/ingresoPac.php", icon: HeartHandshake, color: "bg-orange-brand text-white" },
-  { name: "Biblioteca digital", desc: "Recursos y bases de datos", href: "/biblioteca", icon: Library, color: "bg-green-brand text-white" },
+  { name: "PAC", desc: "Portal de atención al cliente", href: "https://portalcolegio.com/ingresoPac.php", icon: HeartHandshake, color: "bg-orange-brand text-on-brand" },
+  { name: "Biblioteca digital", desc: "Recursos y bases de datos", href: "/biblioteca", icon: Library, color: "bg-green-brand text-on-brand" },
   { name: "Admisiones en línea", desc: "Formulario de preinscripción", href: "/admisiones", icon: ClipboardCheck, color: "bg-yellow-brand text-black" },
   { name: "Plataforma LMS", desc: "Aulas virtuales y tareas", href: "#", icon: BookOpen, color: "bg-pink-brand text-white" },
   { name: "Videoconferencia", desc: "Teams para clases en línea", href: "#", icon: Video, color: "bg-accent text-accent-foreground" },

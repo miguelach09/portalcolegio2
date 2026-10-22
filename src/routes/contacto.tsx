@@ -66,7 +66,7 @@ function Contacto() {
 
             {status === "done" ? (
               <div className="mt-6 flex flex-col items-center gap-3 rounded-xl bg-green-soft p-8 text-center">
-                <CheckCircle2 className="h-12 w-12 text-green-brand" />
+                <CheckCircle2 className="h-12 w-12 text-green-ink" />
                 <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white">¡Mensaje enviado!</h3>
                 <p className="text-sm text-muted-foreground">
                   Gracias por escribirnos. Te responderemos a la brevedad.

@@ -116,7 +116,7 @@ export function News({ news, interestDocs }: NewsProps) {
         </div>
 
         <aside>
-          <span className="text-xs font-bold uppercase tracking-widest text-orange-brand">De interés</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-orange-ink">De interés</span>
           <h2 className="mt-2 font-display text-3xl font-bold text-slate-900 dark:text-white">Documentos y enlaces</h2>
           <ul className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card">
             {interestDocs.length === 0 ? (

@@ -33,7 +33,7 @@ export const Route = createFileRoute("/calendario")({
 
 const CATEGORY_COLORS: Record<string, string> = {
   academico: "bg-blue-soft text-primary",
-  deporte: "bg-green-soft text-green-brand",
+  deporte: "bg-green-soft text-green-ink",
   arte: "bg-purple-soft text-purple-600",
   bienestar: "bg-orange-soft text-orange-600",
   general: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
