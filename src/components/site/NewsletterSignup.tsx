@@ -46,7 +46,7 @@ export function NewsletterSignup() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary hover:bg-white/90 disabled:opacity-60"
+        className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-brand-blue hover:bg-white/90 disabled:opacity-60"
       >
         {status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Suscribirme"}
       </button>

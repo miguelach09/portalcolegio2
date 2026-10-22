@@ -56,7 +56,7 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-              <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+              <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-brand-blue opacity-0 transition-opacity group-hover:opacity-100">
                 {img.title}
               </span>
             </button>

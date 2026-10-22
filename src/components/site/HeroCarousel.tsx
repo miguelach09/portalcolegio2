@@ -129,7 +129,7 @@ export function HeroCarousel({ slides: dbSlides = [] }: { slides?: HeroSlide[] }
                   <div className="flex items-center gap-6 pt-2">
                     <Link
                       to={s.cta.to}
-                      className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-display text-base font-extrabold text-primary shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-sky hover:text-white md:px-10 md:text-lg"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-display text-base font-extrabold text-brand-blue shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-sky hover:text-white md:px-10 md:text-lg"
                     >
                       {s.cta.label} <ArrowRight className="h-5 w-5" />
                     </Link>

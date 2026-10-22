@@ -113,7 +113,7 @@ function Admisiones() {
               <li className="flex items-start gap-3"><Calendar className="mt-0.5 h-5 w-5" /><div><b>Nov 2026</b><br/><span className="text-white/80 text-sm">Entrevistas familiares</span></div></li>
               <li className="flex items-start gap-3"><Calendar className="mt-0.5 h-5 w-5" /><div><b>Ene 2027</b><br/><span className="text-white/80 text-sm">Matrículas e inicio de clases</span></div></li>
             </ul>
-            <a href="#preinscripcion" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-primary">
+            <a href="#preinscripcion" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-brand-blue">
               Iniciar preinscripción
             </a>
             <Link to="/estado-admision" className="mt-3 block text-sm font-semibold text-white/90 underline-offset-4 hover:underline">

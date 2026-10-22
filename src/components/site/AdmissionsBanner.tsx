@@ -21,7 +21,7 @@ export function AdmissionsBanner() {
           </div>
           <Link
             to="/admisiones"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-primary shadow-lg transition-transform hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-brand-blue shadow-lg transition-transform hover:-translate-y-0.5"
           >
             Conoce el proceso <ArrowRight className="h-4 w-4" />
           </Link>
