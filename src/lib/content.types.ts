@@ -185,3 +185,19 @@ export interface QuickAccessItem {
 
 /** Título del documento del Manual de Convivencia publicado en el panel. */
 export const MANUAL_TITLE = "Manual de Convivencia — Colegio Cafam 2026";
+
+/**
+ * Elige el manual vigente: primero el más reciente subido con la categoría
+ * "Manual de Convivencia"; si no hay, el publicado en Institucionales.
+ */
+export function pickManual<T extends { title: string }>(
+  manualDocs: T[],
+  institucionales: T[]
+): T | null {
+  return (
+    manualDocs[0] ??
+    institucionales.find((d) => d.title === MANUAL_TITLE) ??
+    institucionales.find((d) => d.title.startsWith("Manual de Convivencia")) ??
+    null
+  );
+}

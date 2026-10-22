@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getDocuments } from "@/lib/content.functions";
-import { MANUAL_TITLE } from "@/lib/content.types";
+import { MANUAL_TITLE, pickManual } from "@/lib/content.types";
 import { useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
@@ -8,9 +8,13 @@ import { PdfViewer } from "@/components/site/PdfViewer";
 import { Award, Target, Eye, Heart, ExternalLink, PlayCircle, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/mi-colegio")({
-  loader: async () => ({
-    institucionales: await getDocuments({ data: { category: "institucionales" } }),
-  }),
+  loader: async () => {
+    const [institucionales, manualDocs] = await Promise.all([
+      getDocuments({ data: { category: "institucionales" } }),
+      getDocuments({ data: { category: "manual_convivencia" } }),
+    ]);
+    return { institucionales, manual: pickManual(manualDocs, institucionales) };
+  },
   staleTime: 5 * 60 * 1000,
   gcTime: 30 * 60 * 1000,
   errorComponent: () => (
@@ -64,13 +68,13 @@ const tabs: { key: TabKey; label: string }[] = [
 ];
 
 function MiColegio() {
-  const { institucionales } = Route.useLoaderData();
+  const { institucionales, manual } = Route.useLoaderData();
   const [tab, setTab] = useState<TabKey>("pei");
 
   const urlOf = (title: string) =>
     institucionales.find((d) => d.title === title)?.file_url ?? null;
   const adminDocs = institucionales.filter(
-    (d) => d.title !== PEI_TITLE && d.title !== MANUAL_TITLE
+    (d) => d.title !== PEI_TITLE && d.id !== manual?.id && d.title !== MANUAL_TITLE
   );
 
   return (
@@ -122,7 +126,7 @@ function MiColegio() {
 
           <div className="mt-8">
             {tab === "pei" && <PdfViewer url={urlOf(PEI_TITLE)} title={PEI_TITLE} />}
-            {tab === "manual" && <PdfViewer url={urlOf(MANUAL_TITLE)} title={MANUAL_TITLE} />}
+            {tab === "manual" && <PdfViewer url={manual?.file_url ?? null} title={manual?.title ?? MANUAL_TITLE} />}
 
             {tab === "documentos" && (
               <ul className="grid gap-4 md:grid-cols-2">
