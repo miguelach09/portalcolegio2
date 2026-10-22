@@ -89,7 +89,8 @@ export type DocumentArea =
   | "tecnologia"
   | "artes"
   | "profundizacion"
-  | "ciencias_sociales";
+  | "ciencias_sociales"
+  | "ciencias_politicas";
 
 export const AREA_ORDER: DocumentArea[] = [
   "transicion",
@@ -101,6 +102,7 @@ export const AREA_ORDER: DocumentArea[] = [
   "tecnologia",
   "artes",
   "ciencias_sociales",
+  "ciencias_politicas",
   "profundizacion",
 ];
 
@@ -114,13 +116,16 @@ export const AREA_LABELS: Record<DocumentArea, string> = {
   tecnologia: "Tecnología",
   artes: "Artes",
   ciencias_sociales: "Ciencias Sociales",
+  ciencias_politicas: "Ciencias Políticas y Economía",
   profundizacion: "Profundización",
 };
 
-/** Profundización solo existe en Décimo y Once. */
+/** Áreas que solo existen en Décimo y Once. */
+const SENIOR_ONLY_AREAS: DocumentArea[] = ["profundizacion", "ciencias_politicas"];
+
 export function areasForGrade(grade: Grade | null): DocumentArea[] {
   if (grade === "decimo" || grade === "once") return AREA_ORDER;
-  return AREA_ORDER.filter((a) => a !== "profundizacion");
+  return AREA_ORDER.filter((a) => !SENIOR_ONLY_AREAS.includes(a));
 }
 
 export interface Document {
