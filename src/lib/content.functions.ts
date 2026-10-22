@@ -49,10 +49,10 @@ async function checkAdmin(context: {
   }
 }
 
-const SIGN_TTL_SECONDS = 60 * 60 * 24 * 7;
+const SIGN_TTL_SECONDS = 60 * 60 * 2;
 // Cache de URLs firmadas: evita una llamada de red por archivo en cada visita.
 const signedUrlCache = new Map<string, { url: string; expiresAt: number }>();
-const CACHE_MS = 1000 * 60 * 60 * 6;
+const CACHE_MS = 1000 * 60 * 60;
 
 async function getSignedUrl(filePath: string, options?: { download?: boolean }) {
   if (!options?.download) {
@@ -121,7 +121,12 @@ async function signManyUrls(paths: string[]): Promise<Map<string, string>> {
 // Public reads
 export const getDocuments = createServerFn({ method: "GET" })
   .inputValidator(
-    (input: { category?: DocumentCategory; grade?: string; period?: number; limit?: number } = {}) => input
+    (input: { category?: DocumentCategory; grade?: string; period?: number; limit?: number } = {}) => {
+      if (input.grade !== undefined && !/^[a-z0-9_-]{1,40}$/i.test(input.grade)) {
+        throw new Error("Grado no válido");
+      }
+      return input;
+    }
   )
   .handler(async ({ data }) => {
     const supabase = createPublicClient();

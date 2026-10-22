@@ -61,7 +61,11 @@ function PreinscripcionesAdmin() {
           a.status,
           a.created_at.slice(0, 10),
         ]
-          .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+          .map((v) => {
+            let s = String(v ?? "");
+            if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+            return `"${s.replace(/"/g, '""')}"`;
+          })
           .join(",")
       )
       .join("\n");

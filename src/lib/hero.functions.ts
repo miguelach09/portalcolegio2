@@ -15,11 +15,16 @@ function createPublicClient() {
   );
 }
 
+function safePath(path: string) {
+  if (!/^hero\/[a-zA-Z0-9-]+\.(jpg|jpeg|png)$/i.test(path)) throw new Error("Ruta de imagen no válida");
+  return path;
+}
+
 async function getSignedUrl(filePath: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin.storage
     .from(BUCKET_NAME)
-    .createSignedUrl(filePath, 60 * 60 * 24 * 365);
+    .createSignedUrl(filePath, 60 * 60 * 2);
   if (error || !data?.signedUrl) return null;
   return data.signedUrl;
 }
@@ -28,7 +33,7 @@ async function withImages(rows: unknown[]): Promise<HeroSlide[]> {
   return Promise.all(
     (rows as HeroSlide[]).map(async (row) => ({
       ...row,
-      image_url: row.image_path ? await getSignedUrl(row.image_path) : row.image_url,
+      image_url: row.image_path?.startsWith("hero/") && !row.image_path.includes("..") ? await getSignedUrl(row.image_path) : row.image_url,
     }))
   );
 }
@@ -79,7 +84,7 @@ export const saveHeroSlide = createServerFn({ method: "POST" })
     const { id, ...rest } = parsed;
     const payload = {
       ...rest,
-      ...(data.imagePath ? { image_path: data.imagePath } : {}),
+      ...(data.imagePath ? { image_path: safePath(data.imagePath) } : {}),
     };
 
     if (id) {
