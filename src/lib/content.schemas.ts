@@ -62,6 +62,7 @@ export const documentAreaSchema = z.enum([
   "artes",
   "profundizacion",
   "ciencias_sociales",
+  "ciencias_politicas",
 ]);
 
 export const documentFormSchema = z
@@ -90,9 +91,12 @@ export const documentFormSchema = z
   })
   .refine(
     (v) =>
-      v.area !== "profundizacion" || v.grade === "decimo" || v.grade === "once",
+      (v.area !== "profundizacion" && v.area !== "ciencias_politicas") ||
+      v.grade === "decimo" ||
+      v.grade === "once",
     {
-      message: "Profundización solo está disponible en Décimo y Once",
+      message:
+        "Profundización y Ciencias Políticas y Economía solo están disponibles en Décimo y Once",
       path: ["area"],
     }
   );
