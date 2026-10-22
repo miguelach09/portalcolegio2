@@ -1,0 +1,1 @@
+ALTER TYPE public.document_area ADD VALUE IF NOT EXISTS 'transicion' AFTER 'artes';

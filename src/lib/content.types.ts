@@ -80,6 +80,7 @@ export const PERIOD_LABELS: Record<Period, string> = {
 };
 
 export type DocumentArea =
+  | "transicion"
   | "ciencias"
   | "matematicas"
   | "ingles"
@@ -91,6 +92,7 @@ export type DocumentArea =
   | "ciencias_sociales";
 
 export const AREA_ORDER: DocumentArea[] = [
+  "transicion",
   "ciencias",
   "matematicas",
   "ingles",
@@ -103,6 +105,7 @@ export const AREA_ORDER: DocumentArea[] = [
 ];
 
 export const AREA_LABELS: Record<DocumentArea, string> = {
+  transicion: "Transición",
   ciencias: "Ciencias",
   matematicas: "Matemáticas",
   ingles: "Inglés",

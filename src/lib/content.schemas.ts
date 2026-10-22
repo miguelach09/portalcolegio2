@@ -52,6 +52,7 @@ export const periodSchema = z.union([
 ]);
 
 export const documentAreaSchema = z.enum([
+  "transicion",
   "ciencias",
   "matematicas",
   "ingles",

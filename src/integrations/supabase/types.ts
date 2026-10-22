@@ -710,6 +710,7 @@ export type Database = {
         | "humanidades"
         | "tecnologia"
         | "artes"
+        | "transicion"
         | "profundizacion"
         | "ciencias_sociales"
       document_category:
@@ -871,6 +872,7 @@ export const Constants = {
         "humanidades",
         "tecnologia",
         "artes",
+        "transicion",
         "profundizacion",
         "ciencias_sociales",
       ],
