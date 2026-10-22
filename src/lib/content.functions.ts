@@ -119,9 +119,36 @@ async function signManyUrls(paths: string[]): Promise<Map<string, string>> {
 
 
 // Public reads
+function checkGuidesPassword(pwd?: string) {
+  const expected = process.env.GUIAS_PASSWORD || "CafamGuias1";
+  return typeof pwd === "string" && pwd === expected;
+}
+
+export const verifyGuidesPassword = createServerFn({ method: "POST" })
+  .inputValidator((input: { password: string }) => ({ password: String(input?.password ?? "").slice(0, 100) }))
+  .handler(async ({ data }) => ({ ok: checkGuidesPassword(data.password) }));
+
+export const getAllDocumentsAdmin = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { limit?: number } = {}) => input)
+  .handler(async ({ data, context }) => {
+    const { data: rows, error } = await context.supabase
+      .from("documents")
+      .select("*")
+      .eq("is_active", true)
+      .order("published_at", { ascending: false })
+      .limit(Math.min(data.limit ?? 200, 1000));
+    if (error) throw new Error("No se pudieron cargar los documentos");
+    const signed = await signManyUrls((rows || []).map((r) => r.file_path).filter((p): p is string => !!p));
+    return (rows || []).map((row) => ({
+      ...(row as unknown as Document),
+      file_url: (row.file_path ? signed.get(row.file_path) : null) ?? null,
+    })) as Document[];
+  });
+
 export const getDocuments = createServerFn({ method: "GET" })
   .inputValidator(
-    (input: { category?: DocumentCategory; grade?: string; period?: number; limit?: number } = {}) => {
+    (input: { category?: DocumentCategory; grade?: string; period?: number; limit?: number; guidesPassword?: string } = {}) => {
       if (input.grade !== undefined && !/^[a-z0-9_-]{1,40}$/i.test(input.grade)) {
         throw new Error("Grado no válido");
       }
@@ -155,11 +182,18 @@ export const getDocuments = createServerFn({ method: "GET" })
     const { data: rows, error } = await query;
     if (error) throw error;
 
+    // Las guías solo se entregan con la contraseña correcta (verificada en el servidor).
+    const guidesUnlocked = checkGuidesPassword(data.guidesPassword);
+    if (data.category === "guias" && !guidesUnlocked) {
+      throw new Error("Contraseña de guías requerida");
+    }
+    const visible = (rows || []).filter((r) => r.category !== "guias" || guidesUnlocked);
+
     // Sin forzar descarga: los enlaces se abren en el visor incrustado.
     const signed = await signManyUrls(
-      (rows || []).map((r) => r.file_path).filter((p): p is string => !!p)
+      visible.map((r) => r.file_path).filter((p): p is string => !!p)
     );
-    const docs: Document[] = (rows || []).map((row) => ({
+    const docs: Document[] = visible.map((row) => ({
       ...(row as unknown as Document),
       file_url: (row.file_path ? signed.get(row.file_path) : null) ?? null,
     }));
@@ -245,6 +279,7 @@ export const getDocumentById = createServerFn({ method: "GET" })
 
     if (error) throw error;
     if (!row) return null;
+    if (row.category === "guias") return null;
 
     return {
       ...(row as unknown as Document),

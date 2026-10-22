@@ -1,3 +1,4 @@
+import { verifyGuidesPassword } from "@/lib/content.functions";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
@@ -41,7 +42,6 @@ const items: Item[] = [
   { label: "Documentos", desc: "Circulares y comunicados", href: "/circulares", image: btnDocumentos },
 ];
 
-const GUIAS_PASSWORD = "CafamGuias1";
 
 export function QuickAccess() {
   const navigate = useNavigate();
@@ -49,9 +49,11 @@ export function QuickAccess() {
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
 
-  const handleGuiasSubmit = (e: React.FormEvent) => {
+  const handleGuiasSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pwd === GUIAS_PASSWORD) {
+    const { ok } = await verifyGuidesPassword({ data: { password: pwd } }).catch(() => ({ ok: false }));
+    if (ok) {
+      sessionStorage.setItem("guias-pwd", pwd);
       setOpen(false);
       setPwd("");
       setError("");
