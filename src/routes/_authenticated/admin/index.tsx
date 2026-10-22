@@ -27,6 +27,8 @@ import { useRouter } from "@tanstack/react-router";
 import { getDashboardStats } from "@/lib/features.functions";
 import { getContactMessages, updateContactMessageStatus, deleteContactMessage } from "@/lib/features.functions";
 import { ThemeToggle } from "@/components/site/ThemeToggle";
+import { closeAdminSession } from '@/lib/admin-session';
+import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminDashboard,
@@ -34,6 +36,7 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 
 function AdminDashboard() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const stats = useServerFn(getDashboardStats);
   const { data: dashboard } = useQuery({
     queryKey: ["dashboard-stats"],
@@ -55,8 +58,8 @@ function AdminDashboard() {
   });
 
   async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.navigate({ to: "/", replace: true });
+    await closeAdminSession(queryClient);
+    await router.navigate({ to: "/auth", replace: true });
   }
 
   return (
@@ -73,13 +76,13 @@ function AdminDashboard() {
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <ThemeToggle />
-            <button
+            <Button variant="outline"
               onClick={handleSignOut}
               className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent"
             >
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Cerrar sesión</span>
-            </button>
+            </Button>
           </div>
         </div>
       </header>
