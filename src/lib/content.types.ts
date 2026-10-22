@@ -182,3 +182,6 @@ export interface QuickAccessItem {
   href: string;
   external?: boolean;
 }
+
+/** Título del documento del Manual de Convivencia publicado en el panel. */
+export const MANUAL_TITLE = "Manual de Convivencia — Colegio Cafam 2026";

@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getDocuments } from "@/lib/content.functions";
+import { MANUAL_TITLE } from "@/lib/content.types";
 import { useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
-import { Award, Target, Eye, Heart, FileText, ExternalLink, PlayCircle } from "lucide-react";
+import { PdfViewer } from "@/components/site/PdfViewer";
+import { Award, Target, Eye, Heart, ExternalLink, PlayCircle, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/mi-colegio")({
   loader: async () => ({
@@ -46,7 +48,6 @@ const pillars = [
 ];
 
 const PEI_TITLE = "PEI Colegio Cafam — Síntesis";
-const MANUAL_TITLE = "Manual de Convivencia — Colegio Cafam 2026";
 
 const videos = [
   { id: "1zG4D1f2mYw", title: "Este es mi Colegio Cafam" },
@@ -61,35 +62,6 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "documentos", label: "Documentos administrativos" },
   { key: "recorrido", label: "Recorrido virtual" },
 ];
-
-function PdfViewer({ url, title }: { url: string | null; title: string }) {
-  if (!url) {
-    return (
-      <div className="rounded-2xl border border-border bg-card p-8 text-muted-foreground shadow-[var(--shadow-card)]">
-        Este documento aún no está publicado. Súbelo desde el panel de administración.
-      </div>
-    );
-  }
-  return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
-        <h3 className="flex items-center gap-2 font-display text-lg font-bold">
-          <FileText className="h-5 w-5 text-primary" aria-hidden="true" />
-          {title}
-        </h3>
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
-        >
-          Abrir en pestaña nueva <ExternalLink className="h-4 w-4" aria-hidden="true" />
-        </a>
-      </div>
-      <iframe src={url} title={title} loading="lazy" className="h-[70vh] min-h-[480px] w-full bg-muted" />
-    </div>
-  );
-}
 
 function MiColegio() {
   const { institucionales } = Route.useLoaderData();
