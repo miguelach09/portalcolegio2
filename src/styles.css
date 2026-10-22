@@ -45,6 +45,7 @@
   --color-green-soft: var(--green-soft);
   --color-on-brand: var(--on-brand);
   --color-brand-blue: var(--brand-blue);
+  --color-hero-scrim: var(--hero-scrim);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -90,6 +91,8 @@
   --green-soft: oklch(0.94 0.06 132);
   --on-brand: oklch(0.2 0.02 250); /* texto sobre verde/naranja/dorado */
   --brand-blue: oklch(0.5 0.14 250); /* azul fijo para texto sobre botones blancos */
+  /* Velo negro del carrusel de inicio: base para el degradado lateral */
+  --hero-scrim: oklch(0.17 0.01 260);
 
   --destructive: oklch(0.6 0.24 27);
   --destructive-foreground: oklch(0.99 0 0);
