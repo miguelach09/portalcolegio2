@@ -1,0 +1,2 @@
+ALTER TYPE public.document_area ADD VALUE IF NOT EXISTS 'ciencias_politicas' AFTER 'ciencias_sociales';
+COMMENT ON TYPE public.document_area IS 'Áreas de guías de aprendizaje: transicion, ciencias, matematicas, ingles, castellano, humanidades, tecnologia, artes, ciencias_sociales, ciencias_politicas (solo Décimo y Once), profundizacion (solo Décimo y Once).';

@@ -713,6 +713,7 @@ export type Database = {
         | "transicion"
         | "profundizacion"
         | "ciencias_sociales"
+        | "ciencias_politicas"
       document_category:
         | "circulares"
         | "revisas"
@@ -875,6 +876,7 @@ export const Constants = {
         "transicion",
         "profundizacion",
         "ciencias_sociales",
+        "ciencias_politicas",
       ],
       document_category: [
         "circulares",
