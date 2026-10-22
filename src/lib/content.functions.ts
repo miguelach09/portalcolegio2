@@ -279,6 +279,7 @@ export const getDocumentById = createServerFn({ method: "GET" })
 
     if (error) throw error;
     if (!row) return null;
+    if (row.category === "guias") return null;
 
     return {
       ...(row as unknown as Document),

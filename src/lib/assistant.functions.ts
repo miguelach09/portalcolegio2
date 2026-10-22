@@ -292,7 +292,7 @@ async function findResources(query: string, conversationContext = ""): Promise<A
     ]);
 
     for (const d of docs.data ?? []) {
-      const signed = d.file_path ? await getSignedUrl(d.file_path) : null;
+      const signed = d.file_path && d.category !== "guias" ? await getSignedUrl(d.file_path) : null;
       const bits = [d.category as string, d.grade, d.period ? `Periodo ${d.period}` : null, d.area]
         .filter(Boolean)
         .join(" · ");
