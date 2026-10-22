@@ -83,7 +83,7 @@ export function HeroCarousel({ slides: dbSlides = [] }: { slides?: HeroSlide[] }
   }, [emblaApi]);
 
   return (
-    <section className="group relative h-[82vh] max-h-[820px] min-h-[540px] w-full overflow-hidden bg-primary">
+    <section className="group relative h-[82vh] max-h-[820px] min-h-[540px] w-full overflow-hidden bg-hero-scrim">
       <div ref={emblaRef} className="h-full overflow-hidden">
         <div className="flex h-full">
           {slides.map((s, i) => (
@@ -98,7 +98,7 @@ export function HeroCarousel({ slides: dbSlides = [] }: { slides?: HeroSlide[] }
                   height={1080}
                   className="h-full w-full object-cover opacity-80 transition-transform duration-[2000ms] ease-out group-hover:scale-[1.03]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-hero-scrim/95 via-hero-scrim/60 to-transparent" />
               </div>
 
               {/* Contenido */}
