@@ -120,7 +120,7 @@ function Calendario() {
             <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white">Eventos pasados</h2>
             <div className="mt-4 space-y-2">
               {past.slice(0, 10).map((e) => (
-                <div key={e.id} className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 opacity-70">
+                <div key={e.id} className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3">
                   <span className="text-sm font-medium text-slate-900 dark:text-white">{e.title}</span>
                   <span className="text-xs text-muted-foreground">{formatDateES(e.start_date)}</span>
                 </div>
