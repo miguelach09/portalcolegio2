@@ -62,6 +62,7 @@ export const documentAreaSchema = z.enum([
   "artes",
   "profundizacion",
   "ciencias_sociales",
+  "ciencias_politicas",
 ]);
 
 export const documentFormSchema = z
