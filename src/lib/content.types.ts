@@ -5,6 +5,7 @@ export type DocumentCategory =
   | "herramientas"
   | "guias"
   | "institucionales"
+  | "manual_convivencia"
   | "general";
 
 export type Grade =

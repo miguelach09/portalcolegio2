@@ -12,6 +12,7 @@ export const Route = createFileRoute("/_authenticated/admin/metricas/")({
 const CATEGORY_LABEL: Record<string, string> = {
   circulares: "Circulares",
   guias: "Guías",
+  manual_convivencia: "Manual de Convivencia",
   institucionales: "Institucionales",
   admisiones: "Admisiones",
   herramientas: "Herramientas",

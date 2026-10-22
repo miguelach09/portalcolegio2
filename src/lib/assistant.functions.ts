@@ -86,6 +86,8 @@ const routeForDocument = (category: string | null) => {
       return "/admisiones";
     case "herramientas":
       return "/herramientas";
+    case "manual_convivencia":
+      return "/mi-colegio";
     default:
       return "/circulares";
   }

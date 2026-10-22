@@ -23,6 +23,7 @@ export const Route = createFileRoute("/_authenticated/admin/documentos/nuevo")({
 const categories: { value: DocumentCategory; label: string }[] = [
   { value: "circulares", label: "Circulares" },
   { value: "guias", label: "Guías de Aprendizaje" },
+  { value: "manual_convivencia", label: "Manual de Convivencia" },
   { value: "revisas", label: "Revisas" },
   { value: "admisiones", label: "Admisiones" },
   { value: "herramientas", label: "Herramientas" },

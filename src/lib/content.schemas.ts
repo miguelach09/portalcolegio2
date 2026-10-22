@@ -7,6 +7,7 @@ export const documentCategorySchema = z.enum([
   "herramientas",
   "guias",
   "institucionales",
+  "manual_convivencia",
   "general",
 ]);
 
