@@ -24,6 +24,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as HerramientasRouteImport } from './routes/herramientas'
+import { Route as ManualConvivenciaRouteImport } from './routes/manual-convivencia'
 import { Route as MiColegioRouteImport } from './routes/mi-colegio'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as NoticiasIdRouteImport } from './routes/noticias.$id'
@@ -120,6 +121,11 @@ const GuiasRoute = GuiasRouteImport.update({
 const HerramientasRoute = HerramientasRouteImport.update({
   id: '/herramientas',
   path: '/herramientas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManualConvivenciaRoute = ManualConvivenciaRouteImport.update({
+  id: '/manual-convivencia',
+  path: '/manual-convivencia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MiColegioRoute = MiColegioRouteImport.update({
@@ -272,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
+  '/manual-convivencia': typeof ManualConvivenciaRoute
   '/mi-colegio': typeof MiColegioRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/noticias/$id': typeof NoticiasIdRoute
@@ -311,6 +318,7 @@ export interface FileRoutesByTo {
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
+  '/manual-convivencia': typeof ManualConvivenciaRoute
   '/mi-colegio': typeof MiColegioRoute
   '/noticias/$id': typeof NoticiasIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -351,6 +359,7 @@ export interface FileRoutesById {
   '/galeria': typeof GaleriaRoute
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
+  '/manual-convivencia': typeof ManualConvivenciaRoute
   '/mi-colegio': typeof MiColegioRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/noticias/$id': typeof NoticiasIdRoute
@@ -392,6 +401,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/guias'
     | '/herramientas'
+    | '/manual-convivencia'
     | '/mi-colegio'
     | '/admin'
     | '/noticias/$id'
@@ -431,6 +441,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/guias'
     | '/herramientas'
+    | '/manual-convivencia'
     | '/mi-colegio'
     | '/noticias/$id'
     | '/admin'
@@ -470,6 +481,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/guias'
     | '/herramientas'
+    | '/manual-convivencia'
     | '/mi-colegio'
     | '/_authenticated/admin'
     | '/noticias/$id'
@@ -511,6 +523,7 @@ export interface RootRouteChildren {
   GaleriaRoute: typeof GaleriaRoute
   GuiasRoute: typeof GuiasRoute
   HerramientasRoute: typeof HerramientasRoute
+  ManualConvivenciaRoute: typeof ManualConvivenciaRoute
   MiColegioRoute: typeof MiColegioRoute
   NoticiasIdRoute: typeof NoticiasIdRoute
 }
@@ -620,6 +633,13 @@ declare module '@tanstack/react-router' {
       path: '/herramientas'
       fullPath: '/herramientas'
       preLoaderRoute: typeof HerramientasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manual-convivencia': {
+      id: '/manual-convivencia'
+      path: '/manual-convivencia'
+      fullPath: '/manual-convivencia'
+      preLoaderRoute: typeof ManualConvivenciaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mi-colegio': {
@@ -873,6 +893,7 @@ const rootRouteChildren: RootRouteChildren = {
   GaleriaRoute: GaleriaRoute,
   GuiasRoute: GuiasRoute,
   HerramientasRoute: HerramientasRoute,
+  ManualConvivenciaRoute: ManualConvivenciaRoute,
   MiColegioRoute: MiColegioRoute,
   NoticiasIdRoute: NoticiasIdRoute,
 }
