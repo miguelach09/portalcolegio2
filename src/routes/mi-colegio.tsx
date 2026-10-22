@@ -68,13 +68,13 @@ const tabs: { key: TabKey; label: string }[] = [
 ];
 
 function MiColegio() {
-  const { institucionales } = Route.useLoaderData();
+  const { institucionales, manual } = Route.useLoaderData();
   const [tab, setTab] = useState<TabKey>("pei");
 
   const urlOf = (title: string) =>
     institucionales.find((d) => d.title === title)?.file_url ?? null;
   const adminDocs = institucionales.filter(
-    (d) => d.title !== PEI_TITLE && d.title !== MANUAL_TITLE
+    (d) => d.title !== PEI_TITLE && d.id !== manual?.id && d.title !== MANUAL_TITLE
   );
 
   return (
@@ -126,7 +126,7 @@ function MiColegio() {
 
           <div className="mt-8">
             {tab === "pei" && <PdfViewer url={urlOf(PEI_TITLE)} title={PEI_TITLE} />}
-            {tab === "manual" && <PdfViewer url={urlOf(MANUAL_TITLE)} title={MANUAL_TITLE} />}
+            {tab === "manual" && <PdfViewer url={manual?.file_url ?? null} title={manual?.title ?? MANUAL_TITLE} />}
 
             {tab === "documentos" && (
               <ul className="grid gap-4 md:grid-cols-2">
