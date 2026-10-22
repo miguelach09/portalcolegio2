@@ -47,7 +47,7 @@ export function Header() {
             <Link
               key={item.to}
               to={item.to}
-              className="rounded-full px-3.5 py-2 text-sm font-medium text-foreground/75 transition-colors hover:bg-primary-soft hover:text-primary"
+              className="rounded-full px-3.5 py-2 text-sm font-medium text-foreground/85 transition-colors hover:bg-primary-soft hover:text-primary"
               activeProps={{ className: "bg-primary-soft text-primary" }}
               activeOptions={{ exact: item.to === "/" }}
             >

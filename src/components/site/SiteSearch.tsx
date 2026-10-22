@@ -55,7 +55,7 @@ export function SiteSearch() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Buscar en el sitio"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 transition-colors hover:bg-primary-soft hover:text-primary"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/85 transition-colors hover:bg-primary-soft hover:text-primary"
       >
         <Search className="h-5 w-5" />
       </button>
