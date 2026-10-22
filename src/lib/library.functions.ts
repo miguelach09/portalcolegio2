@@ -17,9 +17,16 @@ function createPublicClient() {
   );
 }
 
-const SIGN_TTL_SECONDS = 60 * 60 * 24 * 7;
+function safePath(path: string, prefix: string) {
+  if (!path.startsWith(prefix) || path.includes("..") || !/^[a-z]+\/[a-zA-Z0-9-]+\.(jpg|jpeg|png)$/i.test(path)) {
+    throw new Error("Ruta de imagen no válida");
+  }
+  return path;
+}
+
+const SIGN_TTL_SECONDS = 60 * 60 * 2;
 const coverCache = new Map<string, { url: string; expiresAt: number }>();
-const CACHE_MS = 1000 * 60 * 60 * 6;
+const CACHE_MS = 1000 * 60 * 60;
 
 // Firma todas las portadas en una sola llamada (antes: una petición por libro).
 async function signCovers(paths: string[]): Promise<Map<string, string>> {
@@ -50,11 +57,11 @@ async function signCovers(paths: string[]): Promise<Map<string, string>> {
 async function withCovers(rows: unknown[]): Promise<LibraryBook[]> {
   const list = rows as LibraryBook[];
   const signed = await signCovers(
-    list.map((r) => r.cover_path).filter((p): p is string => !!p)
+    list.map((r) => r.cover_path).filter((p): p is string => !!p && p.startsWith("books/"))
   );
   return list.map((row) => ({
     ...row,
-    cover_url: (row.cover_path ? signed.get(row.cover_path) : null) ?? row.cover_url,
+    cover_url: (row.cover_path?.startsWith("books/") ? signed.get(row.cover_path) : null) ?? row.cover_url,
   }));
 }
 
@@ -124,7 +131,7 @@ export const saveLibraryBook = createServerFn({ method: "POST" })
       availability: rest.availability,
       is_active: rest.is_active,
       sort_order: rest.sort_order,
-      ...(data.coverPath ? { cover_path: data.coverPath } : {}),
+      ...(data.coverPath ? { cover_path: safePath(data.coverPath, "books/") } : {}),
     };
 
     if (id) {

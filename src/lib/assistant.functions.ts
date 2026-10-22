@@ -29,7 +29,7 @@ async function getSignedUrl(filePath: string, download = false) {
     const filename = filePath.split("/").pop();
     const { data } = await supabaseAdmin.storage
       .from(BUCKET_NAME)
-      .createSignedUrl(filePath, 60 * 60 * 24, {
+      .createSignedUrl(filePath, 60 * 60, {
         download: download ? filename || true : false,
       });
     return data?.signedUrl ?? null;
