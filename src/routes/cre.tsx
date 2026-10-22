@@ -112,7 +112,7 @@ function CrePage() {
                 className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                   kind === value
                     ? "bg-primary text-primary-foreground"
-                    : "text-foreground/75 hover:text-primary"
+                    : "text-foreground/85 hover:text-primary"
                 }`}
               >
                 <Icon className="h-4 w-4" />

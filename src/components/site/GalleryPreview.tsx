@@ -19,7 +19,7 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
     <section className="container-page py-16 md:py-24">
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-green-brand">Galería</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-green-ink">Galería</span>
           <h2 className="mt-2 font-display text-3xl font-bold text-slate-900 md:text-4xl dark:text-white">Vida en Cafam</h2>
           <p className="mt-2 max-w-lg text-muted-foreground">
             Instantes de aprendizaje, arte, deporte y celebración que hacen única a nuestra comunidad.
@@ -56,7 +56,7 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-              <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+              <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-brand-blue opacity-0 transition-opacity group-hover:opacity-100">
                 {img.title}
               </span>
             </button>

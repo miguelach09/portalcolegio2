@@ -32,7 +32,7 @@ function Bienestar() {
         <div className="grid gap-6 md:grid-cols-2">
           {areas.map(({ icon: Icon, title, text }) => (
             <div key={title} className="rounded-2xl border border-border bg-card p-8">
-              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-brand/15 text-green-brand">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-brand/15 text-green-ink">
                 <Icon className="h-6 w-6" />
               </span>
               <h2 className="mt-5 font-display text-2xl font-bold">{title}</h2>

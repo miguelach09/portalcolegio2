@@ -54,7 +54,7 @@ export function AdmissionForm() {
   if (status === "done") {
     return (
       <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-[var(--shadow-card)]">
-        <CheckCircle2 className="mx-auto h-12 w-12 text-green-brand" />
+        <CheckCircle2 className="mx-auto h-12 w-12 text-green-ink" />
         <h3 className="mt-4 font-display text-2xl font-bold text-slate-900 dark:text-white">
           ¡Preinscripción enviada!
         </h3>

@@ -105,7 +105,7 @@ export function HeroCarousel({ slides: dbSlides = [] }: { slides?: HeroSlide[] }
               <div className="container-page relative z-10 flex h-full flex-col justify-center">
                 <div className="max-w-3xl space-y-6 md:space-y-8">
                   <div
-                    className={`inline-flex items-center gap-2 rounded-full ${s.accent} px-5 py-2 text-white shadow-xl transition-transform hover:scale-105 ${
+                    className={`inline-flex items-center gap-2 rounded-full ${s.accent} px-5 py-2 ${/(green|orange|yellow)-brand/.test(s.accent) ? "text-on-brand" : s.accent === "bg-primary" ? "text-primary-foreground" : "text-white"} shadow-xl transition-transform hover:scale-105 ${
                       selected === i ? "animate-fade-in" : ""
                     }`}
                   >
@@ -129,7 +129,7 @@ export function HeroCarousel({ slides: dbSlides = [] }: { slides?: HeroSlide[] }
                   <div className="flex items-center gap-6 pt-2">
                     <Link
                       to={s.cta.to}
-                      className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-display text-base font-extrabold text-primary shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-sky hover:text-white md:px-10 md:text-lg"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-display text-base font-extrabold text-brand-blue shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-sky hover:text-white md:px-10 md:text-lg"
                     >
                       {s.cta.label} <ArrowRight className="h-5 w-5" />
                     </Link>
