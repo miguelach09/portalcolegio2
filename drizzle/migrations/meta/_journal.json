@@ -43,6 +43,13 @@
       "when": 1792635189823,
       "tag": "0005_add_ciencias_politicas_area",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792637372616,
+      "tag": "0006_add_manual_convivencia_category",
+      "breakpoints": true
     }
   ]
 }

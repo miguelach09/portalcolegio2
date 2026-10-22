@@ -722,6 +722,7 @@ export type Database = {
         | "general"
         | "guias"
         | "institucionales"
+        | "manual_convivencia"
       gallery_category:
         | "aulas"
         | "deporte"
@@ -886,6 +887,7 @@ export const Constants = {
         "general",
         "guias",
         "institucionales",
+        "manual_convivencia",
       ],
       gallery_category: [
         "aulas",

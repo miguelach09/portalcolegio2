@@ -1,0 +1,1 @@
+ALTER TYPE public.document_category ADD VALUE 'manual_convivencia' AFTER 'institucionales';
