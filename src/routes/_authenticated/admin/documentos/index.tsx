@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin/documentos/")({
 const categoryLabels: Record<string, string> = {
   circulares: "Circulares",
   guias: "Guías",
+  manual_convivencia: "Manual de Convivencia",
   revisas: "Revisas",
   admisiones: "Admisiones",
   herramientas: "Herramientas",
