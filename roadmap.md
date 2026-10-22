@@ -9,4 +9,4 @@
 - [ ] Admisiones: correo de confirmación (requiere dominio de correo del colegio).
 - [ ] Familias: avisos por correo, boletín, "Agregar a mi calendario" (requiere dominio de correo).
 - [ ] Accesibilidad: tamaño de letra y alto contraste.
-- [ ] Abrir una dirección del panel admin directamente debe llevar siempre al login
+- [x] Abrir una dirección del panel admin directamente debe llevar siempre al login

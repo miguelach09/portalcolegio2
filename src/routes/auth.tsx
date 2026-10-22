@@ -17,9 +17,8 @@ export const Route = createFileRoute("/auth")({
       return;
     }
     const target = (search as { redirect?: string })?.redirect;
-    if (target && typeof window !== "undefined" && target.startsWith(window.location.origin)) {
-      throw redirect({ href: target.replace(window.location.origin, "") });
-    }
+    const safe = safeAdminTarget(target);
+    if (safe) throw redirect({ href: safe });
     throw redirect({ to: "/admin" });
   },
   head: () => ({ meta: [
@@ -59,9 +58,7 @@ function AuthPage() {
     }
 
     adminVisit.authorize(data.user.id);
-    const target = search.redirect && search.redirect.startsWith(window.location.origin)
-      ? search.redirect.replace(window.location.origin, "")
-      : "/admin";
+    const target = safeAdminTarget(search.redirect) ?? "/admin";
 
     router.navigate({ to: target as any, replace: true });
   }
@@ -120,4 +117,15 @@ function AuthPage() {
       </section>
     </PageShell>
   );
+}
+
+// Solo se vuelve a direcciones internas del panel (evita redirecciones a otros sitios).
+function safeAdminTarget(raw?: string): string | null {
+  if (!raw) return null;
+  let path = raw;
+  if (typeof window !== "undefined" && path.startsWith(window.location.origin)) {
+    path = path.slice(window.location.origin.length);
+  }
+  if (!path.startsWith("/") || path.startsWith("//")) return null;
+  return path === "/admin" || path.startsWith("/admin/") || path.startsWith("/admin?") ? path : null;
 }
