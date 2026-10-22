@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Admin re-entry uses a memory-only credential-verified visit marker in the admin parent route, separate from the managed auth gate; public navigation clears it and signs out after cancelling and clearing queries so persisted sessions cannot silently reopen the panel.

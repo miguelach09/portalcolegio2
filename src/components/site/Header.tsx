@@ -6,6 +6,10 @@ import type { User } from "@supabase/supabase-js";
 import { ThemeToggle } from "./ThemeToggle";
 import { SiteSearch } from "./SiteSearch";
 import logoCafam from "@/assets/real/logo-cafam.png";
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
+import { closeAdminSession } from '@/lib/admin-session';
+import { Button } from '@/components/ui/button';
 
 const nav = [
   { to: "/", label: "Inicio" },
@@ -108,6 +112,8 @@ export function Header() {
 }
 
 function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => void }) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -136,8 +142,9 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
 
   async function handleSignOut(e: React.MouseEvent) {
     e.preventDefault();
-    await supabase.auth.signOut();
+    await closeAdminSession(queryClient);
     onClick?.();
+    await router.navigate({ to: '/auth', replace: true });
   }
 
   return (
@@ -153,7 +160,7 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
         <LayoutDashboard className="h-4 w-4" />
         Panel
       </Link>
-      <button
+      <Button variant="ghost"
         onClick={handleSignOut}
         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-destructive/10 hover:text-destructive ${
           mobile ? "justify-center border border-input" : ""
@@ -161,7 +168,7 @@ function AuthHeader({ mobile, onClick }: { mobile?: boolean; onClick?: () => voi
       >
         <LogOut className="h-4 w-4" />
         Salir
-      </button>
+      </Button>
     </div>
   );
 }

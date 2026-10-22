@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Exigir credenciales al volver al panel y cerrar la sesión al salir; confirmar claves de Guías e Historial.
+
 - [x] Eliminar circular de prueba.
 - [x] Asistente: menos botones parecidos, dictado por voz, sugerencias por página, registro de preguntas sin respuesta.
 - [x] Admin: programar publicaciones, papelera, subida masiva de guías, métricas.

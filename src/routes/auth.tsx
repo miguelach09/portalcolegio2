@@ -3,18 +3,33 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageShell } from "@/components/site/PageShell";
 import { PageHero } from "@/components/site/PageHero";
+import { adminVisit } from '@/lib/admin-visit';
+import { closeAdminSession } from '@/lib/admin-session';
+import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  beforeLoad: async ({ search }) => {
+  beforeLoad: async ({ search, context }) => {
     const { data } = await supabase.auth.getUser();
     if (!data.user) return;
+    if (!adminVisit.permits(data.user.id)) {
+      await closeAdminSession(context.queryClient);
+      return;
+    }
     const target = (search as { redirect?: string })?.redirect;
     if (target && typeof window !== "undefined" && target.startsWith(window.location.origin)) {
       throw redirect({ href: target.replace(window.location.origin, "") });
     }
     throw redirect({ to: "/admin" });
   },
+  head: () => ({ meta: [
+    { title: 'Acceso administrativo — Colegio Cafam' },
+    { name: 'description', content: 'Acceso del personal autorizado al panel del Colegio Cafam.' },
+    { property: 'og:title', content: 'Acceso administrativo — Colegio Cafam' },
+    { property: 'og:description', content: 'Acceso del personal autorizado al Colegio Cafam.' },
+    { property: 'og:type', content: 'website' },
+    { name: 'twitter:card', content: 'summary' },
+  ] }),
   component: AuthPage,
 });
 
@@ -43,6 +58,7 @@ function AuthPage() {
       return;
     }
 
+    adminVisit.authorize(data.user.id);
     const target = search.redirect && search.redirect.startsWith(window.location.origin)
       ? search.redirect.replace(window.location.origin, "")
       : "/admin";
@@ -92,13 +108,13 @@ function AuthPage() {
                 {error}
               </div>
             )}
-            <button
+            <Button
               type="submit"
               disabled={loading}
               className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
             >
               {loading ? "Ingresando..." : "Ingresar"}
-            </button>
+            </Button>
           </form>
         </div>
       </section>
