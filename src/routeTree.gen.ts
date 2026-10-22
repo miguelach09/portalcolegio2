@@ -25,6 +25,7 @@ import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as HerramientasRouteImport } from './routes/herramientas'
 import { Route as MiColegioRouteImport } from './routes/mi-colegio'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as NoticiasIdRouteImport } from './routes/noticias.$id'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminAsistenteIndexRouteImport } from './routes/_authenticated/admin/asistente/index'
@@ -126,129 +127,134 @@ const MiColegioRoute = MiColegioRouteImport.update({
   path: '/mi-colegio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const NoticiasIdRoute = NoticiasIdRouteImport.update({
   id: '/noticias/$id',
   path: '/noticias/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => AuthenticatedRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
 const AuthenticatedAdminAsistenteIndexRoute =
   AuthenticatedAdminAsistenteIndexRouteImport.update({
-    id: '/admin/asistente/',
-    path: '/admin/asistente/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/asistente/',
+    path: '/asistente/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminAvisosIndexRoute =
   AuthenticatedAdminAvisosIndexRouteImport.update({
-    id: '/admin/avisos/',
-    path: '/admin/avisos/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/avisos/',
+    path: '/avisos/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminCarruselIndexRoute =
   AuthenticatedAdminCarruselIndexRouteImport.update({
-    id: '/admin/carrusel/',
-    path: '/admin/carrusel/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/carrusel/',
+    path: '/carrusel/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminDocumentosIndexRoute =
   AuthenticatedAdminDocumentosIndexRouteImport.update({
-    id: '/admin/documentos/',
-    path: '/admin/documentos/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/documentos/',
+    path: '/documentos/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminDocumentosNuevoRoute =
   AuthenticatedAdminDocumentosNuevoRouteImport.update({
-    id: '/admin/documentos/nuevo',
-    path: '/admin/documentos/nuevo',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/documentos/nuevo',
+    path: '/documentos/nuevo',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminEntrevistasIndexRoute =
   AuthenticatedAdminEntrevistasIndexRouteImport.update({
-    id: '/admin/entrevistas/',
-    path: '/admin/entrevistas/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/entrevistas/',
+    path: '/entrevistas/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminEventosIndexRoute =
   AuthenticatedAdminEventosIndexRouteImport.update({
-    id: '/admin/eventos/',
-    path: '/admin/eventos/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/eventos/',
+    path: '/eventos/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminFaqsIndexRoute =
   AuthenticatedAdminFaqsIndexRouteImport.update({
-    id: '/admin/faqs/',
-    path: '/admin/faqs/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/faqs/',
+    path: '/faqs/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminGaleriaIndexRoute =
   AuthenticatedAdminGaleriaIndexRouteImport.update({
-    id: '/admin/galeria/',
-    path: '/admin/galeria/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/galeria/',
+    path: '/galeria/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminGaleriaNuevaRoute =
   AuthenticatedAdminGaleriaNuevaRouteImport.update({
-    id: '/admin/galeria/nueva',
-    path: '/admin/galeria/nueva',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/galeria/nueva',
+    path: '/galeria/nueva',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminHistorialIndexRoute =
   AuthenticatedAdminHistorialIndexRouteImport.update({
-    id: '/admin/historial/',
-    path: '/admin/historial/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/historial/',
+    path: '/historial/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminLibrosIndexRoute =
   AuthenticatedAdminLibrosIndexRouteImport.update({
-    id: '/admin/libros/',
-    path: '/admin/libros/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/libros/',
+    path: '/libros/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminMensajesIndexRoute =
   AuthenticatedAdminMensajesIndexRouteImport.update({
-    id: '/admin/mensajes/',
-    path: '/admin/mensajes/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/mensajes/',
+    path: '/mensajes/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminMetricasIndexRoute =
   AuthenticatedAdminMetricasIndexRouteImport.update({
-    id: '/admin/metricas/',
-    path: '/admin/metricas/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/metricas/',
+    path: '/metricas/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminNoticiasIndexRoute =
   AuthenticatedAdminNoticiasIndexRouteImport.update({
-    id: '/admin/noticias/',
-    path: '/admin/noticias/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/noticias/',
+    path: '/noticias/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminNoticiasNuevaRoute =
   AuthenticatedAdminNoticiasNuevaRouteImport.update({
-    id: '/admin/noticias/nueva',
-    path: '/admin/noticias/nueva',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/noticias/nueva',
+    path: '/noticias/nueva',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminPapeleraIndexRoute =
   AuthenticatedAdminPapeleraIndexRouteImport.update({
-    id: '/admin/papelera/',
-    path: '/admin/papelera/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/papelera/',
+    path: '/papelera/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminPreinscripcionesIndexRoute =
   AuthenticatedAdminPreinscripcionesIndexRouteImport.update({
-    id: '/admin/preinscripciones/',
-    path: '/admin/preinscripciones/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/preinscripciones/',
+    path: '/preinscripciones/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminSuscriptoresIndexRoute =
   AuthenticatedAdminSuscriptoresIndexRouteImport.update({
-    id: '/admin/suscriptores/',
-    path: '/admin/suscriptores/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/suscriptores/',
+    path: '/suscriptores/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -267,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/noticias/$id': typeof NoticiasIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
@@ -345,6 +352,7 @@ export interface FileRoutesById {
   '/guias': typeof GuiasRoute
   '/herramientas': typeof HerramientasRoute
   '/mi-colegio': typeof MiColegioRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/noticias/$id': typeof NoticiasIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/documentos/nuevo': typeof AuthenticatedAdminDocumentosNuevoRoute
@@ -385,6 +393,7 @@ export interface FileRouteTypes {
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
+    | '/admin'
     | '/noticias/$id'
     | '/admin/'
     | '/admin/documentos/nuevo'
@@ -462,6 +471,7 @@ export interface FileRouteTypes {
     | '/guias'
     | '/herramientas'
     | '/mi-colegio'
+    | '/_authenticated/admin'
     | '/noticias/$id'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/documentos/nuevo'
@@ -619,6 +629,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MiColegioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/noticias/$id': {
       id: '/noticias/$id'
       path: '/noticias/$id'
@@ -628,148 +645,148 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
-      path: '/admin'
+      path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/asistente/': {
       id: '/_authenticated/admin/asistente/'
-      path: '/admin/asistente'
+      path: '/asistente'
       fullPath: '/admin/asistente/'
       preLoaderRoute: typeof AuthenticatedAdminAsistenteIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/avisos/': {
       id: '/_authenticated/admin/avisos/'
-      path: '/admin/avisos'
+      path: '/avisos'
       fullPath: '/admin/avisos/'
       preLoaderRoute: typeof AuthenticatedAdminAvisosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/carrusel/': {
       id: '/_authenticated/admin/carrusel/'
-      path: '/admin/carrusel'
+      path: '/carrusel'
       fullPath: '/admin/carrusel/'
       preLoaderRoute: typeof AuthenticatedAdminCarruselIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/documentos/': {
       id: '/_authenticated/admin/documentos/'
-      path: '/admin/documentos'
+      path: '/documentos'
       fullPath: '/admin/documentos/'
       preLoaderRoute: typeof AuthenticatedAdminDocumentosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/documentos/nuevo': {
       id: '/_authenticated/admin/documentos/nuevo'
-      path: '/admin/documentos/nuevo'
+      path: '/documentos/nuevo'
       fullPath: '/admin/documentos/nuevo'
       preLoaderRoute: typeof AuthenticatedAdminDocumentosNuevoRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/entrevistas/': {
       id: '/_authenticated/admin/entrevistas/'
-      path: '/admin/entrevistas'
+      path: '/entrevistas'
       fullPath: '/admin/entrevistas/'
       preLoaderRoute: typeof AuthenticatedAdminEntrevistasIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/eventos/': {
       id: '/_authenticated/admin/eventos/'
-      path: '/admin/eventos'
+      path: '/eventos'
       fullPath: '/admin/eventos/'
       preLoaderRoute: typeof AuthenticatedAdminEventosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/faqs/': {
       id: '/_authenticated/admin/faqs/'
-      path: '/admin/faqs'
+      path: '/faqs'
       fullPath: '/admin/faqs/'
       preLoaderRoute: typeof AuthenticatedAdminFaqsIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/galeria/': {
       id: '/_authenticated/admin/galeria/'
-      path: '/admin/galeria'
+      path: '/galeria'
       fullPath: '/admin/galeria/'
       preLoaderRoute: typeof AuthenticatedAdminGaleriaIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/galeria/nueva': {
       id: '/_authenticated/admin/galeria/nueva'
-      path: '/admin/galeria/nueva'
+      path: '/galeria/nueva'
       fullPath: '/admin/galeria/nueva'
       preLoaderRoute: typeof AuthenticatedAdminGaleriaNuevaRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/historial/': {
       id: '/_authenticated/admin/historial/'
-      path: '/admin/historial'
+      path: '/historial'
       fullPath: '/admin/historial/'
       preLoaderRoute: typeof AuthenticatedAdminHistorialIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/libros/': {
       id: '/_authenticated/admin/libros/'
-      path: '/admin/libros'
+      path: '/libros'
       fullPath: '/admin/libros/'
       preLoaderRoute: typeof AuthenticatedAdminLibrosIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/mensajes/': {
       id: '/_authenticated/admin/mensajes/'
-      path: '/admin/mensajes'
+      path: '/mensajes'
       fullPath: '/admin/mensajes/'
       preLoaderRoute: typeof AuthenticatedAdminMensajesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/metricas/': {
       id: '/_authenticated/admin/metricas/'
-      path: '/admin/metricas'
+      path: '/metricas'
       fullPath: '/admin/metricas/'
       preLoaderRoute: typeof AuthenticatedAdminMetricasIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/noticias/': {
       id: '/_authenticated/admin/noticias/'
-      path: '/admin/noticias'
+      path: '/noticias'
       fullPath: '/admin/noticias/'
       preLoaderRoute: typeof AuthenticatedAdminNoticiasIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/noticias/nueva': {
       id: '/_authenticated/admin/noticias/nueva'
-      path: '/admin/noticias/nueva'
+      path: '/noticias/nueva'
       fullPath: '/admin/noticias/nueva'
       preLoaderRoute: typeof AuthenticatedAdminNoticiasNuevaRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/papelera/': {
       id: '/_authenticated/admin/papelera/'
-      path: '/admin/papelera'
+      path: '/papelera'
       fullPath: '/admin/papelera/'
       preLoaderRoute: typeof AuthenticatedAdminPapeleraIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/preinscripciones/': {
       id: '/_authenticated/admin/preinscripciones/'
-      path: '/admin/preinscripciones'
+      path: '/preinscripciones'
       fullPath: '/admin/preinscripciones/'
       preLoaderRoute: typeof AuthenticatedAdminPreinscripcionesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/suscriptores/': {
       id: '/_authenticated/admin/suscriptores/'
-      path: '/admin/suscriptores'
+      path: '/suscriptores'
       fullPath: '/admin/suscriptores/'
       preLoaderRoute: typeof AuthenticatedAdminSuscriptoresIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
   }
 }
 
-interface AuthenticatedRouteChildren {
+interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminDocumentosNuevoRoute: typeof AuthenticatedAdminDocumentosNuevoRoute
   AuthenticatedAdminGaleriaNuevaRoute: typeof AuthenticatedAdminGaleriaNuevaRoute
@@ -792,32 +809,48 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminSuscriptoresIndexRoute: typeof AuthenticatedAdminSuscriptoresIndexRoute
 }
 
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+    AuthenticatedAdminDocumentosNuevoRoute:
+      AuthenticatedAdminDocumentosNuevoRoute,
+    AuthenticatedAdminGaleriaNuevaRoute: AuthenticatedAdminGaleriaNuevaRoute,
+    AuthenticatedAdminNoticiasNuevaRoute: AuthenticatedAdminNoticiasNuevaRoute,
+    AuthenticatedAdminAsistenteIndexRoute:
+      AuthenticatedAdminAsistenteIndexRoute,
+    AuthenticatedAdminAvisosIndexRoute: AuthenticatedAdminAvisosIndexRoute,
+    AuthenticatedAdminCarruselIndexRoute: AuthenticatedAdminCarruselIndexRoute,
+    AuthenticatedAdminDocumentosIndexRoute:
+      AuthenticatedAdminDocumentosIndexRoute,
+    AuthenticatedAdminEntrevistasIndexRoute:
+      AuthenticatedAdminEntrevistasIndexRoute,
+    AuthenticatedAdminEventosIndexRoute: AuthenticatedAdminEventosIndexRoute,
+    AuthenticatedAdminFaqsIndexRoute: AuthenticatedAdminFaqsIndexRoute,
+    AuthenticatedAdminGaleriaIndexRoute: AuthenticatedAdminGaleriaIndexRoute,
+    AuthenticatedAdminHistorialIndexRoute:
+      AuthenticatedAdminHistorialIndexRoute,
+    AuthenticatedAdminLibrosIndexRoute: AuthenticatedAdminLibrosIndexRoute,
+    AuthenticatedAdminMensajesIndexRoute: AuthenticatedAdminMensajesIndexRoute,
+    AuthenticatedAdminMetricasIndexRoute: AuthenticatedAdminMetricasIndexRoute,
+    AuthenticatedAdminNoticiasIndexRoute: AuthenticatedAdminNoticiasIndexRoute,
+    AuthenticatedAdminPapeleraIndexRoute: AuthenticatedAdminPapeleraIndexRoute,
+    AuthenticatedAdminPreinscripcionesIndexRoute:
+      AuthenticatedAdminPreinscripcionesIndexRoute,
+    AuthenticatedAdminSuscriptoresIndexRoute:
+      AuthenticatedAdminSuscriptoresIndexRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+}
+
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
-  AuthenticatedAdminDocumentosNuevoRoute:
-    AuthenticatedAdminDocumentosNuevoRoute,
-  AuthenticatedAdminGaleriaNuevaRoute: AuthenticatedAdminGaleriaNuevaRoute,
-  AuthenticatedAdminNoticiasNuevaRoute: AuthenticatedAdminNoticiasNuevaRoute,
-  AuthenticatedAdminAsistenteIndexRoute: AuthenticatedAdminAsistenteIndexRoute,
-  AuthenticatedAdminAvisosIndexRoute: AuthenticatedAdminAvisosIndexRoute,
-  AuthenticatedAdminCarruselIndexRoute: AuthenticatedAdminCarruselIndexRoute,
-  AuthenticatedAdminDocumentosIndexRoute:
-    AuthenticatedAdminDocumentosIndexRoute,
-  AuthenticatedAdminEntrevistasIndexRoute:
-    AuthenticatedAdminEntrevistasIndexRoute,
-  AuthenticatedAdminEventosIndexRoute: AuthenticatedAdminEventosIndexRoute,
-  AuthenticatedAdminFaqsIndexRoute: AuthenticatedAdminFaqsIndexRoute,
-  AuthenticatedAdminGaleriaIndexRoute: AuthenticatedAdminGaleriaIndexRoute,
-  AuthenticatedAdminHistorialIndexRoute: AuthenticatedAdminHistorialIndexRoute,
-  AuthenticatedAdminLibrosIndexRoute: AuthenticatedAdminLibrosIndexRoute,
-  AuthenticatedAdminMensajesIndexRoute: AuthenticatedAdminMensajesIndexRoute,
-  AuthenticatedAdminMetricasIndexRoute: AuthenticatedAdminMetricasIndexRoute,
-  AuthenticatedAdminNoticiasIndexRoute: AuthenticatedAdminNoticiasIndexRoute,
-  AuthenticatedAdminPapeleraIndexRoute: AuthenticatedAdminPapeleraIndexRoute,
-  AuthenticatedAdminPreinscripcionesIndexRoute:
-    AuthenticatedAdminPreinscripcionesIndexRoute,
-  AuthenticatedAdminSuscriptoresIndexRoute:
-    AuthenticatedAdminSuscriptoresIndexRoute,
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
