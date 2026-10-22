@@ -27,6 +27,7 @@ type Item = {
   image: string;
   external?: boolean;
   gated?: boolean;
+  newTab?: boolean;
 };
 
 const items: Item[] = [
